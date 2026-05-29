@@ -5,7 +5,14 @@
       "Read(//usr/**)",
       "Read(//c/Users/cenkg/AppData/Local/Programs/Python/**)",
       "Bash(command -v py)",
-      "PowerShell(& \"C:\\\\Users\\\\cenkg\\\\AppData\\\\Local\\\\Programs\\\\Python\\\\Python313\\\\python.exe\" \"C:\\\\Users\\\\cenkg\\\\Desktop\\\\apex-v2\\\\data\\\\raw\\\\fix_problem_card.py\")"
+      "PowerShell(& \"C:\\\\Users\\\\cenkg\\\\AppData\\\\Local\\\\Programs\\\\Python\\\\Python313\\\\python.exe\" \"C:\\\\Users\\\\cenkg\\\\Desktop\\\\apex-v2\\\\data\\\\raw\\\\fix_problem_card.py\")",
+      "Skill(update-config)",
+      "Bash(dir C:\\\\Users\\\\cenkg\\\\Desktop\\\\apex-v2\\\\data\\\\raw *)",
+      "Bash(git add *)",
+      "Bash(git rm *)",
+      "Bash(git commit -m ' *)",
+      "Bash(git push *)",
+      "Bash(git pull *)"
     ]
   }
 }
