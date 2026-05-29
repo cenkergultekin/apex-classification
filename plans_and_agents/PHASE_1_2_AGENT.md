@@ -38,42 +38,242 @@ Aşağıdaki kodları notebook'taki ilgili hücrelere yerleştir veya mevcut pla
 
 ### 3.1. Section 1: Business Understanding Hücreleri
 
-#### Hücre 1 (Markdown) - Problem Tanımı ve Bağlamı
-Yerleştirilecek alan: **Section 1.1**
-```markdown
-### 1.1 İş Problemi ve Karar Bağlamı
+#### Hücre 1 (Markdown) - İş Hedefleri, Metrikler ve Karar Tasarımı
+Yerleştirilecek alan: **Section 1.1** (Önceki 1.2 ve 1.3 silinerek yerine bu tek hücre yerleştirilmelidir)
+```html
+<div style="background:linear-gradient(135deg,#09090f 0%,#0e0e1c 100%);padding:36px 40px;border-radius:20px;margin-bottom:32px;border:1px solid rgba(255,255,255,0.07);box-shadow:0 4px 28px rgba(0,0,0,0.45);">
+  
+  <!-- Header -->
+  <div style="display:flex;align-items:center;gap:12px;margin-bottom:28px;">
+    <div style="width:4px;height:30px;background:linear-gradient(180deg,#6366f1,#4f46e5);border-radius:2px;flex-shrink:0;"></div>
+    <h2 style="color:#a5b4fc;font-size:1.25em;font-weight:700;margin:0;letter-spacing:0.4px;">Faz 1: İş Hedefleri, Metrikler ve Karar Tasarımı</h2>
+  </div>
 
-Günümüzde Üretken Yapay Zeka (GenAI) araçlarının eğitim süreçlerine entegrasyonu, öğrencilerin bilgiye erişim hızını ve verimliliğini artırırken, diğer taraftan aşırı bağımlılık, sınav anlarında kaygı artışı ve akademik tükenmişlik (burnout) risklerini beraberinde getirmektedir.
+  <div style="display:flex;gap:20px;flex-wrap:wrap;">
+    
+    <!-- Left Column: Success Metrics -->
+    <div style="flex:1.1;min-width:320px;background:linear-gradient(135deg,#0d1117 0%,#161b22 100%);padding:28px 30px;border-radius:14px;border:1px solid rgba(99,102,241,0.18);box-shadow:0 2px 12px rgba(0,0,0,0.3);">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:20px;">
+        <div style="width:3px;height:22px;background:linear-gradient(180deg,#818cf8,#6366f1);border-radius:2px;flex-shrink:0;"></div>
+        <h3 style="color:#c7d2fe;font-size:1.05em;font-weight:700;margin:0;">Proje Başarı Metrikleri</h3>
+      </div>
+      
+      <div style="display:flex;flex-direction:column;gap:16px;">
+        <div style="display:flex;gap:12px;align-items:flex-start;">
+          <div style="width:24px;height:24px;border-radius:50%;background:rgba(99,102,241,0.15);display:flex;align-items:center;justify-content:center;color:#818cf8;font-weight:700;font-size:0.85em;flex-shrink:0;">1</div>
+          <div>
+            <p style="color:#e2e8f0;font-size:0.9em;font-weight:600;margin:0 0 2px;">Macro F1-Score (Birincil Metrik) &gt; 0.80</p>
+            <p style="color:#94a3b8;font-size:0.82em;line-height:1.5;margin:0;">Sınıflar arası (Low, Medium, High) dağılımdaki olası dengesizlik durumunda, modelin her bir risk grubunu eşit derecede doğru tahmin etmesini güvenceye alır.</p>
+          </div>
+        </div>
+        
+        <div style="display:flex;gap:12px;align-items:flex-start;">
+          <div style="width:24px;height:24px;border-radius:50%;background:rgba(99,102,241,0.15);display:flex;align-items:center;justify-content:center;color:#818cf8;font-weight:700;font-size:0.85em;flex-shrink:0;">2</div>
+          <div>
+            <p style="color:#e2e8f0;font-size:0.9em;font-weight:600;margin:0 0 2px;">Recall (High Risk Sınıfı) &gt; 0.85</p>
+            <p style="color:#94a3b8;font-size:0.82em;line-height:1.5;margin:0;">Yüksek akademik tükenmişlik riski altındaki öğrencileri en az ıskalama ile tespit etmek ve rehberlik müdahalelerinde gecikmeyi önlemek için kritik hedeftir.</p>
+          </div>
+        </div>
+        
+        <div style="display:flex;gap:12px;align-items:flex-start;">
+          <div style="width:24px;height:24px;border-radius:50%;background:rgba(99,102,241,0.15);display:flex;align-items:center;justify-content:center;color:#818cf8;font-weight:700;font-size:0.85em;flex-shrink:0;">3</div>
+          <div>
+            <p style="color:#e2e8f0;font-size:0.9em;font-weight:600;margin:0 0 2px;">ROC-AUC (Sınıf Ayrım Gücü) &gt; 0.88</p>
+            <p style="color:#94a3b8;font-size:0.82em;line-height:1.5;margin:0;">Modelin sınıfları birbirinden ayırt etme yeteneğini ve genel olasılıksal sıralama kalitesini ölçer.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Right Column: Cost of Errors -->
+    <div style="flex:1;min-width:300px;background:linear-gradient(135deg,#0d1117 0%,#161b22 100%);padding:28px 30px;border-radius:14px;border:1px solid rgba(244,114,182,0.18);box-shadow:0 2px 12px rgba(0,0,0,0.3);">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:20px;">
+        <div style="width:3px;height:22px;background:linear-gradient(180deg,#f472b6,#db2777);border-radius:2px;flex-shrink:0;"></div>
+        <h3 style="color:#fecdd3;font-size:1.05em;font-weight:700;margin:0;">Hata Maliyeti Tasarımı (Cost of Errors)</h3>
+      </div>
+      
+      <div style="display:flex;flex-direction:column;gap:16px;">
+        <div style="background:rgba(16,185,129,0.08);border:1px solid rgba(16,185,129,0.2);border-radius:10px;padding:14px 16px;">
+          <p style="color:#34d399;font-size:0.88em;font-weight:700;margin:0 0 4px;text-transform:uppercase;letter-spacing:0.5px;">False Positive (Yanlış Alarm)</p>
+          <p style="color:#a7f3d0;font-size:0.82em;line-height:1.5;margin:0;"><strong style="color:#34d399;">Durum:</strong> Düşük/orta riskli bir öğrenci `High` tahmin edilir.<br><strong style="color:#34d399;">Maliyet: DÜŞÜK.</strong> Rehberlik servisi öğrenciyle proaktif bir görüşme yapar; hafif bir zaman kaybı dışında sisteme veya öğrenciye bir zararı yoktur.</p>
+        </div>
+        
+        <div style="background:rgba(239,68,68,0.08);border:1px solid rgba(239,68,68,0.2);border-radius:10px;padding:14px 16px;">
+          <p style="color:#f87171;font-size:0.88em;font-weight:700;margin:0 0 4px;text-transform:uppercase;letter-spacing:0.5px;">False Negative (Kaçırılan Risk)</p>
+          <p style="color:#fecdd3;font-size:0.82em;line-height:1.5;margin:0;"><strong style="color:#f87171;">Durum:</strong> Ciddi tükenmişlik (`High`) yaşayan bir öğrenci `Low/Medium` tahmin edilir.<br><strong style="color:#f87171;">Maliyet: ÇOK YÜKSEK.</strong> Öğrenciye erken müdahale şansı kaçırılır; akademik tükenmişlik derinleşir, notlar düşer ve öğrencinin psikolojik yıpranması önlenemez.</p>
+        </div>
+      </div>
+    </div>
+  </div>
 
-**Temel Problem:** Dönem başındaki akademik durum ve yapay zeka kullanım örüntülerine bakarak, öğrencilerin dönem sonundaki akademik tükenmişlik risk seviyelerini (`Burnout_Risk_Level`) erken aşamada tahmin etmek.
-
-**İş Kararı ve Fayda:** Bu model, akademisyenlerin ve üniversite rehberlik servislerinin risk grubundaki öğrencileri proaktif olarak tespit edip zamanında müdahale (rehberlik görüşmeleri, çalışma stratejileri eğitimi, dengeli YZ kullanımı seminerleri) yapmasını sağlayacaktır. Böylece öğrencilerin okulu bırakma oranları azaltılacak ve akademik başarıları korunacaktır.
+  <!-- Bottom Block: Presentation & Academic Highlights -->
+  <div style="margin-top:24px;background:linear-gradient(135deg,#0a192f 0%,#0f2e5c 100%);padding:24px 28px;border-radius:14px;border:1px solid rgba(56,189,248,0.2);box-shadow:0 2px 12px rgba(0,0,0,0.3);">
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;">
+      <div style="width:3px;height:20px;background:linear-gradient(180deg,#38bdf8,#0284c7);border-radius:2px;flex-shrink:0;"></div>
+      <h3 style="color:#bae6fd;font-size:1.05em;font-weight:700;margin:0;">Sunum ve Eğitimsel Önemli Notlar</h3>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(250px, 1fr));gap:16px;">
+      <div>
+        <p style="color:#e0f2fe;font-size:0.88em;font-weight:600;margin:0 0 4px;">🎯 Tükenmişlik Seviyesi Odağı</p>
+        <p style="color:#94a3b8;font-size:0.81em;line-height:1.5;margin:0;">Projemizin hedefi, öğrencilerin akademik tükenmişlik risk seviyelerini (`Burnout_Risk_Level`: Low, Medium, High) erken aşamada tespit etmektir. Veri setimiz okulu bırakma veya okul terk oranlarıyla ilgili herhangi bir bilgi içermemektedir; tamamen psikolojik ve akademik tükenmişliğin önlenmesine odaklanılmıştır.</p>
+      </div>
+      <div>
+        <p style="color:#e0f2fe;font-size:0.88em;font-weight:600;margin:0 0 4px;">🔍 Dönem Başı Davranışsal Tahminleme</p>
+        <p style="color:#94a3b8;font-size:0.81em;line-height:1.5;margin:0;">Model, tahminleme için dönem başındaki verileri (kayıtlı dersler, ilk akademik durum, YZ araçlarını başlangıç kullanım örüntüleri) kullanır. Bu sayede, öğrencide tükenmişlik belirtileri yerleşmeden veya başarıya zarar vermeden önce akademik danışmanların proaktif aksiyon almasına olanak tanır.</p>
+      </div>
+      <div>
+        <p style="color:#e0f2fe;font-size:0.88em;font-weight:600;margin:0 0 4px;">📈 Sınıf Dengelemesi ve Metrik Seçimi</p>
+        <p style="color:#94a3b8;font-size:0.81em;line-height:1.5;margin:0;">Eğitim verisinde risk grupları nispeten dengeli dağılsa da, hedefimiz yüksek riskli (`High`) öğrencileri en yüksek doğrulukla bulmaktır. Bu nedenle, model başarısını değerlendirirken ve hiperparametre optimizasyonu yaparken birincil odağımız Recall (High) ve sınıflar arası genel dengeyi kuran Macro F1-Score'dur.</p>
+      </div>
+    </div>
+  </div>
+</div>
 ```
 
-#### Hücre 2 (Markdown) - Başarı Metrikleri
-Yerleştirilecek alan: **Section 1.2**
-```markdown
-### 1.2 Başarı Metrikleri (Proje Başında Tanımlanmış)
-
-Modelin başarısı aşağıdaki üç temel metrik üzerinden değerlendirilecektir:
-
-1. **Macro F1-Score (Birincil Metrik):** Sınıflar arası (Low, Medium, High) olası bir dağılım dengesizliğinde, modelin her risk grubunu eşit başarıyla tahmin etmesini sağlamak adına **Macro F1** değerinin **> 0.80** olması hedeflenmiştir.
-2. **Recall (High Risk Sınıfı):** Yüksek tükenmişlik riski taşıyan öğrencilerin ıskalanmaması hayati önem taşır. Bu yüzden `High` sınıfı için Recall skoru hedefi **> 0.85** olarak belirlenmiştir.
-3. **ROC-AUC (Genel Ayrım Gücü):** Modelin sınıfları birbirinden ayırt etme yeteneğini izlemek için **ROC-AUC > 0.88** hedeflenmektedir.
+#### Hücre 1B (Markdown) - Kaynak Değerlendirme ve Veri Özellikleri
+Yerleştirilecek alan: **Section 1.1** (Hücre 1'in hemen altına yeni bir hücre olarak eklenmelidir)
+```html
+<div style="background:linear-gradient(135deg,#09090f 0%,#0e0e1c 100%);padding:36px 40px;border-radius:20px;margin-bottom:32px;border:1px solid rgba(255,255,255,0.07);box-shadow:0 4px 28px rgba(0,0,0,0.45);">
+<div style="display:flex;align-items:center;gap:12px;margin-bottom:24px;">
+<div style="width:4px;height:30px;background:linear-gradient(180deg,#38bdf8,#0284c7);border-radius:2px;flex-shrink:0;"></div>
+<h2 style="color:#7dd3fc;font-size:1.25em;font-weight:700;margin:0;letter-spacing:0.4px;">Faz 1: Kaynak Değerlendirme ve Veri Özellikleri</h2>
+</div>
+<p style="color:#cbd5e1;font-size:0.88em;line-height:1.6;margin:0 0 20px;">Projedeki tek ve en kritik veri kaynağımız 50.000 gözlem içeren öğrenci veri setidir. Verideki özelliklerin (features) anlamı, birimleri ve hedef değişkenimiz olan tükenmişlik riski (<strong>Burnout_Risk_Level</strong>) ile olan istatistiksel ilişkisi aşağıdaki tabloda özetlenmiştir:</p>
+<table style="width:100%;border-collapse:collapse;color:#cbd5e1;font-size:0.83em;line-height:1.5;">
+<thead>
+<tr style="border-bottom:2px solid rgba(255,255,255,0.1);background:rgba(255,255,255,0.03);text-align:left;">
+<th style="padding:10px;color:#a5b4fc;font-weight:700;">Değişken Adı</th>
+<th style="padding:10px;color:#a5b4fc;font-weight:700;">Mevcut -> Olması Gereken Tür / Birim</th>
+<th style="padding:10px;color:#a5b4fc;font-weight:700;">Değişken Açıklaması</th>
+<th style="padding:10px;color:#a5b4fc;font-weight:700;">Hedef Değişkene (Target) Göre Anlamı ve Önem Derecesi</th>
+</tr>
+</thead>
+<tbody>
+<tr style="border-bottom:1px solid rgba(255,255,255,0.05);">
+<td style="padding:8px 10px;font-weight:600;color:#e2e8f0;">Student_ID</td>
+<td style="padding:8px 10px;color:#cbd5e1;">int64 (Sayısal / ID) -> Kaldırılacak (Ezber Engelleme)</td>
+<td style="padding:8px 10px;">Öğrenciye özel benzersiz kimlik numarası (100001 - 150000).</td>
+<td style="padding:8px 10px;color:#94a3b8;">Herhangi bir açıklayıcı değeri yoktur. Modelin ezber yapmasını engellemek için veri setinden düşürülecektir.</td>
+</tr>
+<tr style="border-bottom:1px solid rgba(255,255,255,0.05);">
+<td style="padding:8px 10px;font-weight:600;color:#e2e8f0;">Major_Category</td>
+<td style="padding:8px 10px;color:#818cf8;">object (Metin) -> Kategorik (One-Hot - Sayısal)</td>
+<td style="padding:8px 10px;">Öğrencinin eğitim gördüğü ana akademik alan (Arts, Business, Humanities, Medical, STEM).</td>
+<td style="padding:8px 10px;color:#cbd5e1;">Bölümler arası tükenmişlik riski dağılımı dengelidir. Ancak farklı akademik alanların YZ araçlarını kullanım alışkanlıklarını yakalamak için modele dahil edilecektir.</td>
+</tr>
+<tr style="border-bottom:1px solid rgba(255,255,255,0.05);">
+<td style="padding:8px 10px;font-weight:600;color:#e2e8f0;">Year_of_Study</td>
+<td style="padding:8px 10px;color:#818cf8;">object (Metin) -> Kategorik (Ordinal - Sayısal)</td>
+<td style="padding:8px 10px;">Öğrencinin eğitim yılı/sınıf seviyesi (Freshman, Sophomore, Junior, Senior, Graduate).</td>
+<td style="padding:8px 10px;color:#cbd5e1;">Sınıf derecesinin yükselmesiyle birlikte (özellikle Graduate seviyesinde) akademik stres ve bitirme yükünün getirdiği tükenmişlik riski farklılaşabilir.</td>
+</tr>
+<tr style="border-bottom:1px solid rgba(255,255,255,0.05);">
+<td style="padding:8px 10px;font-weight:600;color:#e2e8f0;">Pre_Semester_GPA</td>
+<td style="padding:8px 10px;color:#818cf8;">float64 (Sayısal / Not Ortalaması 0.00-4.00) -> Sayısal (Standartlaştırılmış GPA)</td>
+<td style="padding:8px 10px;">Öğrencinin dönem başındaki akademik not ortalaması (1.18 - 4.00 arası).</td>
+<td style="padding:8px 10px;color:#cbd5e1;">Hafif negatif ilişki. Dönem başı not ortalaması görece düşük olan öğrencilerin sınav stresine ve tükenmişlik riskine daha açık olduğu gözlemlenmektedir.</td>
+</tr>
+<tr style="border-bottom:1px solid rgba(255,255,255,0.05);">
+<td style="padding:8px 10px;font-weight:600;color:#e2e8f0;">Weekly_GenAI_Hours</td>
+<td style="padding:8px 10px;color:#818cf8;">float64 (Sayısal / Saat/Hafta) -> Sayısal (Standartlaştırılmış Saat)</td>
+<td style="padding:8px 10px;">Haftalık üretken yapay zeka araçları kullanım süresi (0.0 - 40.0 saat arası).</td>
+<td style="padding:8px 10px;color:#f87171;font-weight:600;">En Yüksek Pozitif Korelasyon (0.47). YZ araçlarında geçirilen sürenin artması, artan stres ve tükenmişlik riskiyle doğrudan paraleldir.</td>
+</tr>
+<tr style="border-bottom:1px solid rgba(255,255,255,0.05);">
+<td style="padding:8px 10px;font-weight:600;color:#e2e8f0;">Primary_Use_Case</td>
+<td style="padding:8px 10px;color:#818cf8;">object (Metin) -> Kategorik (One-Hot - Sayısal)</td>
+<td style="padding:8px 10px;">YZ araçlarının öncelikli kullanım amacı (Debugging/Troubleshooting, Ideation, Summarizing_Reading vb.).</td>
+<td style="padding:8px 10px;color:#cbd5e1;">Kullanım amaçlarının risk sınıfları üzerindeki oranları dengelidir (%25-%28 bandı). "Debugging/Troubleshooting" en yüksek hacimli gruptur.</td>
+</tr>
+<tr style="border-bottom:1px solid rgba(255,255,255,0.05);">
+<td style="padding:8px 10px;font-weight:600;color:#e2e8f0;">Prompt_Engineering_Skill</td>
+<td style="padding:8px 10px;color:#818cf8;">object (Metin) -> Kategorik (Ordinal - Sayısal)</td>
+<td style="padding:8px 10px;">Öğrencinin prompt (komut) yazma beceri seviyesi (Beginner, Intermediate, Advanced).</td>
+<td style="padding:8px 10px;color:#cbd5e1;">Prompt becerisi "Beginner" olan ve ücretli aboneliği bulunmayan öğrencilerde stres ve tükenmişlik riski görece daha yüksek seyretmektedir.</td>
+</tr>
+<tr style="border-bottom:1px solid rgba(255,255,255,0.05);">
+<td style="padding:8px 10px;font-weight:600;color:#e2e8f0;">Tool_Diversity</td>
+<td style="padding:8px 10px;color:#818cf8;">float64 (Sayısal / Adet) -> Sayısal (Standartlaştırılmış Adet)</td>
+<td style="padding:8px 10px;">Öğrencinin kullandığı farklı üretken YZ araçlarının sayısı (1.0 - 5.0 adet arası).</td>
+<td style="padding:8px 10px;color:#cbd5e1;">Hafif pozitif ilişki. Çok sayıda farklı aracın aynı anda kullanılması bilişsel adaptasyon yükünü artırarak tükenmişliği tetikleyebilir.</td>
+</tr>
+<tr style="border-bottom:1px solid rgba(255,255,255,0.05);">
+<td style="padding:8px 10px;font-weight:600;color:#e2e8f0;">Paid_Subscription</td>
+<td style="padding:8px 10px;color:#818cf8;">bool (Mantıksal) -> Sayısal (Binary 0/1)</td>
+<td style="padding:8px 10px;">Öğrencinin herhangi bir ücretli YZ aracına aboneliği olup olmadığı (True / False).</td>
+<td style="padding:8px 10px;color:#cbd5e1;">Aboneliği olmayan başlangıç düzeyindeki öğrencilerde tükenmişlik riski hafif düzeyde daha yaygındır.</td>
+</tr>
+<tr style="border-bottom:1px solid rgba(255,255,255,0.05);">
+<td style="padding:8px 10px;font-weight:600;color:#e2e8f0;">Traditional_Study_Hours</td>
+<td style="padding:8px 10px;color:#818cf8;">float64 (Sayısal / Saat/Hafta) -> Sayısal (Standartlaştırılmış Saat)</td>
+<td style="padding:8px 10px;">Kütüphane, kitap okuma, grup çalışması gibi geleneksel ders çalışma süresi (1.0 - 35.86 saat arası).</td>
+<td style="padding:8px 10px;color:#34d399;font-weight:600;">Negatif Korelasyon (-0.14). Geleneksel yöntemlerle çalışmaya daha fazla zaman ayıran öğrencilerin tükenmişlik riski azalmaktadır.</td>
+</tr>
+<tr style="border-bottom:1px solid rgba(255,255,255,0.05);">
+<td style="padding:8px 10px;font-weight:600;color:#e2e8f0;">Perceived_AI_Dependency</td>
+<td style="padding:8px 10px;color:#818cf8;">float64 (Sayısal / Skor 1.0-10.0) -> Sayısal (Standartlaştırılmış Skor)</td>
+<td style="padding:8px 10px;">Öğrencinin YZ araçlarına olan bağımlılığını hissetme derecesi (1.0 - 10.0 arası).</td>
+<td style="padding:8px 10px;color:#f87171;font-weight:600;">Güçlü Pozitif Korelasyon (0.37). Kendini yapay zekaya bağımlı hisseden öğrencilerde tükenmişlik riski son derece belirgindir.</td>
+</tr>
+<tr style="border-bottom:1px solid rgba(255,255,255,0.05);">
+<td style="padding:8px 10px;font-weight:600;color:#e2e8f0;">Institutional_Policy</td>
+<td style="padding:8px 10px;color:#818cf8;">object (Metin) -> Kategorik (One-Hot - Sayısal)</td>
+<td style="padding:8px 10px;">Okulun yapay zeka kullanım kuralları (Actively_Encouraged, Allowed_With_Citation, Strict_Ban).</td>
+<td style="padding:8px 10px;color:#cbd5e1;">Yasalara/kısıtlamalara tabi olan öğrencilerde YZ bağımlılığı ve akademik kaygı örüntüleri dolaylı etkiler yaratabilir. Oransal dağılım homojendir.</td>
+</tr>
+<tr style="border-bottom:1px solid rgba(255,255,255,0.05);">
+<td style="padding:8px 10px;font-weight:600;color:#e2e8f0;">Anxiety_Level_During_Exams</td>
+<td style="padding:8px 10px;color:#818cf8;">float64 (Sayısal / Skor 1.0-10.0) -> Sayısal (Standartlaştırılmış Kaygı Skoru)</td>
+<td style="padding:8px 10px;">Sınav dönemlerinde hissedilen stres ve kaygı derecesi (1.0 - 10.0 arası).</td>
+<td style="padding:8px 10px;color:#fda4af;">Pozitif Korelasyon (0.16). Sınav kaygısı yüksek olan öğrencilerin High risk seviyesine girme ihtimali daha yüksektir.</td>
+</tr>
+<tr style="border-bottom:1px solid rgba(255,255,255,0.05);">
+<td style="padding:8px 10px;font-weight:600;color:#ef4444;">Post_Semester_GPA</td>
+<td style="padding:8px 10px;color:#ef4444;font-weight:600;">float64 (Sayısal / Not Ortalaması 0.00-4.00) -> Kaldırılacak (Veri Sızıntısı Engelleme)</td>
+<td style="padding:8px 10px;">Dönem sonundaki başarı notu ortalaması (1.00 - 4.00 arası).</td>
+<td style="padding:8px 10px;color:#ef4444;font-weight:600;">Kritik Veri Sızıntısı (Data Leakage)! Dönem sonuna ait olduğu ve dönem başındaki öngörü modelinde bilinemeyeceği için kesinlikle çıkarılmalıdır.</td>
+</tr>
+<tr style="border-bottom:1px solid rgba(255,255,255,0.05);">
+<td style="padding:8px 10px;font-weight:600;color:#e2e8f0;">Skill_Retention_Score</td>
+<td style="padding:8px 10px;color:#818cf8;">float64 (Sayısal / Skor 0.0-100.0) -> Sayısal (Standartlaştırılmış Skor)</td>
+<td style="padding:8px 10px;">Akademik bilgilerin zihinde kalıcılık derecesi (10.78 - 100.0 arası).</td>
+<td style="padding:8px 10px;color:#cbd5e1;">Hafif negatif ilişki. Hafıza kalıcılığı zayıf olan öğrencilerde tükenmişlik baskısı artabilir. Modellemede sızıntı takibi için yakından izlenecektir.</td>
+</tr>
+<tr style="border-bottom:1px solid rgba(255,255,255,0.05);">
+<td style="padding:8px 10px;font-weight:600;color:#a5b4fc;">Burnout_Risk_Level</td>
+<td style="padding:8px 10px;color:#a5b4fc;font-weight:600;">object (Metin) -> Sayısal (Ordinal Sınıf Etiketi 0/1/2) - HEDEF</td>
+<td style="padding:8px 10px;">Tahmin edilmeye çalışılan akademik tükenmişlik risk düzeyi (Low, Medium, High).</td>
+<td style="padding:8px 10px;color:#a5b4fc;font-weight:600;">Hedef Değişken (Target). Model bu sınıfları tahmin etmek üzere eğitilmektedir. Sınıf dağılımı dengelidir.</td>
+</tr>
+</tbody>
+</table>
+<div style="margin-top:24px;background:linear-gradient(135deg,#0a192f 0%,#0f2e5c 100%);padding:24px 28px;border-radius:14px;border:1px solid rgba(56,189,248,0.2);box-shadow:0 2px 12px rgba(0,0,0,0.3);">
+<div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;">
+<div style="width:3px;height:20px;background:linear-gradient(180deg,#38bdf8,#0284c7);border-radius:2px;flex-shrink:0;"></div>
+<h3 style="color:#bae6fd;font-size:1.05em;font-weight:700;margin:0;">Veri İçi Mantıksal Bağlamlar ve İş Odaklı Çıkarımlar</h3>
+</div>
+<div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(250px, 1fr));gap:16px;">
+<div>
+<p style="color:#e0f2fe;font-size:0.88em;font-weight:600;margin:0 0 4px;">💻 STEM ve Kodlama Bağımlılığı</p>
+<p style="color:#94a3b8;font-size:0.81em;line-height:1.5;margin:0;">STEM öğrencileri en kalabalık grubu oluşturmakla kalmayıp (%30.1), haftalık ortalama YZ kullanımında <strong>10.84 saat</strong> ile açık ara liderdir. Bu yoğun kullanım, <strong>3.79</strong> bağımlılık algısı skoru ve en yüksek yüksek-riskli tükenmişlik oranı (<strong>%30.0</strong>) ile doğrudan ilişkilidir. STEM öğrencilerinin YZ'yi en çok <strong>Debugging (%51.7)</strong> için kullanması, kod hatalarını çözmede YZ'ye olan bağımlılıklarını açıklamaktadır.</p>
+</div>
+<div>
+<p style="color:#e0f2fe;font-size:0.88em;font-weight:600;margin:0 0 4px;">📝 Humanities ve Yazım Odaklılık</p>
+<p style="color:#94a3b8;font-size:0.81em;line-height:1.5;margin:0;">Humanities öğrencileri YZ'yi çoğunlukla <strong>Copywriting/Drafting (%51.9)</strong> amacıyla kullanmaktadır. Bu grupta YZ kullanım süresi (7.11 saat/hafta) ve bağımlılık algısı (3.24) en düşük seviyededir. Buna paralel olarak, yüksek tükenmişlik riski de bu grupta en düşük düzeydedir (<strong>%20.7</strong>). Bu durum, metin yazma odaklı YZ kullanımının kodlama hatalarını giderme kadar yüksek stres ve yıpranma yaratmadığını gösterir.</p>
+</div>
+<div>
+<p style="color:#e0f2fe;font-size:0.88em;font-weight:600;margin:0 0 4px;">📊 Business (Ideation) ve Medical (Summarizing)</p>
+<p style="color:#94a3b8;font-size:0.81em;line-height:1.5;margin:0;">Kullanım amaçları akademik disiplinlerle son derece tutarlıdır: Business öğrencileri YZ'yi ezici bir oranla <strong>Ideation (%47.9)</strong> (fikir geliştirme) için kullanırken (yüksek risk %24.3), Medical öğrencileri tıp eğitiminin yoğun bilgi yükünü yönetmek için <strong>Summarizing/Reading (%47.9)</strong> amacıyla kullanmaktadır (yüksek risk %23.2).</p>
+</div>
+<div>
+<p style="color:#e0f2fe;font-size:0.88em;font-weight:600;margin:0 0 4px;">🔄 Geleneksel Çalışma İkamesi</p>
+<p style="color:#94a3b8;font-size:0.81em;line-height:1.5;margin:0;">Geleneksel çalışma saatlerinin STEM öğrencilerinde en düşük seviyede (11.00 saat) olması, YZ kullanımının geleneksel çalışmanın yerini almaya başladığını göstermektedir. Bu ikame ilişkisi, sınav anksiyetesini ve tükenmişliği artıran en büyük faktörlerden biridir. Akademik rehberlik birimleri için bu durum, YZ'yi bir ikame değil, destekleyici araç olarak konumlandırma stratejisinin önemini kanıtlamaktadır.</p>
+</div>
+</div>
+</div>
+</div>
 ```
 
-#### Hücre 3 (Markdown) - Hata Maliyeti
-Yerleştirilecek alan: **Section 1.3**
-```markdown
-### 1.3 Hata Maliyeti Analizi
-
-| Hata Tipi | Açıklama | Tahmini Maliyet |
-|-----------|----------|-----------------|
-| **False Positive (Yanlış Alarm)** | Risk taşımayan (Low/Medium) bir öğrencinin model tarafından `High` tahmin edilmesi. | **Düşük:** Rehberlik servisi öğrenciyle fazladan bir görüşme yapar. Zaman kaybı yaşanır ancak öğrenciye bir zararı olmaz. |
-| **False Negative (Kaçırılan Risk)** | Ciddi tükenmişlik yaşayan (High) bir öğrencinin model tarafından `Low/Medium` tahmin edilmesi. | **Çok Yüksek:** Öğrenciye erken müdahale yapılamaz; ders başarısızlığı, okulu bırakma veya psikolojik yıpranma kaçınılmaz hale gelir. |
-
-*Karar:* Model geliştirme ve eşik değer seçimlerinde **Recall (High)** metriğine öncelik verilecektir.
-```
 
 ---
 
@@ -107,16 +307,17 @@ display(df.describe().T.style.set_properties(**{'background-color': '#111827', '
 Yerleştirilecek alan: **Section 2.3**
 ```python
 # 2.3 Target Değişken Dağılımı
-# Target sütun adını güncelliyoruz
 TARGET = 'Burnout_Risk_Level'
 
-target_counts = df[TARGET].value_counts().reset_index()
+# Hedef değişkeni kategorik yaparak sıralamayı (Low -> Medium -> High) olarak sabitliyoruz
+df[TARGET] = pd.Categorical(df[TARGET], categories=['Low', 'Medium', 'High'], ordered=True)
+
+target_counts = df[TARGET].value_counts(sort=False).reset_index()
 target_counts.columns = ['Risk Seviyesi', 'Öğrenci Sayısı']
 
 fig = make_subplots(rows=1, cols=2, specs=[[{"type": "bar"}, {"type": "pie"}]],
                     subplot_titles=("Öğrenci Sayısı Dağılımı", "Yüzdesel Dağılım"))
 
-# Renk haritası
 colors = {'Low': '#10b981', 'Medium': '#f59e0b', 'High': '#ef4444'}
 
 # Bar chart
@@ -139,7 +340,8 @@ fig.add_trace(
         values=target_counts['Öğrenci Sayısı'],
         marker=dict(colors=[colors[l] for l in target_counts['Risk Seviyesi']]),
         hole=.4,
-        name='Yüzde'
+        name='Yüzde',
+        sort=False
     ),
     row=1, col=2
 )
@@ -151,67 +353,98 @@ fig.update_layout(
     plot_bgcolor='#0f0e17',
     showlegend=True
 )
-
 fig.show()
 
-# Grafik kaydetme
 try:
     fig.write_image(f"{FIGURES_DIR}eda_target_distribution.png", scale=2)
     print("Grafik kaydedildi: eda_target_distribution.png")
 except Exception as e:
-    print(f"Kaydetme başarısız (Kaleido kurulu olmayabilir): {e}")
+    print(f"Kaydetme başarısız: {e}")
 ```
-*Not: Bu hücrenin hemen altına bir Markdown hücresi açıp analist yorumunu ekle:*
-```markdown
-**Veri Analisti Yorumu:** Hedef değişkenimiz olan `Burnout_Risk_Level` sınıflarının dağılımı incelendiğinde, dengeli bir dağılım olduğu görülmektedir. High, Medium ve Low sınıflarının oranları birbirine yakındır, bu durum sınıf dengesizliği (class imbalance) probleminin çok derin olmadığını gösterir. Ancak yine de en kritik sınıf olan `High` risk grubunu hatasız yakalayabilmek için modelleme aşamasında Macro F1 metriği yakından takip edilecektir.
+*Not: Bu hücrenin hemen altına bir Markdown hücresi açıp analist yorumunu ekle (HTML formatında flat ve unindented):*
+```html
+<div style="background:linear-gradient(135deg,#0d1117 0%,#161b22 100%);padding:20px 24px;border-radius:12px;border:1px solid rgba(167,139,250,0.15);margin-top:12px;box-shadow:0 4px 20px rgba(0,0,0,0.3);">
+<div style="display:flex;align-items:center;gap:8px;margin-bottom:10px;">
+<div style="width:3px;height:18px;background:linear-gradient(180deg,#a78bfa,#7c3aed);border-radius:1.5px;flex-shrink:0;"></div>
+<h4 style="color:#c7d2fe;font-size:0.95em;font-weight:700;margin:0;">Veri Analisti Yorumu</h4>
+</div>
+<p style="color:#cbd5e1;font-size:0.83em;line-height:1.5;margin:0;">
+Hedef değişkenimiz olan <code>Burnout_Risk_Level</code> sınıflarının (Low, Medium, High) dağılımı incelendiğinde, dengeli bir yapı olduğu görülmektedir (Low: %32.7, Medium: %42.3, High: %25.0). Sınıf dengesizliği (class imbalance) derin bir problem olmamakla birlikte, yüksek riskli öğrencileri erken aşamada yakalamak akademik rehberlik açısından kritik öneme sahiptir. Bu doğrultuda, model başarısını değerlendirirken birincil hedeflerimiz <strong>Recall (High) &gt; 0.85</strong> ve genel dengeyi koruyan <strong>Macro F1-Score &gt; 0.80</strong> olacaktır.
+</p>
+</div>
 ```
 
-#### Hücre 3 (Code) - Eksik Değer Analizi
+#### Hücre 3 (Code) - Eksik Değer Dağılım Analizi
 Yerleştirilecek alan: **Section 2.4**
 ```python
-# 2.4 Eksik Değer Isı Haritası (Eksikliklerin veri setindeki dağılımı)
-missing_matrix = df.isnull().astype(int)
+# 2.4 Eksik Değer Dağılım Analizi
+missing_counts = df.isnull().sum()
+missing_pct = (df.isnull().sum() / len(df) * 100).round(2)
 
-fig = px.imshow(
-    missing_matrix.iloc[:1000].T,  # İlk 1000 satır görselleştirme için yeterlidir
-    labels=dict(x="Gözlem İndeksi", y="Özellikler", color="Eksik mi?"),
-    y=df.columns,
-    color_continuous_scale=[[0, '#111827'], [1, '#ef4444']]
+missing_df = pd.DataFrame({
+    'Değişken': df.columns,
+    'Eksik Değer Sayısı': missing_counts,
+    'Eksiklik Oranı (%)': missing_pct
+}).sort_values(by='Eksik Değer Sayısı', ascending=False)
+
+# Sadece eksik değer içeren özellikleri görselleştirelim
+missing_df_plot = missing_df[missing_df['Eksik Değer Sayısı'] > 0]
+
+fig = px.bar(
+    missing_df_plot,
+    x='Değişken',
+    y='Eksiklik Oranı (%)',
+    text='Eksik Değer Sayısı',
+    title='Özelliklere Göre Eksik Değer Oranları (%) ve Sayıları (Tüm 50.000 Gözlem)',
+    color='Eksiklik Oranı (%)',
+    color_continuous_scale='Reds',
+    labels={'Eksiklik Oranı (%)': 'Oran (%)', 'Değişken': 'Değişken Adı'}
 )
 
+fig.update_traces(textposition='outside')
 fig.update_layout(
-    title="Eksik Değerlerin Dağılım Isı Haritası (İlk 1000 Gözlem - Kırmızı Bölgeler Eksik Değerlerdir)",
-    template="plotly_dark",
+    template='plotly_dark',
     paper_bgcolor='#0f0e17',
     plot_bgcolor='#0f0e17',
-    coloraxis_showscale=False
+    yaxis_range=[0, 10],
+    height=500
 )
-
 fig.show()
 
 try:
     fig.write_image(f"{FIGURES_DIR}eda_missing_value_heatmap.png", scale=2)
-    print("Grafik kaydedildi: eda_missing_value_heatmap.png")
+    print("Grafik kaydedildi: eda_missing_value_heatmap.png (Eksik değer bar grafiği olarak güncellendi)")
 except Exception as e:
     print(e)
 ```
 *Altına eklenecek analist yorumu:*
-```markdown
-**Veri Analisti Yorumu:** Eksik değer ısı haritası incelendiğinde, eksikliklerin veri setinin geneline rastgele dağıldığı (Missing Completely at Random - MCAR) gözlemlenmektedir. Veri setinde `Pre_Semester_GPA`, `Post_Semester_GPA`, `Weekly_GenAI_Hours`, `Skill_Retention_Score`, `Tool_Diversity`, `Perceived_AI_Dependency`, `Traditional_Study_Hours`, `Prompt_Engineering_Skill` ve `Anxiety_Level_During_Exams` olmak üzere 9 değişkende eksik değerler mevcuttur. Bu değişkenler modelleme öncesi veri hazırlama (Data Preparation) aşamasında uygun median (sayısal) veya mode (kategorik) imputer yöntemleriyle doldurulmalıdır.
+```html
+<div style="background:linear-gradient(135deg,#0d1117 0%,#161b22 100%);padding:20px 24px;border-radius:12px;border:1px solid rgba(167,139,250,0.15);margin-top:12px;box-shadow:0 4px 20px rgba(0,0,0,0.3);">
+<div style="display:flex;align-items:center;gap:8px;margin-bottom:10px;">
+<div style="width:3px;height:18px;background:linear-gradient(180deg,#a78bfa,#7c3aed);border-radius:1.5px;flex-shrink:0;"></div>
+<h4 style="color:#c7d2fe;font-size:0.95em;font-weight:700;margin:0;">Veri Analisti Yorumu</h4>
+</div>
+<p style="color:#cbd5e1;font-size:0.83em;line-height:1.5;margin:0;">
+Eksik değerlerin dağılım analizi, veri setindeki 9 değişkenin tamamında (Pre_Semester_GPA, Post_Semester_GPA, Weekly_GenAI_Hours, Skill_Retention_Score, Tool_Diversity, Paid_Subscription, Traditional_Study_Hours, Perceived_AI_Dependency, Anxiety_Level_During_Exams) %1 ile %6 arasında değişen hafif eksiklikler olduğunu göstermektedir. Bu dağınık ve düşük oranlı eksik değer yapısı, veri toplama sürecindeki sistemsel kayıt kesintileri veya anket doldurmama eğilimi gibi <strong>rastgele hatalara (MCAR - Missing Completely at Random)</strong> işaret etmektedir. Bu durum veri setimizin temsil gücünü olumsuz etkilemez. Modelleme öncesi veri kaybını önlemek için satır silme yerine, sayısal değişkenler için <strong>Median Imputer</strong>, kategorik değişkenler için ise <strong>Mode Imputer</strong> yöntemleri uygulanacaktır.
+</p>
+</div>
 ```
 
-#### Hücre 4 (Code) - Sayısal Değişken Dağılımları
+#### Hücre 4 (Code) - Sayısal ve Sayım Değişkenleri Dağılımları
 Yerleştirilecek alan: **Section 2.5**
 ```python
-# 2.5 Sayısal Değişken Dağılımları
+# 2.5 Sayısal ve Sayım Değişkenleri Dağılımları
+TARGET = 'Burnout_Risk_Level'
 num_cols = [
     'Pre_Semester_GPA', 'Weekly_GenAI_Hours', 'Traditional_Study_Hours', 
     'Skill_Retention_Score', 'Anxiety_Level_During_Exams', 
-    'Tool_Diversity', 'Perceived_AI_Dependency', 'Post_Semester_GPA'
+    'Perceived_AI_Dependency', 'Post_Semester_GPA'
 ]
+colors = {'Low': '#10b981', 'Medium': '#f59e0b', 'High': '#ef4444'}
 
+# 1. Sürekli Sayısal Değişkenler (Histogram + Box-Plot)
 for col in num_cols:
-    fig = make_subplots(rows=1, cols=2, subplot_titles=(f"{col} Dağılımı", f"{col} Kutu Grafiği (Risk Grubu Bazlı)"))
+    fig = make_subplots(rows=1, cols=2, subplot_titles=(f'{col} Dağılımı', f'{col} Kutu Grafiği (Risk Grubu Bazlı)'))
     
     # Histogram
     fig.add_trace(
@@ -228,8 +461,8 @@ for col in num_cols:
         )
         
     fig.update_layout(
-        title_text=f"{col} Değişken Analizi",
-        template="plotly_dark",
+        title_text=f'{col} Değişken Analizi',
+        template='plotly_dark',
         paper_bgcolor='#0f0e17',
         plot_bgcolor='#0f0e17',
         showlegend=False
@@ -237,32 +470,74 @@ for col in num_cols:
     fig.show()
     
     try:
-        fig.write_image(f"{FIGURES_DIR}eda_numeric_{col}.png", scale=2)
+        fig.write_image(f'{FIGURES_DIR}eda_numeric_{col}.png', scale=2)
     except Exception as e:
         pass
+
+# 2. Sayım / Kesikli Değişken: Tool_Diversity
+col = 'Tool_Diversity'
+temp_df = df.groupby([col, TARGET]).size().reset_index(name='Öğrenci Sayısı')
+fig = px.bar(
+    temp_df,
+    x=col,
+    y='Öğrenci Sayısı',
+    color=TARGET,
+    color_discrete_map=colors,
+    barmode='group',
+    title=f'{col} Değişkeninin Tükenmişlik Riski Kırılımlı Dağılımı',
+    labels={col: 'Kullanılan YZ Araç Sayısı', 'Öğrenci Sayısı': 'Öğrenci Sayısı', TARGET: 'Tükenmişlik Riski'}
+)
+fig.update_layout(
+    template='plotly_dark',
+    paper_bgcolor='#0f0e17',
+    plot_bgcolor='#0f0e17'
+)
+fig.show()
+
+try:
+    fig.write_image(f'{FIGURES_DIR}eda_numeric_{col}.png', scale=2)
+except Exception as e:
+    pass
 ```
 *Altına eklenecek analist yorumu:*
-```markdown
-**Veri Analisti Yorumu:** Haftalık yapay zeka kullanım saatleri (`Weekly_GenAI_Hours`) ve algılanan yapay zeka bağımlılığı (`Perceived_AI_Dependency`) arttıkça, ayrıca sınav anı kaygısı (`Anxiety_Level_During_Exams`) yükseldikçe öğrencilerin yüksek tükenmişlik riski (`High`) grubunda yer alma oranı belirgin şekilde artmaktadır. Geleneksel çalışma saatleri (`Traditional_Study_Hours`) arttıkça ise tükenmişlik riski azalmaktadır. Akademik ortalamalar (`Pre_Semester_GPA` ve `Post_Semester_GPA`) ile beceri kalıcılığı (`Skill_Retention_Score`) ve araç çeşitliliği (`Tool_Diversity`) risk seviyelerine göre daha homojen bir dağılım sergilemektedir; ancak düşük not ortalaması ve düşük beceri kalıcılığı yüksek riskle kısmen ilişkilidir. Not: `Post_Semester_GPA` dönem sonu verisi olduğundan, modelleme aşamasında veri sızıntısını önlemek için hariç tutulacaktır.
+```html
+<div style="background:linear-gradient(135deg,#0d1117 0%,#161b22 100%);padding:20px 24px;border-radius:12px;border:1px solid rgba(167,139,250,0.15);margin-top:12px;box-shadow:0 4px 20px rgba(0,0,0,0.3);">
+<div style="display:flex;align-items:center;gap:8px;margin-bottom:10px;">
+<div style="width:3px;height:18px;background:linear-gradient(180deg,#a78bfa,#7c3aed);border-radius:1.5px;flex-shrink:0;"></div>
+<h4 style="color:#c7d2fe;font-size:0.95em;font-weight:700;margin:0;">Veri Analisti Yorumu (Tekil Değişkenlerin Hedef Değişken ile Olan İlişkisi)</h4>
+</div>
+<p style="color:#cbd5e1;font-size:0.83em;line-height:1.5;margin:0;">
+Sayısal değişkenlerin hedef risk seviyeleri kırılımındaki kutu grafikleri (box-plot) ve dağılımları incelendiğinde son derece önemli çıkarımlar elde edilmiştir:
+<br>1. <strong>Weekly_GenAI_Hours & Perceived_AI_Dependency:</strong> Haftalık YZ kullanım saatleri arttıkça ve bağımlılık algısı yükseldikçe, öğrencilerin ezici çoğunluğunun <strong>High</strong> risk grubunda toplandığı görülmektedir. Bu iki değişken en güçlü risk belirleyicileridir.
+<br>2. <strong>Traditional_Study_Hours:</strong> Geleneksel yöntemlerle çalışmaya daha fazla zaman ayıran öğrencilerin tükenmişlik riskinin azaldığı (negatif ilişki) gözlenmektedir. Bu durum geleneksel ders çalışmanın koruyucu etkisini doğrular.
+<br>3. <strong>Anxiety_Level_During_Exams:</strong> Sınav anksiyetesi yüksek olan öğrencilerin High risk seviyesine girme eğilimi çok daha yüksektir.
+<br>4. <strong>Tool_Diversity:</strong> Çok sayıda farklı YZ aracının aynı anda kullanılması (4 veya 5 araç), box plot yerine bar grafiklerinden de görüleceği üzere bilişsel adaptasyon yükünü artırarak risk düzeyini hafifçe yukarı taşımaktadır.
+<br>5. <strong>Pre_Semester_GPA & Skill_Retention_Score:</strong> Düşük başlangıç GPA'ine ve zayıf hafıza kalıcılık skoruna sahip öğrencilerde tükenmişlik riski daha yaygındır.
+</p>
+</div>
 ```
 
-#### Hücre 5 (Code) - Kategorik Değişkenler
-Yerleştirilecek alan: **Section 2.5'in kategorik bölümü**
+#### Hücre 5 (Code) - Kategorik Değişkenlerin Dağılımları
+Yerleştirilecek alan: **Section 2.6**
 ```python
-# Kategorik Değişkenlerin Analizi
+# 2.6 Kategorik Değişkenlerin Dağılımları
 cat_cols = ['Major_Category', 'Year_of_Study', 'Primary_Use_Case', 'Prompt_Engineering_Skill', 'Paid_Subscription', 'Institutional_Policy']
+colors = {'Low': '#10b981', 'Medium': '#f59e0b', 'High': '#ef4444'}
 
 for col in cat_cols:
-    # Target kırılımlı stacked bar chart
-    temp_df = df.groupby([col, TARGET]).size().reset_index(name='Adet')
+    temp_df = df.copy()
+    if temp_df[col].dtype == 'bool':
+        temp_df[col] = temp_df[col].map({True: 'Abonelik Var (True)', False: 'Abonelik Yok (False)'})
+        
+    plot_data = temp_df.groupby([col, TARGET]).size().reset_index(name='Öğrenci Sayısı')
     
     fig = px.bar(
-        temp_df, 
+        plot_data, 
         x=col, 
-        y='Adet', 
+        y='Öğrenci Sayısı', 
         color=TARGET,
         color_discrete_map=colors,
-        title=f"{col} Değişkeninin Tükenmişlik Riski Dağılımı",
+        title=f"{col} Değişkeninin Tükenmişlik Riski Kırılımlı Dağılımı",
         barmode='group'
     )
     
@@ -281,25 +556,39 @@ for col in cat_cols:
         pass
 ```
 *Altına eklenecek analist yorumu:*
-```markdown
-**Veri Analisti Yorumu:** Yapay zekayı birincil kullanım amaçlarına (`Primary_Use_Case`) göre incelediğimizde, `Direct_Answer_Generation` (Doğrudan Cevap Üretme) ve `Debugging/Troubleshooting` (Hata Ayıklama) dahil tüm kategorilerde yüksek tükenmişlik riski (`High`) oranının birbirine oldukça yakın ve dengeli (yaklaşık %25-%28 bandında) olduğu görülmektedir. Hacimsel olarak incelendiğinde, `Debugging/Troubleshooting` en fazla öğrenci içeren gruptur ve dolayısıyla bu gruptaki yüksek riskli öğrenci sayısı mutlak değer olarak daha fazladır. Ayrıca, prompt mühendisliği becerisi (`Prompt_Engineering_Skill`) 'Beginner' olanlar ile ücretli aboneliği bulunmayan öğrencilerde tükenmişlik riski bir miktar daha baskındır.
+```html
+<div style="background:linear-gradient(135deg,#0d1117 0%,#161b22 100%);padding:20px 24px;border-radius:12px;border:1px solid rgba(167,139,250,0.15);margin-top:12px;box-shadow:0 4px 20px rgba(0,0,0,0.3);">
+<div style="display:flex;align-items:center;gap:8px;margin-bottom:10px;">
+<div style="width:3px;height:18px;background:linear-gradient(180deg,#a78bfa,#7c3aed);border-radius:1.5px;flex-shrink:0;"></div>
+<h4 style="color:#c7d2fe;font-size:0.95em;font-weight:700;margin:0;">Veri Analisti Yorumu (Kategorik Değişkenlerin Hedef Değişken ile Olan İlişkisi)</h4>
+</div>
+<p style="color:#cbd5e1;font-size:0.83em;line-height:1.5;margin:0;">
+Kategorik değişkenlerin hedef değişken kırılımındaki dağılımları disiplinler arası önemli eğilimleri göstermektedir:
+<br>1. <strong>Bölümler ve YZ Kullanım Amaçları:</strong> STEM öğrencileri en yoğun YZ kullanıcıları olup çoğunlukla <code>Debugging/Troubleshooting</code> (%51.7) amacıyla YZ'yi tercih etmektedir ve yüksek risk oranları %30 ile zirvededir. Buna karşın, Humanities öğrencileri YZ'yi <code>Copywriting/Drafting</code> (%51.9) amacıyla kullanmakta olup tükenmişlik riski en düşük gruptur (%20.7).
+<br>2. <strong>Prompt Yetkinliği & Paid_Subscription:</strong> Prompt yazma becerisi başlangıç düzeyinde olan (Beginner) ve premium aboneliği bulunmayan öğrencilerde stres ve tükenmişlik riski hafif düzeyde daha yaygındır.
+<br>3. <strong>Okul Politikaları:</strong> Yapay zekayı tamamen yasaklayan (Strict_Ban) veya serbest bırakan okul politikalarında tükenmişlik riskinin dağılımı homojendir, ancak yasakçı yaklaşımların anksiyete üzerindeki dolaylı etkileri incelenmelidir.
+</p>
+</div>
 ```
 
-#### Hücre 6 (Code) - Korelasyon Matrisi
-Yerleştirilecek alan: **Section 2.6**
+#### Hücre 6 (Code) - Korelasyon Matrisi (Tüm 15 Değişken)
+Yerleştirilecek alan: **Section 2.7**
 ```python
-# 2.6 Korelasyon Matrisi
+# 2.7 Korelasyon Matrisi (Tüm 15 Değişken)
 TARGET = 'Burnout_Risk_Level'
-num_cols = [
-    'Pre_Semester_GPA', 'Weekly_GenAI_Hours', 'Traditional_Study_Hours', 
-    'Skill_Retention_Score', 'Anxiety_Level_During_Exams', 
-    'Tool_Diversity', 'Perceived_AI_Dependency', 'Post_Semester_GPA'
-]
 
-# Korelasyon matrisinde hedef değişkeni de göstermek için geçici olarak sayısallaştırıyoruz
-corr_df = df[num_cols].copy()
-target_map = {'Low': 0, 'Medium': 1, 'High': 2}
-corr_df['Burnout_Risk_Level'] = df[TARGET].map(target_map)
+# Korelasyon matrisinde Student_ID dışındaki tüm 15 değişkeni göstermek için kopyalıyoruz ve encode ediyoruz
+corr_df = df.copy().drop('Student_ID', axis=1, errors='ignore')
+
+# Ordinal değişkenleri map ediyoruz
+corr_df[TARGET] = corr_df[TARGET].map({'Low': 0, 'Medium': 1, 'High': 2})
+corr_df['Prompt_Engineering_Skill'] = corr_df['Prompt_Engineering_Skill'].map({'Beginner': 0, 'Intermediate': 1, 'Advanced': 2})
+corr_df['Year_of_Study'] = corr_df['Year_of_Study'].map({'Freshman': 0, 'Sophomore': 1, 'Junior': 2, 'Senior': 3, 'Graduate': 4})
+corr_df['Paid_Subscription'] = corr_df['Paid_Subscription'].astype(float)
+
+# Nominal değişkenleri label-encode ediyoruz
+for col in ['Major_Category', 'Primary_Use_Case', 'Institutional_Policy']:
+    corr_df[col] = corr_df[col].astype('category').cat.codes
 
 corr_matrix = corr_df.corr()
 
@@ -307,32 +596,122 @@ fig = px.imshow(
     corr_matrix,
     text_auto='.2f',
     color_continuous_scale='Viridis',
-    labels=dict(color="Korelasyon")
+    labels=dict(color='Korelasyon'),
+    width=900,
+    height=800
 )
 
 fig.update_layout(
-    title="Sayısal Değişkenler ve Hedef Değişken Korelasyon Matrisi",
-    template="plotly_dark",
+    title='Sayısal, Kategorik ve Hedef Değişken Genel Korelasyon Matrisi',
+    template='plotly_dark',
     paper_bgcolor='#0f0e17',
     plot_bgcolor='#0f0e17'
 )
 fig.show()
 
 try:
-    fig.write_image(f"{FIGURES_DIR}eda_correlation_matrix.png", scale=2)
-    print("Grafik kaydedildi: eda_correlation_matrix.png")
+    fig.write_image(f'{FIGURES_DIR}eda_correlation_matrix.png', scale=2)
+    print('Grafik kaydedildi: eda_correlation_matrix.png')
 except Exception as e:
     print(e)
 ```
 *Altına eklenecek analist yorumu:*
-```markdown
-**Veri Analisti Yorumu:** Korelasyon matrisi incelendiğinde, hedef değişkenimiz `Burnout_Risk_Level` ile en güçlü pozitif ilişkinin `Weekly_GenAI_Hours` (0.47) ve `Perceived_AI_Dependency` (0.37) arasında olduğu görülmektedir. Sınav anı kaygısı da target ile pozitif yönlü (0.16) ilişkilidir. Geleneksel çalışma saatleri (`Traditional_Study_Hours`) ile hedef değişken arasında ise negatif yönlü (-0.14) bir ilişki mevcuttur. Diğer yandan, `Traditional_Study_Hours` ile `Weekly_GenAI_Hours` arasındaki negatif korelasyon (-0.16) yapay zekanın geleneksel çalışmanın yerini aldığını desteklemektedir. GPA değerleri ile diğer özellikler arasındaki ilişkiler oldukça zayıftır, bu da doğrusal olmayan modellerin (Ağaç tabanlı algoritmalar) tercih edilmesi gerektiğini göstermektedir.
+```html
+<div style="background:linear-gradient(135deg,#0d1117 0%,#161b22 100%);padding:20px 24px;border-radius:12px;border:1px solid rgba(167,139,250,0.15);margin-top:12px;box-shadow:0 4px 20px rgba(0,0,0,0.3);">
+<div style="display:flex;align-items:center;gap:8px;margin-bottom:10px;">
+<div style="width:3px;height:18px;background:linear-gradient(180deg,#a78bfa,#7c3aed);border-radius:1.5px;flex-shrink:0;"></div>
+<h4 style="color:#c7d2fe;font-size:0.95em;font-weight:700;margin:0;">Veri Analisti Yorumu (Korelasyon Matrisi Çıkarımları)</h4>
+</div>
+<p style="color:#cbd5e1;font-size:0.83em;line-height:1.5;margin:0;">
+Tüm 15 değişkeni (Student_ID hariç) kapsayan genişletilmiş korelasyon matrisi, doğrusal ve sıra bazlı ilişkileri netleştirmektedir:
+<br>1. <strong>Hedef Değişkenle En Güçlü Pozitif Korelasyonlar:</strong> <code>Weekly_GenAI_Hours</code> (0.47) ve <code>Perceived_AI_Dependency</code> (0.37) değişkenlerindedir. Bu durum, fiili kullanım ve bağımlılık hissinin risk düzeyinin en birincil doğrusal öngörücüleri olduğunu onaylar.
+<br>2. <strong>Negatif Korelasyonlar:</strong> Geleneksel çalışma saatleri (Traditional_Study_Hours, -0.14) ve Pre_Semester_GPA (-0.10) ile risk arasında negatif korelasyon vardır; yani bu iki faktör koruyucu etki göstermektedir.
+<br>3. <strong>Disiplin ve Politika İlişkileri:</strong> Nominal değişkenlerin (Major_Category, Primary_Use_Case) katsayılarının düşüklüğü, bu değişkenlerin etkilerinin doğrusal olmadığını ve modelleme aşamasında ağaç tabanlı veya doğrusal olmayan algoritmaların (örn. LightGBM, Random Forest, XGBoost) tercih edilmesi gerektiğini göstermektedir.
+</p>
+</div>
 ```
 
-#### Hücre 7 (Code) - Aykırı Değer Tespiti
-Yerleştirilecek alan: **Section 2.7**
+#### Hücre 7 (Code) - İkili Değişken Analizleri (Bivariate Analysis)
+Yerleştirilecek alan: **Section 2.8**
 ```python
-# 2.7 Aykırı Değer Analizi (IQR Yöntemi)
+# 2.8 İkili Değişken Analizleri (Bivariate Analysis)
+colors = {'Low': '#10b981', 'Medium': '#f59e0b', 'High': '#ef4444'}
+
+# 1. Weekly_GenAI_Hours vs Traditional_Study_Hours (İkame Etkisi)
+fig = px.scatter(
+    df,
+    x='Weekly_GenAI_Hours',
+    y='Traditional_Study_Hours',
+    color=TARGET,
+    color_discrete_map=colors,
+    opacity=0.6,
+    title='Haftalık YZ Kullanım Saati vs Geleneksel Çalışma Saati (İkame Etkisi)',
+    labels={'Weekly_GenAI_Hours': 'Haftalık YZ Kullanım Saati', 'Traditional_Study_Hours': 'Geleneksel Çalışma Saati', TARGET: 'Tükenmişlik Riski'}
+)
+fig.update_layout(template='plotly_dark', paper_bgcolor='#0f0e17', plot_bgcolor='#0f0e17')
+fig.show()
+try:
+    fig.write_image(f'{FIGURES_DIR}eda_bivariate_genai_vs_traditional.png', scale=2)
+except Exception as e:
+    pass
+
+# 2. Weekly_GenAI_Hours vs Skill_Retention_Score (Öğrenme Kaybı)
+fig = px.scatter(
+    df,
+    x='Weekly_GenAI_Hours',
+    y='Skill_Retention_Score',
+    color=TARGET,
+    color_discrete_map=colors,
+    opacity=0.6,
+    title='Haftalık YZ Kullanım Saati vs Beceri Kalıcılık Skoru (Öğrenme Kaybı)',
+    labels={'Weekly_GenAI_Hours': 'Haftalık YZ Kullanım Saati', 'Skill_Retention_Score': 'Beceri Kalıcılık Skoru', TARGET: 'Tükenmişlik Riski'}
+)
+fig.update_layout(template='plotly_dark', paper_bgcolor='#0f0e17', plot_bgcolor='#0f0e17')
+fig.show()
+try:
+    fig.write_image(f'{FIGURES_DIR}eda_bivariate_genai_vs_retention.png', scale=2)
+except Exception as e:
+    pass
+
+# 3. Weekly_GenAI_Hours vs Perceived_AI_Dependency (Ortalama Bağımlılık Gelişimi)
+avg_dep = df.groupby(['Perceived_AI_Dependency', TARGET], observed=True)['Weekly_GenAI_Hours'].mean().reset_index()
+fig = px.line(
+    avg_dep,
+    x='Perceived_AI_Dependency',
+    y='Weekly_GenAI_Hours',
+    color=TARGET,
+    color_discrete_map=colors,
+    markers=True,
+    title='Algılanan YZ Bağımlılık Skoru vs Ortalama Haftalık YZ Kullanım Saati',
+    labels={'Weekly_GenAI_Hours': 'Ortalama Haftalık YZ Saati', 'Perceived_AI_Dependency': 'Algılanan YZ Bağımlılık Skoru (1-10)', TARGET: 'Tükenmişlik Riski'}
+)
+fig.update_layout(template='plotly_dark', paper_bgcolor='#0f0e17', plot_bgcolor='#0f0e17')
+fig.show()
+try:
+    fig.write_image(f'{FIGURES_DIR}eda_bivariate_genai_vs_dependency.png', scale=2)
+except Exception as e:
+    pass
+```
+*Altına eklenecek analist yorumu:*
+```html
+<div style="background:linear-gradient(135deg,#0d1117 0%,#161b22 100%);padding:20px 24px;border-radius:12px;border:1px solid rgba(167,139,250,0.15);margin-top:12px;box-shadow:0 4px 20px rgba(0,0,0,0.3);">
+<div style="display:flex;align-items:center;gap:8px;margin-bottom:10px;">
+<div style="width:3px;height:18px;background:linear-gradient(180deg,#a78bfa,#7c3aed);border-radius:1.5px;flex-shrink:0;"></div>
+<h4 style="color:#c7d2fe;font-size:0.95em;font-weight:700;margin:0;">Veri Analisti Yorumu (İkili Değişken Analizleri ve Hedef İlişkisi)</h4>
+</div>
+<p style="color:#cbd5e1;font-size:0.83em;line-height:1.5;margin:0;">
+İkili değişken analizleri (bivariate analysis) sonucunda ortaya koyulan kritik akademik ve davranışsal kesişimler şunlardır:
+<br>1. <strong>YZ Kullanımı ve Geleneksel Çalışma (İkame Etkisi):</strong> Geleneksel çalışma saatleri ile YZ kullanım saatleri arasındaki negatif ilişki (-0.16) ve scatter plot grafiği incelendiğinde; haftalık YZ kullanım saati 15 saati geçen öğrencilerin geleneksel çalışma sürelerinin dramatik olarak azaldığı ve bu bölgedeki öğrencilerin neredeyse tamamının <strong>High</strong> risk sınıfına girdiğini görmekteyiz. YZ, çalışmayı desteklemekten ziyade ikame ettiğinde tükenmişlik tetiklenmektedir.
+<br>2. <strong>YZ Kullanımı ve Beceri Kalıcılığı (Öğrenme Kaybı):</strong> <code>Weekly_GenAI_Hours</code> ve <code>Skill_Retention_Score</code> arasındaki negatif ilişki (-0.12) öğrenme süreçlerine dair alarm vermektedir. Haftalık 20 saatin üzerinde YZ kullanan öğrencilerin beceri kalıcılık skorlarının düştüğü ve bu bölgede High tükenmişliğin yoğunlaştığı görülmektedir. Aşırı kullanım, bilginin derinlemesine işlenmesini engellemektedir.
+<br>3. <strong>Kullanım ve Bağımlılık Algısı:</strong> Haftalık YZ saati arttıkça bağımlılık algısının (1-10) doğrusal olarak arttığı (korelasyon: 0.67) ve bağımlılık algısı 7'yi geçen öğrencilerin ezici bir çoğunluğunun High riskli olduğu net bir şekilde doğrulanmıştır.
+</p>
+</div>
+```
+
+#### Hücre 8 (Code) - Aykırı Değer Analizi (IQR Yöntemi)
+Yerleştirilecek alan: **Section 2.9**
+```python
+# 2.9 Aykırı Değer Analizi (Tukey IQR Yöntemi)
 outlier_summary = []
 num_cols = [
     'Pre_Semester_GPA', 'Weekly_GenAI_Hours', 'Traditional_Study_Hours', 
@@ -357,48 +736,90 @@ for col in num_cols:
     })
 
 outlier_df = pd.DataFrame(outlier_summary)
-display(outlier_df.style.set_properties(**{'background-color': '#111827', 'color': '#f3f4f6'}))
+display(outlier_df.style.set_properties(**{'background-color': '#111827', 'color': '#f3f4f6', 'border-color': '#374151'})\
+    .set_table_styles([{'selector': 'th', 'props': [('background-color', '#1f2937'), ('color', '#a78bfa'), ('font-weight', 'bold')]}]))
+print('Aykırı değer tablosu oluşturuldu.')
 ```
 *Altına eklenecek analist yorumu:*
-```markdown
-**Veri Analisti Yorumu:** IQR analizi sonuçlarına göre, sayısal değişkenlerin çoğunda uç veya aykırı değer bulunmamaktadır veya oran %0.1'in altındadır. Bu durum veri setinin nispeten temiz olduğunu göstermektedir. Var olan çok az sayıdaki aykırı değer için kırpma (clipping / winsorization) veya robust ölçeklendirme (RobustScaler) metotları, sonraki faz olan veri hazırlama aşamasında alternatif olarak değerlendirilebilir.
+```html
+<div style="background:linear-gradient(135deg,#0d1117 0%,#161b22 100%);padding:20px 24px;border-radius:12px;border:1px solid rgba(167,139,250,0.15);margin-top:12px;box-shadow:0 4px 20px rgba(0,0,0,0.3);">
+<div style="display:flex;align-items:center;gap:8px;margin-bottom:10px;">
+<div style="width:3px;height:18px;background:linear-gradient(180deg,#a78bfa,#7c3aed);border-radius:1.5px;flex-shrink:0;"></div>
+<h4 style="color:#c7d2fe;font-size:0.95em;font-weight:700;margin:0;">Veri Analisti Yorumu</h4>
+</div>
+<p style="color:#cbd5e1;font-size:0.83em;line-height:1.5;margin:0;">
+Tukey (IQR) yöntemiyle yapılan aykırı değer analizi, veri setindeki uç değerlerin oranının son derece düşük olduğunu göstermektedir (tüm sayısal sütunlar için oran %0.1'in altındadır). Bu durum veri toplama kalitesinin son derece yüksek olduğunu ve veride gürültü/bozuk veri bulunmadığını kanıtlar. Box-plot grafiklerinde de görülen bu uç değerler, veri hatası değil, öğrencilerin doğal davranışsal uç varyasyonlarıdır (örneğin haftada 40 saat YZ kullanan veya 35 saat geleneksel çalışan öğrenciler). Modelleme aşamasında (Faz 3) bu uç değerlerin mesafe bazlı algoritmaları (KNN, SVM vb.) olumsuz etkilemesini önlemek adına <strong>RobustScaler</strong> ölçeklendirme yöntemi veya <strong>clipping (kırpma)</strong> tekniği uygulanacaktır.
+</p>
+</div>
 ```
 
-#### Hücre 8 (Markdown) - Veri Sızıntısı Değerlendirmesi
-Yerleştirilecek alan: **Section 2.8**
-```markdown
-### 2.8 Veri Sızıntısı (Data Leakage) Değerlendirmesi
-
-Modelin gerçek dünyada (dönem başında) doğru ve güvenilir tahminler yapabilmesi için veri sızıntısı riski taşıyan özellikleri analiz etmek ve filtrelemek kritik öneme sahiptir.
-
-* **`Post_Semester_GPA` (Dönem Sonu Not Ortalaması):** Dönem sonuna ait bir ölçümdür. İş problemi, dönem başındaki verilere göre dönem sonundaki tükenmişlik riskini tahmin etmektir. Dönem başında bilinmeyen bu özelliğin modele feature olarak girilmesi **veri sızıntısına (data leakage)** sebep olur. Bu nedenle bu sütun **kesinlikle modelleme dışı bırakılacaktır.**
-* **`Skill_Retention_Score` (Beceri Kalıcılığı Skoru):** Dönem içi bir değerlendirme olarak kabul edilmiştir. Ancak, modelleme sonrasında bu özelliğin model üzerindeki etkisi yakından izlenecektir. Beklenmedik düzeyde yüksek bir feature importance gösterirse, veri sızıntısı şüphesiyle modelden çıkarılması değerlendirilmelidir.
-* **`GPA_Change` (Not Değişimi Önerisi):** `Post_Semester_GPA - Pre_Semester_GPA` şeklinde bir özellik türetilmesi önerisi, içinde `Post_Semester_GPA` barındırdığı için **aynı veri sızıntısı riskini taşımaktadır ve kesinlikle uygulanmayacaktır.**
+#### Hücre 9 (Markdown) - Veri Sızıntısı Değerlendirmesi
+Yerleştirilecek alan: **Section 2.10**
+```html
+<div style="background:linear-gradient(135deg,#09090f 0%,#0e0e1c 100%);padding:36px 40px;border-radius:20px;margin-bottom:32px;border:1px solid rgba(255,255,255,0.07);box-shadow:0 4px 28px rgba(0,0,0,0.45);">
+<div style="display:flex;align-items:center;gap:12px;margin-bottom:24px;">
+<div style="width:4px;height:30px;background:linear-gradient(180deg,#ef4444,#dc2626);border-radius:2px;flex-shrink:0;"></div>
+<h2 style="color:#f87171;font-size:1.25em;font-weight:700;margin:0;letter-spacing:0.4px;">Faz 2: Veri Sızıntısı (Data Leakage) Değerlendirmesi</h2>
+</div>
+<div style="display:flex-direction:column;gap:20px;">
+<div style="background:rgba(239,68,68,0.08);border:1px solid rgba(239,68,68,0.2);border-radius:10px;padding:16px 20px;">
+<p style="color:#f87171;font-size:0.95em;font-weight:700;margin:0 0 6px;text-transform:uppercase;letter-spacing:0.5px;">Veri Sızıntısı Nedir ve Neye Sebep Olur?</p>
+<p style="color:#fecdd3;font-size:0.83em;line-height:1.5;margin:0;">
+Veri sızıntısı (data leakage), eğitim veri setinde modelin öğrenmemesi gereken, geleceğe dair veya tahmin anında (dönem başında) elde edilemeyecek bilgilerin yer alması durumudur. Bu durum, modelin doğrulama aşamasında yapay olarak **%100'e yakın gerçekçi olmayan bir başarı** göstermesine sebob olurken, canlı sisteme alındığında ise **tamamen başarısız olmasına** (aşırı ezberleme/overfitting) yol açar.
+</p>
+</div>
+<div style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:10px;padding:16px 20px;">
+<p style="color:#e2e8f0;font-size:0.9em;font-weight:600;margin:0 0 8px;">📊 Örnek Senaryo ve Somut Etkileri</p>
+<p style="color:#cbd5e1;font-size:0.82em;line-height:1.5;margin:0;">
+<code>Post_Semester_GPA</code> (Dönem Sonu Not Ortalaması) dönem sonunda belirlenir. Bizim amacımız ise dönem başında öğrencinin tükenmişlik riskini tahmin etmektir. Eğer <code>Post_Semester_GPA</code> model girdisi olarak tutulursa, model bu not ile <code>Pre_Semester_GPA</code> arasındaki düşüşleri görerek tükenmişlik riskini doğrudan sızdırılan bu gelecek bilgisinden ezberler. Ancak dönem başında elimizde dönem sonu notu olmayacağı için model canlıda tahmin yapamaz.
+</p>
+</div>
+<div style="background:rgba(16,185,129,0.08);border:1px solid rgba(16,185,129,0.2);border-radius:10px;padding:16px 20px;">
+<p style="color:#34d399;font-size:0.95em;font-weight:700;margin:0 0 6px;text-transform:uppercase;letter-spacing:0.5px;">Alınan Net Kararlar ve Aksiyonlar</p>
+<ul style="color:#a7f3d0;font-size:0.82em;line-height:1.5;margin:0;padding-left:20px;">
+<li><strong>Post_Semester_GPA Kesinlikle Çıkarıldı:</strong> Veri sızıntısını tamamen kesmek için <code>Post_Semester_GPA</code> değişkeni model girdilerinden çıkarılmıştır.</li>
+<li><strong>GPA_Change Özelliği İptal Edildi:</strong> İçinde <code>Post_Semester_GPA</code> barındıran <code>GPA_Change</code> (Not Değişimi) feature engineering önerisi veri sızıntısı nedeniyle iptal edilmiştir.</li>
+<li><strong>Skill_Retention_Score Yakın Takip Altında:</strong> Dönem içi bir sınav skoru olarak kabul edilmekle birlikte, modellemede sızıntı şüphesi yaratıp yaratmadığı feature importance katsayıları üzerinden izlenecektir.</li>
+</ul>
+</div>
+</div>
+</div>
 ```
 
-#### Hücre 9 (Markdown) - EDA Sonu Raporu / Handoff Notu
-Yerleştirilecek alan: **Section 2.9**
-```markdown
-### 2.9 EDA Bulguları ve Cenker'e Handoff Notları
-
-**Cenker (Faz 3 - Data Preparation)** için hazırlanan veri hazırlama yönergeleri aşağıdadır:
-
-1. **Eksik Değer Yönetimi (Imputation):**
-   * Sayısal Değişkenler (`Pre_Semester_GPA`, `Post_Semester_GPA`, `Weekly_GenAI_Hours`, `Traditional_Study_Hours`, `Skill_Retention_Score`, `Anxiety_Level_During_Exams`, `Tool_Diversity`, `Perceived_AI_Dependency`): Çarpık olmayan veya normal dağılıma yakın dağılımlar için **Median Imputer** kullanılması önerilir.
-   * Kategorik Değişkenler (`Prompt_Engineering_Skill`, `Primary_Use_Case`): Eksik değerler en sık gözlenen değerle (**Mode Imputer**) veya "Unknown" gibi sabit bir kategori atanarak doldurulmalıdır.
-2. **Kategorik Değişken Encoding:**
-   * `Prompt_Engineering_Skill` ve `Year_of_Study` değişkenleri doğal bir hiyerarşi içerdiğinden **OrdinalEncoder** (Beginner -> Intermediate -> Advanced; Freshman -> Senior) ile sayısallaştırılmalıdır.
-   * `Major_Category`, `Primary_Use_Case` ve `Institutional_Policy` sütunları hiyerarşik olmadığından train seti üzerinde fit edilerek **OneHotEncoder** ile dönüştürülmelidir.
-   * `Paid_Subscription` kolonu boolean yapıda olup doğrudan 1 ve 0'a cast edilebilir.
-3. **Scaling:**
-   * Modelleme aşamasında SVM, KNN ve Lojistik Regresyon gibi mesafeye duyarlı algoritmalar da kullanılacağından, tüm sayısal özellikler `StandardScaler` ile standartlaştırılmalıdır.
-4. **Yeni Özellik Türetimi (Feature Engineering) Önerileri:**
-   * `Study_Ratio` = `Weekly_GenAI_Hours` / (`Traditional_Study_Hours` + 1) (Geleneksel çalışma ile YZ kullanımı arasındaki dengeyi temsil eden oran).
-   * `Total_Study_Hours` = `Weekly_GenAI_Hours` + `Traditional_Study_Hours` (Toplam akademik efor).
-   * `GPA_Change` → **UYGULAMA (Veri Sızıntısı Engellendi):** `Post_Semester_GPA` içerdiği için veri sızıntısına yol açmaktadır.
-5. **Veri Sızıntısı Filtrelemesi:**
-   * `Post_Semester_GPA` ve `Student_ID` sütunları veri sızıntısını ve ezberlemeyi önlemek için pipeline öncesinde veri setinden düşürülmelidir (`drop`).
-6. **Görsellerin Durumu:** Tüm grafikler `figures/` klasörü altına PNG formatında başarıyla kaydedilmiştir.
+#### Hücre 10 (Markdown) - EDA Sonu Raporu / Bulgular Raporu
+Yerleştirilecek alan: **Section 2.11**
+```html
+<div style="background:linear-gradient(135deg,#09090f 0%,#0e0e1c 100%);padding:36px 40px;border-radius:20px;margin-bottom:32px;border:1px solid rgba(255,255,255,0.07);box-shadow:0 4px 28px rgba(0,0,0,0.45);">
+<div style="display:flex;align-items:center;gap:12px;margin-bottom:24px;">
+<div style="width:4px;height:30px;background:linear-gradient(180deg,#10b981,#059669);border-radius:2px;flex-shrink:0;"></div>
+<h2 style="color:#a7f3d0;font-size:1.25em;font-weight:700;margin:0;letter-spacing:0.4px;">Faz 2: EDA Bulguları ve Süreç Değerlendirme Raporu</h2>
+</div>
+<div style="display:flex;flex-direction:column;gap:20px;">
+<p style="color:#cbd5e1;font-size:0.88em;line-height:1.6;margin:0;">
+50.000 gözlem içeren öğrenci veri setimiz üzerinde gerçekleştirilen Keşifsel Veri Analizi (EDA) süreci başarıyla tamamlanmıştır. Bulgular, veri kalitesi sorunları, sızıntı analizleri ve bir sonraki aşama (Faz 3 - Veri Hazırlama) için kararlaştırılan yönergeler bu raporda özetlenmiştir.
+</p>
+<div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(280px, 1fr));gap:20px;">
+<div style="background:linear-gradient(135deg,#0d1117 0%,#161b22 100%);padding:20px 24px;border-radius:12px;border:1px solid rgba(16,185,129,0.18);box-shadow:0 2px 12px rgba(0,0,0,0.3);">
+<h3 style="color:#34d399;font-size:1.0em;font-weight:700;margin:0 0 12px;">📊 Temel EDA Çıktıları</h3>
+<ul style="color:#94a3b8;font-size:0.82em;line-height:1.6;margin:0;padding-left:18px;">
+<li><strong>Dengeli Dağılım:</strong> Hedef sınıfımız Low-Medium-High oranları dengeli olup, sınıf dengesizliği riski düşüktür.</li>
+<li><strong>En Güçlü Belirleyiciler:</strong> Haftalık GenAI kullanım saati (0.47 korelasyon) ve bağımlılık algısı (0.37) tükenmişliği artıran en güçlü faktörlerdir.</li>
+<li><strong>Geleneksel Çalışmanın Koruyucu Etkisi:</strong> Geleneksel ders çalışma saatleri (-0.14) tükenmişlik riskini azaltmaktadır.</li>
+<li><strong>İkame ve Öğrenme Kaybı:</strong> Haftalık 15 saatin üzerinde YZ kullanımı, geleneksel çalışma saatlerini ikame etmekte ve 20 saatin üzerindeki aşırı kullanım, beceri kalıcılık skorunu (-0.12) düşürmektedir.</li>
+</ul>
+</div>
+<div style="background:linear-gradient(135deg,#0d1117 0%,#161b22 100%);padding:20px 24px;border-radius:12px;border:1px solid rgba(99,102,241,0.18);box-shadow:0 2px 12px rgba(0,0,0,0.3);">
+<h3 style="color:#818cf8;font-size:1.0em;font-weight:700;margin:0 0 12px;">🛠️ Veri Hazırlama (Faz 3) Yönergeleri</h3>
+<ul style="color:#94a3b8;font-size:0.82em;line-height:1.6;margin:0;padding-left:18px;">
+<li><strong>Eksik Değer Yönetimi:</strong> Sayısal değişkenler için <code>Median Imputer</code>, kategorik değişkenler için <code>Mode Imputer</code> kullanılacaktır (9 değişken etkilendi).</li>
+<li><strong>Encoding Stratejisi:</strong> <code>Prompt_Engineering_Skill</code> ve <code>Year_of_Study</code> için <code>OrdinalEncoder</code>; nominal kategorikler (Major, Use Case, Policy) için <code>OneHotEncoder</code> uygulanacaktır.</li>
+<li><strong>Ölçeklendirme:</strong> Mesafe hassasiyetini ve aykırı değerlerin etkisini yönetmek için tüm sayısallara <code>RobustScaler</code> veya <code>StandardScaler</code> uygulanacaktır.</li>
+<li><strong>Sızıntı Önleme:</strong> Pipeline öncesi <code>Post_Semester_GPA</code> ve <code>Student_ID</code> sütunları veri setinden kesinlikle düşürülecektir (drop).</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
 ```
 
 ---
