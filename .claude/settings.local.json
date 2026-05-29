@@ -12,7 +12,17 @@
       "Bash(git rm *)",
       "Bash(git commit -m ' *)",
       "Bash(git push *)",
-      "Bash(git pull *)"
+      "Bash(git pull *)",
+      "Bash(awk 'NR>=8900 && NR<=8990' \"c:/Users/cenkg/Desktop/apex-v2/notebooks/final_analysis.ipynb\")",
+      "Bash(awk 'NR>=8400 && NR<=8990 && /\"id\":/' \"c:/Users/cenkg/Desktop/apex-v2/notebooks/final_analysis.ipynb\")",
+      "Bash(awk 'NR>=7700 && NR<=8990' \"c:/Users/cenkg/Desktop/apex-v2/notebooks/final_analysis.ipynb\")",
+      "Bash(awk 'NR>=7700 && NR<=9100' \"c:/Users/cenkg/Desktop/apex-v2/notebooks/final_analysis.ipynb\")",
+      "Bash(awk 'NR>=7769 && NR<=9050 && /\"id\":/{print NR\": \"$0}' \"c:/Users/cenkg/Desktop/apex-v2/notebooks/final_analysis.ipynb\")",
+      "Bash(awk 'NR>=7769 && NR<=9043 && /\"source\":/{print NR\": \"$0}' \"c:/Users/cenkg/Desktop/apex-v2/notebooks/final_analysis.ipynb\")",
+      "Bash(awk 'NR>=2500 && NR<=3080 && /\"id\":/' notebooks/final_analysis.ipynb)",
+      "PowerShell(py -3 c:/tmp/restore_feza_24.py)",
+      "PowerShell(py -3 c:/tmp/restore_feza_24_md.py)",
+      "Bash(awk -F: '$2<=3031')"
     ]
   }
 }
