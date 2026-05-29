@@ -6,10 +6,12 @@ Bu PR, APEX-V2 projesinin **Faz 1 (Business Understanding)** ve **Faz 2 (Data Un
 
 ## 🚀 Değişiklik Özeti (Session Summary)
 
-### 1. İş Problemi, Başarı Metrikleri & Hata Maliyetleri (Faz 1)
-* **İş Kararı Bağlamı:** Üretken Yapay Zeka (GenAI) kullanımının öğrencilerin akademik tükenmişlik (`Burnout_Risk_Level`) risklerine etkisini erken aşamada tahmin etme problemi detaylandırıldı. Proaktif müdahalelerin yönlendirme servisleri üzerindeki önemi açıklandı.
-* **Başarı Metrikleri:** Birincil metrik olarak Macro F1-Score (> 0.80), Recall (High Risk sınıfı için > 0.85) ve ROC-AUC (> 0.88) başarı kriterleri tanımlandı.
-* **Maliyet Odaklı Tasarım:** Yüksek risk grubundaki bir öğrenciyi gözden kaçırmanın (False Negative) maliyetinin çok yüksek olduğu gerekçelendirilerek Recall (High) metriği önceliklendirildi.
+### 1. İş Hedefleri, Metrikler & Karar Tasarımı (Faz 1)
+* **Kart Tasarımı Entegrasyonu:** Section 1 (Business Understanding) paydaş sunumuna uygun görsel HTML kartları şeklinde yapılandırıldı. Mükerrer açıklamalar temizlendi.
+* **Kaynak Değerlendirme, Veri Özellikleri ve Mantıksal Karar Bağlamları Kartı:** Projenin tek veri kaynağı olan veri setindeki tüm 16 değişkenin (15 özellik + 1 hedef) ham veri tipleri, birimleri, açıklamaları ve veri hazırlama aşamasındaki nihai tip dönüşüm hedefleri ok (->) gösterimiyle yeni bir HTML tablo kartı olarak Section 1'e dahil edildi. Ek olarak, veri setinden elde edilen disiplinler arası kullanım örüntüleri (STEM kodlama bağımlılığı, Humanities metin odağı vb.) ve geleneksel çalışma ikamesine dair mantıksal karar bağlamları karta entegre edilerek Business Understanding adımı güçlendirildi.
+* **Tükenmişlik Seviyesi Odağı (Okul Terk Referansları Kaldırıldı):** Veri setinde yer almayan "okulu bırakma" (dropout) referansları projenin tamamından temizlendi; modelin sadece tükenmişlik riskini (`Burnout_Risk_Level`) tahmin ettiği netleştirildi.
+* **Sunum ve Eğitimsel Önemli Notlar:** Akademik sunumlara yönelik olarak dönem başı tahminlemesinin proaktif rehberlikteki değeri, hata maliyeti mantığı ve Recall (High) metriğinin önceliklendirilme nedenleri açıklandı.
+* **Başarı Metrikleri ve Hata Maliyeti:** Birincil metrik olarak Macro F1-Score (> 0.80), Recall (High Risk sınıfı için > 0.85) ve ROC-AUC (> 0.88) hedeflendi. False Positive / False Negative durumları eğitimsel etkileriyle açıklandı.
 
 ### 2. Temiz Keşifsel Veri Analizi - EDA (Faz 2) ve Kalite Denetim Düzeltmeleri
 * **Yeniden Yazım:** `final_analysis.ipynb` dosyası hücre hücre sıfırdan, en temiz ve hatasız biçimde programatik olarak yeniden oluşturuldu.
