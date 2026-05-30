@@ -35,7 +35,9 @@ apex-v2/
 │   └── final_analysis.ipynb        # Ana CRISP-DM notebook
 ├── models/
 │   ├── best_model.joblib           # Final model
-│   └── pipeline.joblib             # Preprocessing pipeline
+│   ├── best_model_metadata.json    # Final model metadata
+│   └── artifacts/
+│       └── full_preprocessor.pkl   # Production preprocessor artifact
 ├── app/
 │   ├── streamlit_app.py            # veya gradio_app.py
 │   └── index.html                  # Tanıtım sitesi

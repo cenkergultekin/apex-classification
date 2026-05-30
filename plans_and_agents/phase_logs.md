@@ -1,5 +1,12 @@
 # APEX-V2 Proje Geçmişi ve Faz Katkı Günlüğü
 
+> **2026-05-30 Güncel senaryo notu:** Faz 4-5 sırasında proje hedefi dönem başı
+> erken uyarıdan **dönem sonrası tükenmişlik seviyesi değerlendirmesine**
+> çevrildi. Bu güncel kullanımda `Post_Semester_GPA` / `Dönem Sonrası GNO`
+> tahmin anında mevcut kabul edilir. Bu nedenle GNO sonrası ve GNO değişimi
+> feature'ları güncel production pipeline içinde tutulur. Aşağıdaki eski leakage
+> notları önceki dönem başı senaryosuna aittir.
+
 Bu dosya, projedeki tüm fazların işlem adımlarını, kararlarını ve katkılarını takip etmek amacıyla ortaklaşa güncellenebilir bir günlük olarak tasarlanmıştır. Her ekip üyesi kendi fazını tamamladığında ilgili başlık altını ne yapıldığını, neden yapıldığını ve nasıl yapıldığını açıklayacak şekilde güncellemelidir.
 
 ---
@@ -33,7 +40,7 @@ Bu dosya, projedeki tüm fazların işlem adımlarını, kararlarını ve katkı
 
 * **Durum:** ⏳ Beklemede (Cenker tarafından güncellenecektir)
 * **Kişi:** Cenker
-* **Beklenen Aksiyonlar:** Feza'nın handoff notlarına uygun olarak eksik değerlerin doldurulması (GPA için median, kategorikler için mode), One-Hot ve Ordinal encoding işlemleri, robust scaling yapılması ve pipeline'ın `pipeline.joblib` olarak kaydedilmesi.
+* **Güncel Çıktı:** Eksik değer doldurma, encoding, robust scaling ve Compact Core üretimi `app/preprocessing.py` içindeki `ProductionPreprocessor` ile production pipeline'a taşındı. Preprocessor artifact'i `models/artifacts/full_preprocessor.pkl` olarak üretilir.
 
 ---
 
@@ -41,7 +48,7 @@ Bu dosya, projedeki tüm fazların işlem adımlarını, kararlarını ve katkı
 
 * **Durum:** ⏳ Beklemede (Berkay tarafından güncellenecektir)
 * **Kişi:** Berkay
-* **Beklenen Aksiyonlar:** En az 10 farklı sınıflandırma modelinin eğitilmesi, Cross-Validation ile karşılaştırılması, en iyi modelin hiperparametre optimizasyonu, Confusion Matrix ve ROC-AUC analizlerinin yapılması ve modelin `best_model.joblib` olarak kaydedilmesi.
+* **Güncel Çıktı:** En az 10 farklı sınıflandırma modeli CV ile karşılaştırıldı, öne çıkan modeller tuning'e alındı, confusion matrix / ROC-AUC / classification report / feature importance üretildi ve final metadata `models/best_model_metadata.json` olarak kaydedildi.
 
 ---
 

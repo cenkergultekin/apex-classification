@@ -20,6 +20,8 @@ data/model_ready/
 # Models (büyük dosyalar)
 models/*.joblib
 models/*.pkl
+models/artifacts/*.joblib
+models/artifacts/*.pkl
 
 # IDE
 .vscode/
