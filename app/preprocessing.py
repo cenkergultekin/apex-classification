@@ -4,6 +4,11 @@
 Ham formdan gelen DataFrame doğrudan ``ProductionPreprocessor.transform`` ile
 modele hazır hale gelir. Öğrenilen tüm eşikler/imputer/encoder/scaler yalnızca
 ``fit`` sırasında verilen train verisinden öğrenilir.
+
+Kullanım senaryosu dönem sonrası değerlendirmedir. Bu yüzden ``Dönem Sonrası GNO``
+ve bundan türeyen GNO değişkenleri canlı tahmin anında mevcut kabul edilir.
+Eğer dönem başı erken uyarı senaryosuna dönülürse bu sütunlar compact core'dan
+çıkarılmalıdır.
 """
 
 from __future__ import annotations

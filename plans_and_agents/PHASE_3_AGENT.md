@@ -1,4 +1,12 @@
 # APEX-V2 — Faz 3 Agent Talimatları (Cenker)
+
+> **2026-05-30 Güncel senaryo notu:** Final notebook ve production pipeline artık
+> **dönem sonrası değerlendirme** senaryosunu hedefler. Bu nedenle
+> `Post_Semester_GPA` / `Dönem Sonrası GNO` ve bundan türeyen
+> `GNO Değişimi`, `GNO Düşüş Şiddeti` değişkenleri canlı tahmin anında mevcut
+> kabul edilir ve leakage sayılmaz. Bu dosyanın aşağı kısımlarındaki eski
+> "dönem başı tahmin" ve "Post_Semester_GPA drop" talimatları önceki senaryoya
+> aittir; güncel uygulamada `app/preprocessing.py` ve notebook 3.7 esas alınır.
 ## Data Preparation + Pipeline · Section 3 · 20 Puan
 
 Bu doküman, `notebooks/final_analysis.ipynb` içindeki Section 3'ü doldurmakla görevlendirilen bir kodlama agent'ı için **eksiksiz çalıştırma yönergelerini** tanımlar. Agent bu dosyayı okuyarak Cenker adına Phase 3'ü baştan sona yürütür.

@@ -20,7 +20,8 @@
 
 ### Faz 1 — Business Understanding
 - [ ] Proje başlığı ve problem cümlesini yaz (1 paragraf, iş bağlamı açık)
-- [ ] Hedef değişkeni tanımla ve tahmin etmeye çalıştığımız kararı belirt
+- [x] Hedef değişkeni tanımla ve tahmin etmeye çalıştığımız kararı belirt
+  - Güncel karar: canlı kullanım senaryosu dönem sonrası değerlendirmedir; `Dönem Sonrası GNO` tahmin anında mevcut kabul edilir.
 - [ ] Başarı metriklerini proje başında tanımla (F1? ROC-AUC? Recall öncelikli mi?)
 - [ ] Yanlış pozitif / yanlış negatif maliyetini iş açısından yorumla
 - [ ] Veri setinin gerçek dünya bağlantısını kur (nereden geldi, kime hizmet eder)
@@ -64,7 +65,7 @@
 - [ ] Stratified train-test split (`test_size=0.2`, `random_state=42`)
 - [ ] Veri sızıntısı kontrolü: fit sadece train'de, transform her ikisinde
 - [ ] `data/processed/X_train.csv`, `X_test.csv`, `y_train.csv`, `y_test.csv` kaydet
-- [ ] `pipeline.joblib` olarak `models/` klasörüne kaydet
+- [x] Preprocessor artifact olarak `models/artifacts/full_preprocessor.pkl`, final model metadata olarak `models/best_model_metadata.json` üretildi.
 - [ ] Pipeline adımlarını görsel şema ile göster (HTML tablo veya Plotly)
 
 **Devir:** Ethem'e → hazır train/test split, pipeline objesi, feature listesi
@@ -72,7 +73,7 @@
 ---
 
 ## ETHEM — Faz 4 & 5 · Modeling + Evaluation
-> Notebook: Section 4 & 5 · Çıktı: `models/best_model.joblib`, karşılaştırma tablosu
+> Notebook: Section 4 & 5 · Çıktı: `models/best_model_metadata.json`, karşılaştırma tablosu
 
 ### Faz 4 — Modeling (min. 10 model)
 - [ ] Logistic Regression
@@ -104,7 +105,7 @@
 - [ ] Feature importance / SHAP görselleştirme (en az top-10 feature)
 - [ ] **İş bağlamına çevirme:** hangi hata tipinin maliyeti daha yüksek? neden?
 - [ ] Model seçimini savun: neden bu model, alternatiflerine göre avantajı?
-- [ ] `models/best_model.joblib` kaydet
+- [x] `models/best_model_metadata.json` ile final model bilgilerini kaydet
 
 **Devir:** Berkay'e → kaydedilmiş model + pipeline, örnek input formatı
 
@@ -146,7 +147,7 @@ Feza (EDA biter)
     → Cenker (Pipeline biter)
       → Ethem'e handoff notu: processed data yolu, pipeline objesi, feature listesi
         → Ethem (Model + Eval biter)
-          → Berkay'e handoff notu: best_model.joblib yolu, örnek input dict
+          → Berkay'e handoff notu: model metadata yolu, örnek input dict
 ```
 
 Her faz bittikten sonra ilgili kişi `TASKS.md`'deki kutucukları `[x]` olarak işaretler.
@@ -161,6 +162,6 @@ Her faz bittikten sonra ilgili kişi `TASKS.md`'deki kutucukları `[x]` olarak i
 - [ ] Pipeline sadece train'de fit edilmiş
 - [ ] 10+ model denenmiş ve karşılaştırma tablosu var
 - [ ] Deployment uygulaması gerçekten çalışıyor (ekran görüntüsü var)
-- [ ] `models/` klasöründe `.joblib` dosyaları var
+- [x] `models/` klasöründe final metadata dosyası var; büyük binary model/preprocessor artifact'leri `.gitignore` ile dışarıda tutulur
 - [ ] README Mermaid diyagramıyla tamamlanmış
 - [ ] GitHub repo yapısı standartta belirtilen şemaya uyuyor
