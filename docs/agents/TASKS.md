@@ -1,4 +1,4 @@
-# APEX-V2 | Görev Dağılımı
+# APEX | Görev Dağılımı
 ### AI Student Impact — Classification Final Projesi
 > CRISP-DM metodolojisi · 4 kişi · Sıralı devir zinciri
 

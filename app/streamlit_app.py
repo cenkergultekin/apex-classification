@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""Streamlit deployment interface for APEX-V2 AI Student Impact classifier.
+"""Streamlit deployment interface for APEX AI Student Impact classifier.
 
 This app features:
 1. Burnout Risk Predictor (Form, real-time prediction, gauges, and advisor suggestions)
@@ -30,7 +30,7 @@ from app.preprocessing import ProductionPreprocessor
 
 # Page configuration
 st.set_page_config(
-    page_title="APEX-V2 Öğrenci Tükenmişlik Risk Analizi",
+    page_title="APEX Öğrenci Tükenmişlik Risk Analizi",
     page_icon="🎓",
     layout="wide",
     initial_sidebar_state="expanded"
@@ -211,7 +211,7 @@ preprocessor, model_package = load_model_artifacts()
 # Sidebar Info
 with st.sidebar:
     st.image("https://img.icons8.com/nolan/256/brain.png", width=90)
-    st.markdown("<h2 style='color:#a78bfa; font-weight:800; margin-top:0;'>APEX-V2</h2>", unsafe_allow_html=True)
+    st.markdown("<h2 style='color:#a78bfa; font-weight:800; margin-top:0;'>APEX</h2>", unsafe_allow_html=True)
     st.markdown("<p style='color:#71717a; font-size:0.85em;'>AI Student Impact — Akademik Tükenmişlik Risk Tahmin Sistemi</p>", unsafe_allow_html=True)
     
     st.markdown("---")
@@ -274,22 +274,10 @@ with tab_predict:
                     index=1
                 )
                 
-                # Numeric inputs with interactive "Bilinmiyor" option
+                # GPA inputları Lean Core refactor ile kaldırıldı (Pre/Post GNO drop edildi —
+                # ablation testinde Yüksek risk recall'unu düşürdüğü ve canlı tahmin senaryolarında
+                # kırılgan olduğu için).
                 st.write("")
-                pre_gpa_unk = st.checkbox("Dönem Öncesi GNO Bilinmiyor", value=False)
-                pre_gpa = st.slider(
-                    "Dönem Öncesi GNO (Pre-Semester GPA)",
-                    min_value=0.0, max_value=4.0, value=3.0, step=0.01,
-                    disabled=pre_gpa_unk
-                )
-                
-                post_gpa_unk = st.checkbox("Dönem Sonrası GNO Bilinmiyor", value=False)
-                post_gpa = st.slider(
-                    "Dönem Sonrası GNO (Post-Semester GPA)",
-                    min_value=0.0, max_value=4.0, value=3.0, step=0.01,
-                    disabled=post_gpa_unk
-                )
-                
                 retention_unk = st.checkbox("Beceri Kalıcılık Skoru Bilinmiyor", value=False)
                 retention = st.slider(
                     "Beceri Kalıcılık Skoru (Skill Retention Score)",
@@ -346,11 +334,10 @@ with tab_predict:
                     min_value=1, max_value=10, value=3, step=1
                 )
         
-        # Build the input DataFrame dynamically
+        # Build the input DataFrame dynamically (Lean Core schema — GPA alanları kaldırıldı)
         input_data = {
             'Okunan Bölüm': [major],
             'Sınıf Düzeyi': [year_of_study],
-            'Dönem Öncesi GNO': [np.nan if pre_gpa_unk else pre_gpa],
             'Haftalık AI Saati': [weekly_ai_hours],
             'Birincil Kullanım Amacı': [use_case],
             'Prompt Yazma Becerisi': [np.nan if prompt_skill == 'Bilinmiyor' else prompt_skill],
@@ -360,8 +347,7 @@ with tab_predict:
             'Algılanan AI Bağımlılığı': [ai_dependency],
             'Kurum Politikası': [policy],
             'Sınav Kaygı Düzeyi': [exam_anxiety],
-            'Dönem Sonrası GNO': [np.nan if post_gpa_unk else post_gpa],
-            'Beceri Kalıcılık Skoru': [np.nan if retention_unk else retention]
+            'Beceri Kalıcılık Skoru': [np.nan if retention_unk else retention],
         }
         
         input_df = pd.DataFrame(input_data)

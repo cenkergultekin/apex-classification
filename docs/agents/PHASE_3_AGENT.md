@@ -1,12 +1,23 @@
-# APEX-V2 — Faz 3 Agent Talimatları (Cenker)
+# APEX — Faz 3 Agent Talimatları (Cenker)
 
-> **2026-05-30 Güncel senaryo notu:** Final notebook ve production pipeline artık
-> **dönem sonrası değerlendirme** senaryosunu hedefler. Bu nedenle
-> `Post_Semester_GPA` / `Dönem Sonrası GNO` ve bundan türeyen
-> `GNO Değişimi`, `GNO Düşüş Şiddeti` değişkenleri canlı tahmin anında mevcut
-> kabul edilir ve leakage sayılmaz. Bu dosyanın aşağı kısımlarındaki eski
-> "dönem başı tahmin" ve "Post_Semester_GPA drop" talimatları önceki senaryoya
-> aittir; güncel uygulamada `app/preprocessing.py` ve notebook 3.7 esas alınır.
+> **2026-05-31 KRİTİK REVİZYON — Binary classifier + WoE geçişi:**
+> Proje binary classification'a (`Yüksek` vs diğer) geçti. Bu revizyondan sonra:
+>
+> 1. **Encoding:** Nominal kategorikler → **WoE Encoder** (1 sütun, log-odds).
+>    Ordinal kategorikler → **OrdinalEncoder kalır** (sıralı doğası WoE ile bozulmamalı).
+>    Boolean → `astype(int)` kalır.
+> 2. **Scaling:** **StandardScaler** kalır (aykırı oranı %0.5 altında, RobustScaler şart değil).
+> 3. **GPA features (Pre/Post/Ortalama/Değişim):** **TAMAMEN DROP**. Ablation
+>    incelemesinde recall (Yüksek sınıfı) düşürdüğü ve production'da kırılgan
+>    olduğu için elendi. Senaryo notu artık geçersiz.
+> 4. **Feature engineering prensibi:** Yüksek-MI değişkenlerden ratio/product
+>    türetme YASAK (kolinearite üretir). Yalnızca tek başına zayıf,
+>    mantıken birleşince güçlenen sinerji adayları kabul edilir. Eşik:
+>    `MI(combined) − max(MI(A), MI(B)) > 0.01`.
+> 5. **Feature selection:** IV (Information Value) filtresi ön katmanı eklenir.
+>    IV<0.02 otomatik drop, IV>0.5 leakage check.
+>
+> Detaylar Adım 0.4, 3, 4, 4.5, 5'te güncellenmiştir.
 ## Data Preparation + Pipeline · Section 3 · 20 Puan
 
 Bu doküman, `notebooks/final_analysis.ipynb` içindeki Section 3'ü doldurmakla görevlendirilen bir kodlama agent'ı için **eksiksiz çalıştırma yönergelerini** tanımlar. Agent bu dosyayı okuyarak Cenker adına Phase 3'ü baştan sona yürütür.
@@ -48,16 +59,14 @@ Sütunları, tipleri ve ilk 10 satırı göz gez. Aşağıdakileri teyit et:
 - `Burnout_Risk_Level` sütununun target olduğunu
 - Kullanılabilecek feature sayısı: 14 (Student_ID ve target çıktıktan sonra)
 
-### 0.3 Veri Sızıntısı Kararı (KESİN KARAR — DEĞİŞTİRME)
-
-Aşağıdaki iki sütun için karar önceden verilmiştir:
+### 0.3 GPA Kararı (KESİN — DEĞİŞTİRME)
 
 | Sütun | Durum | Gerekçe |
 |-------|-------|---------|
-| `Post_Semester_GPA` | **FEATURE OLARAK KULLANILMAYACAK** | Dönem sonu notu. İş problemi "dönem başında tahmin" diyor. Bu değer o an bilinmiyor → veri sızıntısı. |
-| `Skill_Retention_Score` | **KULLANILACAK — izlenmeli** | Dönem içi ölçüm olarak kabul ediliyor. Ancak modelleme sonrası feature importance'ı izle; beklenmedik yüksek önem varsa çıkar. |
-
-`GPA_Change = Post_Semester_GPA - Pre_Semester_GPA` feature engineering önerisini **UYGULAMA** — Post_Semester_GPA içerdiği için aynı leakage'ı taşır.
+| `Pre_Semester_GPA` | **DROP** | Ablation'da GPA blok çıkarıldığında recall (Yüksek) +0.7pp arttı; precision düşse de iş hedefiyle (FN azalt) çelişiyor. |
+| `Post_Semester_GPA` | **DROP** | Yukarıdaki + her senaryoda kırılgan (dönem başı erken uyarı senaryosuna dönülürse leakage). |
+| `GNO Ortalaması`, `GNO Değişimi`, `GNO Düşüş Şiddeti` | **OLUŞTURMA** | Yukarıdakilerden türev, aynı eleme. |
+| `Skill_Retention_Score` | **KULLANILACAK — izlenmeli** | Dönem içi ölçüm. Feature importance beklenmedik yüksekse Berkay'a bildir. |
 
 ### 0.4 Faz 1-2 Kesin Bulgular Özeti (Doğrulanmış — Yeniden Türetme)
 
@@ -107,19 +116,36 @@ Tüm sayısal sütunlarda aykırı değer oranı **%0.1'in altında** olduğu do
 
 > **Karar:** Agresif kırpma (clipping) veya silme gerekmez. StandardScaler yeterli. Rapor üret, aksiyon alma.
 
-#### Encoding Kararları (Feza'nın Handoff'undan Doğrulanmış)
+#### Encoding Kararları (Binary + WoE Revizyonu)
 
-| Sütun | Encoding Türü | Sıra / Not |
-|-------|--------------|------------|
-| `Year_of_Study` | **OrdinalEncoder** | Freshman < Sophomore < Junior < Senior |
-| `Prompt_Engineering_Skill` | **OrdinalEncoder** | Beginner < Intermediate < Advanced |
-| `Major_Category` | **OneHotEncoder** | Hiyerarşisiz |
-| `Primary_Use_Case` | **OneHotEncoder** | Hiyerarşisiz — 5 kategori: Copywriting/Drafting, Debugging/Troubleshooting, Direct_Answer_Generation, Ideation, Summarizing_Reading |
-| `Institutional_Policy` | **OneHotEncoder** | Hiyerarşisiz |
+| Sütun | Encoding | Sıra / Not |
+|-------|----------|------------|
+| `Year_of_Study` | **OrdinalEncoder** | Freshman < Sophomore < Junior < Senior — sıra korunur (WoE'ye geçirme) |
+| `Prompt_Engineering_Skill` | **OrdinalEncoder** | Beginner < Intermediate < Advanced — sıra korunur (WoE'ye geçirme) |
+| `Major_Category` | **WoEEncoder** | Nominal → 1 sütun log-odds. OHE şişmesi yok, IV bonusu var. |
+| `Primary_Use_Case` | **WoEEncoder** | Nominal — 5 kategori → 1 sütun |
+| `Institutional_Policy` | **WoEEncoder** | Nominal → 1 sütun |
 | `Paid_Subscription` | **astype(int)** | True→1, False→0 |
 
+> **Neden WoE binary'de altın standart?** Kredi skorlama literatüründen
+> gelir, binary target için tasarlanmıştır. Encoding log-odds skalasında
+> olduğu için Logistic Regression'ın link fonksiyonuyla doğal uyum sağlar;
+> ağaç modellerinde de tek bir sürekli değişken üzerinde temiz split bulur.
+> Information Value (IV) yan ürünü feature selection için doğrudan eşik
+> verir. Kütüphane: `category_encoders.WoEEncoder`. **Sadece train fold'unda
+> fit, test'e transform** — pipeline içinde otomatik sağlanır.
+
+> **Ordinaller neden WoE'ye gitmiyor?** Sıralı doğa zaten anlamlı bir
+> monoton sinyal taşıyor (junior→senior, beginner→advanced). WoE bu sırayı
+> yok eder. Eğer monotonluk varsayımı gerçekte yanlışsa modelleme aşaması
+> tespit eder ve gerekirse sonra revize ederiz.
+
 #### Scaling Kararı
-Tüm sayısal sütunlar için **StandardScaler** kullanılacak. Gerekçe: Modelleme fazında SVM, KNN ve Lojistik Regresyon gibi mesafeye duyarlı algoritmalar kullanılacak (Berkay - Faz 4-5). Bu algoritmalar ölçek farklılıklarına hassastır.
+Tüm sayısal sütunlar için **StandardScaler**. Aykırı değer oranı tüm
+sütunlarda <%0.5 (Phase 2), bu yüzden RobustScaler şart değil. SVM/KNN/LR
+gibi ölçeğe duyarlı modeller için tek ortak ölçek. WoE çıktıları doğal
+olarak log-odds skalasında olsa da, pipeline'ı tek tip tutmak için onları
+da StandardScaler'dan geçiririz (zarar vermez).
 
 #### Teknik Not — Windows + Kaleido
 `phase_logs.md`'den: Kaleido kütüphanesinin Windows'ta kilitlenme sorunu `kaleido>=1.3.0` sürümüyle aşıldı. Grafik kaydetme kod bloklarında her zaman `try-except` kullan, requirements.txt'te `kaleido>=1.3.0` olduğunu varsay.
@@ -137,7 +163,7 @@ Her kod bloğunun hemen altına bir Markdown hücresi açarak **veri mühendisi 
 Her karar bu logger'a işlenir. Phase 3 boyunca hiçbir dönüşüm gerekçesiz yapılmaz.
 
 ```python
-# ── Action Logger (cemal-agents/dataprep-expert-agent.md standardı)
+# ── Action Logger (classroom-agents/dataprep-expert-agent.md standardı)
 dataprep_actions = []
 model_handoff_report = []
 
@@ -167,38 +193,47 @@ print("Action Logger hazır.")
 Kod boyunca tutarlı kullan. Bu tanımları Section 3'ün en üst hücresine ekle:
 
 ```python
-# ── Sütun Tanımları (Phase 3 genelinde sabit)
-TARGET = 'Burnout_Risk_Level'
-DROP_COLS = ['Student_ID', 'Post_Semester_GPA']  # leakage + identifier
+# ── Sütun Tanımları (Phase 3 — Binary + WoE Revizyonu)
+TARGET = 'Burnout_Risk_Level'  # binary: 'Yüksek' vs diğer
+
+# Drop: ID + GPA blok (recall-hostile, kırılgan)
+DROP_COLS = [
+    'Student_ID',
+    'Pre_Semester_GPA',
+    'Post_Semester_GPA',
+]
 
 # Sayısal: median imputation + StandardScaler
 NUMERIC_COLS = [
-    'Pre_Semester_GPA',
     'Weekly_GenAI_Hours',
     'Tool_Diversity',
     'Traditional_Study_Hours',
     'Perceived_AI_Dependency',
     'Anxiety_Level_During_Exams',
-    'Skill_Retention_Score'
+    'Skill_Retention_Score',
 ]
 
-# Kategorik - hiyerarşisiz: mode imputation + OneHotEncoder
-OHE_COLS = ['Major_Category', 'Primary_Use_Case', 'Institutional_Policy']
+# Kategorik nominal: mode imputation + WoEEncoder (1 sütun her biri)
+WOE_COLS = [
+    'Major_Category',
+    'Primary_Use_Case',
+    'Institutional_Policy',
+]
 
-# Kategorik - hiyerarşik: mode imputation + OrdinalEncoder
+# Kategorik ordinal: mode imputation + OrdinalEncoder (sıra korunur)
 ORDINAL_COLS = ['Prompt_Engineering_Skill', 'Year_of_Study']
 ORDINAL_ORDERS = [
-    ['Beginner', 'Intermediate', 'Advanced'],     # Prompt_Engineering_Skill
+    ['Beginner', 'Intermediate', 'Advanced'],      # Prompt_Engineering_Skill
     ['Freshman', 'Sophomore', 'Junior', 'Senior']  # Year_of_Study
 ]
 
-# Boolean: direkt int'e cast
+# Boolean: direkt int'e cast (encoding gerekmez)
 BOOL_COLS = ['Paid_Subscription']
 
-print("Sütun tanımları yüklendi.")
+print("Sütun tanımları yüklendi (Binary + WoE).")
 print(f"  Sayısal  : {len(NUMERIC_COLS)} sütun")
-print(f"  OHE      : {len(OHE_COLS)} sütun")
-print(f"  Ordinal  : {len(ORDINAL_COLS)} sütun")
+print(f"  WoE      : {len(WOE_COLS)} sütun (nominal)")
+print(f"  Ordinal  : {len(ORDINAL_COLS)} sütun (ordinal)")
 print(f"  Boolean  : {len(BOOL_COLS)} sütun")
 print(f"  Drop     : {DROP_COLS}")
 ```
@@ -207,7 +242,7 @@ print(f"  Drop     : {DROP_COLS}")
 
 ## ADIM 3 — VERİ TEMİZLEME (Hücre 3.1)
 
-### Eksik Değer Karar Motoru (cemal-agents standardı)
+### Eksik Değer Karar Motoru (classroom-agents standardı)
 
 Her sütun için eksik değer oranına göre strateji belirlenir:
 
@@ -269,7 +304,7 @@ log_action("3.1 Bool Cast", "Paid_Subscription bool", "int'e çevrildi", "Pipeli
 
 ## ADIM 3.5 — DAĞILIM & ÇARPIKLIK ANALİZİ (Hücre 3.1b)
 
-> cemal-agents standardı: `|skew| > 1` → Log / Yeo-Johnson / Box-Cox dönüşümü değerlendir.
+> classroom-agents standardı: `|skew| > 1` → Log / Yeo-Johnson / Box-Cox dönüşümü değerlendir.
 
 ```python
 # 3.1b Sayısal Değişken Çarpıklık (Skewness) Analizi
@@ -312,58 +347,146 @@ otomatik olarak uyarı üretir. |skew|>1 olan sütun çıkarsa log/Yeo-Johnson d
 
 ## ADIM 4 — FEATURE ENGINEERING (Hücre 3.2)
 
-Leakage içeren `GPA_Change` önerisini atla. Aşağıdaki 3 feature'ı üret:
+> **Prensip (KRİTİK):** Yüksek-MI değişkenlerden ratio/product türetmek
+> **YASAK** — kolinearite üretir, tree modeller bu nonlineer dönüşümleri
+> zaten kendileri keşfeder. Engineering sadece **tek başına zayıf, mantıken
+> birleşince güçlenen** sinerji adayları için kabul edilir.
+>
+> **Sinerji eşiği:** `MI(combined) − max(MI(A), MI(B)) > 0.01`. Bu eşiği
+> geçemeyen aday otomatik elenir.
+
+### 4.1 Önceden Elenmiş Engineered Feature'lar (UYGULAMA)
+
+Aşağıdaki 7 feature **prensip ihlali** olduğu için artık üretilmez:
+
+| Eski Feature | Neden Elendi |
+|--------------|--------------|
+| `AI Bağımlılık Yükü` (Haftalık AI × Bağımlılık) | İki yüksek-MI'ın çarpımı, kolineer |
+| `Sınav Kaygısı × AI Saati` | İki yüksek-MI'ın çarpımı |
+| `AI × Kaygı × Bağımlılık` | Üç yüksek-MI triple, ağır kolineer |
+| `AI Çalışma Payı` (oran) | Yüksek + orta MI oranı, sinyal duplikasyonu |
+| `Kalıcılık / AI Saati` | İki yüksek-MI oranı |
+| `AI × Düşük Kalıcılık` | İki yüksek-MI'ın çarpımı |
+| `Bağımlılık / Kalıcılık` | İki yüksek-MI oranı |
+
+### 4.2 Korunan Feature
 
 ```python
-# 3.2 Feature Engineering
+# 3.2 Feature Engineering — Sadeleştirilmiş
 df_fe = df_clean.copy()
 
-# FE-1: AI kullanım yoğunluğu / geleneksel çalışma dengesi
-# Yüksek oran → AI'ya bağımlı, geleneksel çalışma düşük
-df_fe['Study_Ratio'] = df_fe['Weekly_GenAI_Hours'] / (df_fe['Traditional_Study_Hours'] + 1)
+# KORUNAN: Toplam Çalışma Yükü
+# Gerekçe: AI + Geleneksel toplamı, çarpım/oran değil. Kapasite/yük
+# kavramı ayrı bir konsept — bileşenlerin tekil sinyallerinden ayrışır.
+df_fe['Toplam Çalışma Yükü'] = (
+    df_fe['Weekly_GenAI_Hours'] + df_fe['Traditional_Study_Hours']
+)
+```
 
-# FE-2: Toplam haftalık akademik efor
-df_fe['Total_Study_Hours'] = df_fe['Weekly_GenAI_Hours'] + df_fe['Traditional_Study_Hours']
+### 4.3 Sinerji Adayları (TEST → IV/MI Eşiği)
 
-# FE-3: AI yoğunluk kategorisi (medyan üstü = yüksek)
-# NOT: Bu eşik sadece istatistiksel referans. Pipeline'da train median kullanılacak.
-ai_median = df_fe['Weekly_GenAI_Hours'].median()
-df_fe['High_AI_User'] = (df_fe['Weekly_GenAI_Hours'] > ai_median).astype(int)
+Aşağıdaki 4 aday **test edilir**, eşiği geçen kalır:
 
-# Yeni feature'ları NUMERIC_COLS'a ekle (pipeline bunu görmeli)
-NUMERIC_COLS_FE = NUMERIC_COLS + ['Study_Ratio', 'Total_Study_Hours', 'High_AI_User']
+| Aday | Mantıksal gerekçe | Birleşim |
+|------|-------------------|----------|
+| `Prompt × Araç Çeşitliliği` | İkisi de tek başına orta-düşük MI; birlikte "AI power user" profili | `Prompt_Skill_Ordinal * Tool_Diversity` (sayısal) veya bin'li kombinasyon |
+| `Bölüm × Kullanım Amacı` | CS+Debug ≠ Sosyal+Summarizing; etkileşim profili | Joint category string → WoE |
+| `Yıl × Politika` | Junior+kısıtlayıcı ≠ Senior+serbest | Joint category string → WoE |
+| `Abonelik × Prompt` | Ücretli+Advanced = ciddi kullanıcı; Ücretli+Beginner = çaresiz | Joint category string → WoE |
 
-print("Feature engineering tamamlandı.")
-print(f"Yeni sütunlar: Study_Ratio, Total_Study_Hours, High_AI_User")
-print(f"Son shape: {df_fe.shape}")
-display(df_fe[['Weekly_GenAI_Hours', 'Traditional_Study_Hours',
-               'Study_Ratio', 'Total_Study_Hours', 'High_AI_User']].head(5))
+```python
+# 3.2b Sinerji Adayları — MI testleri
+from sklearn.feature_selection import mutual_info_classif
+from sklearn.preprocessing import LabelEncoder
+
+def mi_1d(col_series, y):
+    """Tek sütun için MI hesapla."""
+    le = LabelEncoder()
+    x_enc = le.fit_transform(col_series.astype(str))
+    return float(mutual_info_classif(x_enc.reshape(-1, 1), y, random_state=42)[0])
+
+y_bin = (df_clean[TARGET] == 'Yüksek').astype(int).values
+
+# Aday 1: Prompt × Araç Çeşitliliği (sayısal etkileşim)
+prompt_ord = pd.Categorical(
+    df_clean['Prompt_Engineering_Skill'],
+    categories=['Beginner', 'Intermediate', 'Advanced'], ordered=True
+).codes
+combo_1 = (prompt_ord + 1) * df_clean['Tool_Diversity'].fillna(df_clean['Tool_Diversity'].median())
+mi_a = mi_1d(df_clean['Prompt_Engineering_Skill'].fillna('Intermediate'), y_bin)
+mi_b = mi_1d(df_clean['Tool_Diversity'].fillna(df_clean['Tool_Diversity'].median()), y_bin)
+mi_combo = mi_1d(combo_1, y_bin)
+synergy_1 = mi_combo - max(mi_a, mi_b)
+print(f"Prompt × Tool: MI_combo={mi_combo:.4f}, sinerji={synergy_1:+.4f}")
+
+# Aday 2-4: Joint category (string concat)
+candidates_str = {
+    'Bölüm × Amaç' : ('Major_Category', 'Primary_Use_Case'),
+    'Yıl × Politika': ('Year_of_Study', 'Institutional_Policy'),
+    'Abonelik × Prompt': ('Paid_Subscription', 'Prompt_Engineering_Skill'),
+}
+synergy_results = [('Prompt × Tool', mi_a, mi_b, mi_combo, synergy_1)]
+for name, (a, b) in candidates_str.items():
+    sa = df_clean[a].astype(str).fillna('NA')
+    sb = df_clean[b].astype(str).fillna('NA')
+    joint = sa + '||' + sb
+    mi_a2 = mi_1d(sa, y_bin)
+    mi_b2 = mi_1d(sb, y_bin)
+    mi_j  = mi_1d(joint, y_bin)
+    syn   = mi_j - max(mi_a2, mi_b2)
+    synergy_results.append((name, mi_a2, mi_b2, mi_j, syn))
+
+syn_df = pd.DataFrame(synergy_results, columns=['Aday', 'MI(A)', 'MI(B)', 'MI(birleşik)', 'Sinerji'])
+syn_df['Karar'] = syn_df['Sinerji'].apply(lambda s: '✅ TUT' if s > 0.01 else '❌ ELE')
+display(syn_df.style
+    .format({'MI(A)': '{:.4f}', 'MI(B)': '{:.4f}', 'MI(birleşik)': '{:.4f}', 'Sinerji': '{:+.4f}'})
+    .set_properties(**{'background-color': '#111827', 'color': '#f3f4f6'}))
+
+# Eşiği geçenleri df_fe'ye ekle
+accepted = syn_df[syn_df['Sinerji'] > 0.01]['Aday'].tolist()
+print(f"\nKabul edilen sinerji feature'ları: {accepted}")
+# (Kabul edilenleri df_fe'ye uygulama kodu — yalnızca 'accepted' listesindekiler eklenir)
 ```
 
 **Markdown yorumu:**
 ```
-Study_Ratio, bir öğrencinin kaç birim geleneksel çalışmaya karşılık ne kadar AI kullandığını 
-özetler — yüksek değer AI bağımlılığına işaret eder. Total_Study_Hours toplam akademik eforu 
-temsil eder. High_AI_User binary bir sinyal olarak ağaç tabanlı modellere ek ayrım kapasitesi 
-kazandırabilir. GPA_Change önerisi veri sızıntısı riski nedeniyle uygulanmadı.
+Engineering tarafında sadece sum (Toplam Çalışma Yükü) korundu — bileşenlerinden
+ayrı bir kapasite kavramı taşıyor. 4 sinerji adayı MI testi ile değerlendirildi;
+sadece MI(birleşik) − max(MI(A), MI(B)) > 0.01 eşiğini geçen feature'lar eklendi.
+Bu eşik literatürdeki "interaction effect" testlerinin pratik karşılığıdır:
+parçaların toplamından kayda değer fazla bilgi geliyor mu?
 ```
 
 ```python
-# Action logger — feature engineering
-log_action("4. FE", "Study_Ratio türetildi", "Uygulandı", "Weekly_GenAI_Hours / (Traditional+1) — AI bağımlılık oranı", "Düşük")
-log_action("4. FE", "Total_Study_Hours türetildi", "Uygulandı", "Toplam akademik efor sinyali", "Düşük")
-log_action("4. FE", "High_AI_User türetildi", "Uygulandı", "Medyan üstü AI kullanımı binary flag", "Düşük")
-log_action("4. FE", "GPA_Change önerildi", "REDDEDİLDİ", "Post_Semester_GPA içerdiğinden leakage riski", "Yüksek")
+# Action logger
+log_action("4.1 FE Cleanup", "7 redundant feature", "DROP", "Yüksek-MI değişkenlerden türev, kolinearite", "Düşük")
+log_action("4.2 FE Keep", "Toplam Çalışma Yükü", "Korundu", "Sum, farklı kavram (kapasite)", "Düşük")
+log_action("4.3 FE Test", f"{len(syn_df)} sinerji adayı", f"{len(accepted)} kabul", "MI sinerji eşiği +0.01", "Düşük")
+log_action("4. FE", "GPA türev feature'ları", "REDDEDİLDİ", "GPA blok ablation'da recall'u düşürdü, drop edildi", "Yüksek")
 ```
 
 ---
 
-## ADIM 4.5 — FEATURE KALİTE KONTROLÜ & LEAKAGE AUDIT (Hücre 3.2b)
+## ADIM 4.5 — FEATURE KALİTE + IV FİLTRESİ (Hücre 3.2c)
 
-> cemal-agents standardı: Her yeni feature için null inflation, leakage, redundancy, stability kontrolü yapılır.
+> Her yeni feature için null inflation, leakage, redundancy, stability +
+> **IV (Information Value)** kontrolü yapılır. IV binary classifier'da
+> doğrudan feature gücü göstergesidir; literatür eşikleri:
+>
+> | IV | Karar |
+> |----|-------|
+> | < 0.02 | Faydasız — otomatik drop |
+> | 0.02 – 0.10 | Zayıf — ablation'a kalsın |
+> | 0.10 – 0.30 | Orta — tut |
+> | 0.30 – 0.50 | Güçlü — tut |
+> | > 0.50 | **Şüpheli — leakage check** |
+>
+> IV hesabı: `Σ (P(x|y=1) − P(x|y=0)) × WoE(x)` her bin için, toplamı feature IV'sidir.
+> Kütüphane: `category_encoders.WoEEncoder` fit sonrası `.feature_names_` üzerinden
+> manuel hesap veya `optbinning.BinningProcess` doğrudan IV verir.
 
 ```python
-# 3.2b Feature Quality Check (cemal-agents Phase 6 standardı)
+# 3.2b Feature Quality Check (classroom-agents Phase 6 standardı)
 from sklearn.feature_selection import mutual_info_classif
 from sklearn.preprocessing import LabelEncoder
 
@@ -437,67 +560,74 @@ sinyal taşıdığını önceden bildirir.
 
 ---
 
-## ADIM 5 — PIPELINE KURULUMU (Hücre 3.3)
+## ADIM 5 — PIPELINE KURULUMU (Hücre 3.3) — Binary + WoE
 
 ```python
-# 3.3 Sklearn Pipeline Kurulumu
+# 3.3 Sklearn Pipeline Kurulumu — Binary + WoE Revizyonu
 from sklearn.pipeline import Pipeline
 from sklearn.compose import ColumnTransformer
-from sklearn.preprocessing import StandardScaler, OneHotEncoder, OrdinalEncoder
+from sklearn.preprocessing import StandardScaler, OrdinalEncoder
 from sklearn.impute import SimpleImputer
+from category_encoders import WoEEncoder  # pip install category_encoders
 
-# Sayısal pipeline: önce medyan imputation, sonra standartlaştırma
+# Sayısal pipeline: medyan imputation + StandardScaler
 numeric_pipeline = Pipeline([
     ('imputer', SimpleImputer(strategy='median')),
-    ('scaler', StandardScaler())
+    ('scaler',  StandardScaler()),
 ])
 
-# OHE pipeline: mode imputation + OneHot (bilinmeyen kategori için handle_unknown='ignore')
-ohe_pipeline = Pipeline([
+# WoE pipeline (nominal kategorikler): mode imputation + WoEEncoder
+# KRİTİK: WoEEncoder.fit(X, y) çağrıldığında y (binary) bekler.
+# ColumnTransformer otomatik y'yi geçer; fit yalnızca train fold'unda
+# çalıştığı sürece sızıntı olmaz.
+woe_pipeline = Pipeline([
     ('imputer', SimpleImputer(strategy='most_frequent')),
-    ('encoder', OneHotEncoder(handle_unknown='ignore', sparse_output=False))
+    ('encoder', WoEEncoder(handle_unknown='value', handle_missing='value')),
 ])
 
-# Ordinal pipeline: mode imputation + OrdinalEncoder (hiyerarşi korunur)
+# Ordinal pipeline (hiyerarşi korunur — WoE'ye geçirilmez)
 ordinal_pipeline = Pipeline([
     ('imputer', SimpleImputer(strategy='most_frequent')),
     ('encoder', OrdinalEncoder(
         categories=ORDINAL_ORDERS,
         handle_unknown='use_encoded_value',
-        unknown_value=-1
-    ))
+        unknown_value=-1,
+    )),
+    ('scaler', StandardScaler()),  # sayısallarla aynı ölçeğe çek
 ])
 
-# Boolean: imputation gerekmez (zaten int), sadece passthrough
-bool_pipeline = Pipeline([
-    ('passthrough', 'passthrough')
-])
-
-# ColumnTransformer: tüm pipeline'ları birleştir
+# ColumnTransformer
 preprocessor = ColumnTransformer(
     transformers=[
-        ('num', numeric_pipeline, NUMERIC_COLS_FE),
-        ('ohe', ohe_pipeline, OHE_COLS),
-        ('ord', ordinal_pipeline, ORDINAL_COLS),
-        ('bool', 'passthrough', BOOL_COLS)
+        ('num',  numeric_pipeline, NUMERIC_COLS),  # + sinerji testinden geçen FE'ler
+        ('woe',  woe_pipeline,     WOE_COLS),
+        ('ord',  ordinal_pipeline, ORDINAL_COLS),
+        ('bool', 'passthrough',    BOOL_COLS),
     ],
-    remainder='drop'  # DROP_COLS zaten düşürüldü, güvenlik için drop
+    remainder='drop',
 )
 
-print("Pipeline tanımlandı.")
-print(f"  Sayısal transformer  : {len(NUMERIC_COLS_FE)} sütun")
-print(f"  OHE transformer      : {len(OHE_COLS)} sütun")
+print("Pipeline tanımlandı (Binary + WoE).")
+print(f"  Sayısal transformer  : {len(NUMERIC_COLS)} sütun (+ FE)")
+print(f"  WoE transformer      : {len(WOE_COLS)} sütun")
 print(f"  Ordinal transformer  : {len(ORDINAL_COLS)} sütun")
 print(f"  Boolean passthrough  : {len(BOOL_COLS)} sütun")
+print(f"  Beklenen toplam      : {len(NUMERIC_COLS) + len(WOE_COLS) + len(ORDINAL_COLS) + len(BOOL_COLS)} sütun (+ FE)")
 ```
 
 **Markdown yorumu:**
 ```
-Pipeline mimarisinde her sütun grubu ayrı bir alt pipeline'a sahip. Sayısal değişkenler için 
-medyan imputation tercih edildi çünkü EDA'da çarpıklık riski tespit edildi ve medyan outlier'lara 
-karşı daha dayanıklıdır. OHE'de handle_unknown='ignore' ile test setindeki görülmemiş 
-kategorilerin pipeline'ı çöktürmesi engellendi.
+Pipeline binary classifier için WoE geçişine uyarlandı: nominal kategorikler
+(Major_Category, Primary_Use_Case, Institutional_Policy) WoEEncoder ile tek
+sütuna sıkıştırılarak hem boyut hem IV-tabanlı feature selection avantajı
+kazanıldı. Ordinal sütunlar (Prompt_Engineering_Skill, Year_of_Study) sıra
+bilgisini korumak için OrdinalEncoder'da bırakıldı. fit() yalnızca train
+setinde çağrılır → WoE log-odds'ları train hedefinden öğrenilir, test
+sızıntısı yok.
 ```
+
+> **Kütüphane gereksinimi:** `requirements.txt`'e `category_encoders>=2.6.0`
+> eklenmeli. Kurulum: `pip install category_encoders`.
 
 ---
 
@@ -537,7 +667,7 @@ veri setimizde kritiktir; rastgele split'te High sınıfı test setinden dışar
 ```
 
 ```python
-# 3.5b Sınıf Dengesizliği Karar Motoru (cemal-agents standardı)
+# 3.5b Sınıf Dengesizliği Karar Motoru (classroom-agents standardı)
 # Split sonrası train üzerinde çalışır — leakage yok
 dominant_ratio = y_train.value_counts(normalize=True).max() * 100
 minority_class = y_train.value_counts().idxmin()
@@ -663,16 +793,18 @@ print("Pipeline yüklenme ve çıktı testi geçti ✓")
 ```python
 # 3.8 Pipeline Adımları Görsel Şeması
 steps_data = [
-    {'Adım': '1. Drop', 'Kapsam': 'Student_ID, Post_Semester_GPA', 'Yöntem': 'Manuel (df.drop)', 'Gerekçe': 'ID/Leakage'},
-    {'Adım': '2. Feature Eng.', 'Kapsam': 'Study_Ratio, Total_Study_Hours, High_AI_User', 'Yöntem': 'Manuel türetim', 'Gerekçe': 'Anlamlı sinyal'},
-    {'Adım': '3. Split', 'Kapsam': 'Tüm veri', 'Yöntem': 'StratifiedShuffleSplit (80/20, seed=42)', 'Gerekçe': 'Sınıf dengesi'},
-    {'Adım': '4a. Num. Impute', 'Kapsam': ', '.join(NUMERIC_COLS_FE), 'Yöntem': 'SimpleImputer(median)', 'Gerekçe': 'Outlier dayanıklı'},
-    {'Adım': '4b. Scaling', 'Kapsam': 'Tüm sayısal', 'Yöntem': 'StandardScaler', 'Gerekçe': 'SVM/KNN uyumu'},
-    {'Adım': '5a. OHE Impute', 'Kapsam': ', '.join(OHE_COLS), 'Yöntem': 'SimpleImputer(most_frequent)', 'Gerekçe': 'Mod ile doldur'},
-    {'Adım': '5b. OHE Encode', 'Kapsam': ', '.join(OHE_COLS), 'Yöntem': 'OneHotEncoder(ignore)', 'Gerekçe': 'Hiyerarşisiz kategorik'},
+    {'Adım': '1. Drop', 'Kapsam': 'Student_ID, Pre/Post_Semester_GPA', 'Yöntem': 'df.drop', 'Gerekçe': 'ID + GPA blok (recall-hostile)'},
+    {'Adım': '2. FE Keep', 'Kapsam': 'Toplam Çalışma Yükü', 'Yöntem': 'AI + Geleneksel sum', 'Gerekçe': 'Kapasite kavramı (ratio değil)'},
+    {'Adım': '2b. FE Sinerji', 'Kapsam': 'MI eşiği +0.01 geçen adaylar', 'Yöntem': 'MI(birleşik) − max(MI(A),MI(B))', 'Gerekçe': 'Sinerji testi'},
+    {'Adım': '3. Split', 'Kapsam': 'Tüm veri', 'Yöntem': 'StratifiedShuffleSplit (80/20, seed=42)', 'Gerekçe': 'Binary sınıf dengesi'},
+    {'Adım': '4a. Num. Impute', 'Kapsam': ', '.join(NUMERIC_COLS), 'Yöntem': 'SimpleImputer(median)', 'Gerekçe': '<%5 eksik → median yeterli'},
+    {'Adım': '4b. Scaling', 'Kapsam': 'Tüm sayısal + ordinal', 'Yöntem': 'StandardScaler', 'Gerekçe': 'SVM/KNN/LR uyumu, aykırı düşük'},
+    {'Adım': '5a. WoE Impute', 'Kapsam': ', '.join(WOE_COLS), 'Yöntem': 'SimpleImputer(most_frequent)', 'Gerekçe': 'Mod ile doldur'},
+    {'Adım': '5b. WoE Encode', 'Kapsam': ', '.join(WOE_COLS), 'Yöntem': 'WoEEncoder (binary log-odds)', 'Gerekçe': 'Nominal → 1 sütun, IV bonus'},
     {'Adım': '6a. Ord. Impute', 'Kapsam': ', '.join(ORDINAL_COLS), 'Yöntem': 'SimpleImputer(most_frequent)', 'Gerekçe': 'Mod ile doldur'},
-    {'Adım': '6b. Ord. Encode', 'Kapsam': ', '.join(ORDINAL_COLS), 'Yöntem': 'OrdinalEncoder(sıralı)', 'Gerekçe': 'Hiyerarşi korunur'},
-    {'Adım': '7. Bool Cast', 'Kapsam': 'Paid_Subscription', 'Yöntem': 'astype(int)', 'Gerekçe': 'Boolean → 0/1'},
+    {'Adım': '6b. Ord. Encode', 'Kapsam': ', '.join(ORDINAL_COLS), 'Yöntem': 'OrdinalEncoder(sıralı)', 'Gerekçe': 'Hiyerarşi korunur (WoE değil)'},
+    {'Adım': '7. Bool Cast', 'Kapsam': 'Paid_Subscription', 'Yöntem': 'astype(int)', 'Gerekçe': 'Zaten 0/1'},
+    {'Adım': '8. IV Filtre', 'Kapsam': 'Tüm feature\'lar (WoE sonrası)', 'Yöntem': 'IV<0.02 drop, IV>0.5 leakage check', 'Gerekçe': 'Binary feature selection prefilter'},
 ]
 
 pipeline_df = pd.DataFrame(steps_data)
@@ -760,40 +892,45 @@ Notebook'a şu Markdown hücresini ekle:
 ```markdown
 ### 3.10b Model Expert Handoff Raporu (Berkay için)
 
-> cemal-agents/dataprep-expert-agent.md MODEL EXPERT HANDOFF FORMAT standardına uygundur.
+> classroom-agents/dataprep-expert-agent.md MODEL EXPERT HANDOFF FORMAT standardına uygundur.
 
 ---
 
-**Veri Durumu:** Temiz
+**Veri Durumu:** Temiz · **Target:** Binary (`Yüksek` vs diğer, ~%25 pozitif)
 
 **Missing Value Strategy:**
-Tüm sayısal sütunlar (Pre_Semester_GPA, Weekly_GenAI_Hours, Tool_Diversity, Traditional_Study_Hours,
-Perceived_AI_Dependency, Anxiety_Level_During_Exams, Skill_Retention_Score) → Median Imputation.
-Kategorikler (Prompt_Engineering_Skill, Primary_Use_Case) → Mode Imputation. Pipeline içinde.
+Tüm eksik oranları <%5 → basit imputation yeterli. Sayısal sütunlar (Weekly_GenAI_Hours,
+Tool_Diversity, Traditional_Study_Hours, Perceived_AI_Dependency, Anxiety_Level_During_Exams,
+Skill_Retention_Score) → Median. Kategorikler → Mode. Pipeline içinde train-only fit.
 
-**Encoding Strategy:**
-- OrdinalEncoder: Year_of_Study (Freshman→Senior), Prompt_Engineering_Skill (Beginner→Advanced)
-- OneHotEncoder: Major_Category, Primary_Use_Case (5 kategori), Institutional_Policy
-- int cast: Paid_Subscription (True→1)
+**Encoding Strategy (Binary + WoE):**
+- **WoEEncoder** (nominal → 1 sütun log-odds): Major_Category, Primary_Use_Case, Institutional_Policy
+- **OrdinalEncoder** (sıra korunur): Prompt_Engineering_Skill (Beginner→Advanced), Year_of_Study (Freshman→Senior)
+- **astype(int)**: Paid_Subscription
 
 **Scaling Strategy:**
-StandardScaler — tüm sayısal feature'lara uygulandı. SVM, KNN, Logistic Regression direkt kullanılabilir.
+StandardScaler — tüm sayısal + ordinal + WoE çıktıları. Aykırı oranı <%0.5 olduğu için
+RobustScaler şart değil. SVM/KNN/LR direkt kullanılabilir.
 
 **Imbalance Strategy:**
-class_weight='balanced' önerilir. High=%25, Medium=%42, Low=%33. SMOTE gerekirse yalnızca
-train seti içinde CV loop'u içinde uygula — asla split öncesi veya tüm veri üzerinde.
+Binary target ~%25 pozitif. `class_weight='balanced'` veya `scale_pos_weight=3` öner.
+SMOTE yalnızca train CV loop içinde uygula — asla split öncesi.
 
 **Feature Engineering:**
-- Study_Ratio = Weekly_GenAI_Hours / (Traditional_Study_Hours + 1)
-- Total_Study_Hours = Weekly_GenAI_Hours + Traditional_Study_Hours
-- High_AI_User = binary (train medyanı referanslı)
-- GPA_Change → REDDEDİLDİ (leakage)
+- `Toplam Çalışma Yükü` = Weekly_GenAI_Hours + Traditional_Study_Hours (sum, kapasite kavramı)
+- Sinerji adaylarından MI eşiğini (+0.01) geçenler: [test sonucu listele]
+- 7 eski redundant feature (AI Bağımlılık Yükü, Sınav Kaygısı × AI Saati, vb.) → DROP (kolinearite)
+- Tüm GPA feature'ları (Pre/Post/Ortalama/Değişim) → DROP (recall-hostile, ablation kanıtı)
+
+**Feature Selection:**
+- IV filtresi: IV<0.02 otomatik drop, IV>0.5 leakage check yapıldı
+- Compact Core (eski 21 feature) yerine **Lean WoE Core** üretildi
+- Ablation karşılaştırması Berkay'a bırakıldı (eski Compact Core vs yeni Lean Core)
 
 **Leakage Status:** Temiz
-- Post_Semester_GPA drop edildi
-- Student_ID drop edildi
-- Pipeline sadece train'de fit edildi
-- Test seti sadece transform uygulandı
+- Pre/Post_Semester_GPA + Student_ID drop edildi
+- WoE fit yalnızca train'de — log-odds train hedefinden öğrenildi
+- Pipeline sadece train'de fit, test sadece transform
 
 **Önerilen Model Türleri:**
 Tree-based & Ensemble öncelikli (RF, XGBoost, LightGBM) — korelasyonlar çok zayıf, non-linear.
@@ -897,12 +1034,12 @@ for cls in ytr.unique():
     else:
         print(f"[OK] Stratification '{cls}': train={tr_r:.3f}, test={te_r:.3f}, diff={diff:.4f}")
 
-# TEST 6: Leakage kontrolü — Post_Semester_GPA sütun adı işlenmiş veride olmamalı
-leak_cols = [c for c in Xtr.columns if 'Post_Semester' in c or 'GPA_Change' in c]
-if leak_cols:
-    errors.append(f"FAIL — Leakage sütunları işlenmiş veride tespit edildi: {leak_cols}")
+# TEST 6: GPA blok tamamen çıkmış olmalı (recall-hostile karar)
+gpa_cols = [c for c in Xtr.columns if 'GPA' in c or 'GNO' in c or 'Semester' in c]
+if gpa_cols:
+    errors.append(f"FAIL — GPA sütunları işlenmiş veride tespit edildi: {gpa_cols}")
 else:
-    print("[OK] Leakage kontrolü geçti (Post_Semester_GPA ve GPA_Change yok)")
+    print("[OK] GPA blok tamamen çıkarıldı (Pre/Post/GNO yok)")
 
 # TEST 7: Student_ID işlenmiş veride olmamalı
 id_cols = [c for c in Xtr.columns if 'Student_ID' in c or 'student_id' in c.lower()]
@@ -920,12 +1057,23 @@ try:
 except Exception as e:
     errors.append(f"FAIL — Pipeline yüklenme/çalıştırma hatası: {e}")
 
-# TEST 9: Yeni feature'lar ham X'te var mı (feature engineering çalıştı mı)?
-for fe_col in ['Study_Ratio', 'Total_Study_Hours', 'High_AI_User']:
-    if fe_col not in X_train.columns:
-        errors.append(f"FAIL — Feature engineering eksik: '{fe_col}' X_train'de yok")
-    else:
-        print(f"[OK] Feature engineering: '{fe_col}' mevcut")
+# TEST 9: Korunan FE feature'ı (Toplam Çalışma Yükü) ham X'te var mı?
+if 'Toplam Çalışma Yükü' not in X_train.columns:
+    errors.append("FAIL — 'Toplam Çalışma Yükü' X_train'de yok")
+else:
+    print("[OK] Toplam Çalışma Yükü mevcut")
+
+# TEST 9b: Elenmesi gereken 7 redundant feature pipeline çıktısında olmamalı
+banned_fe = [
+    'AI Bağımlılık Yükü', 'Sınav Kaygısı × AI Saati', 'AI × Kaygı × Bağımlılık',
+    'AI Çalışma Payı', 'Kalıcılık / AI Saati', 'AI × Düşük Kalıcılık',
+    'Bağımlılık / Kalıcılık',
+]
+leaked_fe = [c for c in banned_fe if c in X_train.columns or c in Xtr.columns]
+if leaked_fe:
+    errors.append(f"FAIL — Elenmesi gereken redundant FE'ler hâlâ var: {leaked_fe}")
+else:
+    print(f"[OK] 7 redundant FE temiz şekilde elendi")
 
 # TEST 10: Target sütunu işlenmiş feature setinde olmamalı (hedef sızıntısı)
 if TARGET in Xtr.columns or TARGET in Xte.columns:

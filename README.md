@@ -1,91 +1,200 @@
-# APEX-V2 | Öğrenci Akademik Tükenmişlik Sınıflandırma Analizi
-> **CRISP-DM Metodolojisi ile Yapay Zeka Etkisi ve Akademik Tükenmişlik Risk Tahmini**
+# APEX
 
-Bu proje, öğrencilerin üretken yapay zeka (GenAI) araçlarını kullanım yoğunlukları, geleneksel çalışma alışkanlıkları, sınav kaygı düzeyleri ve akademik performans göstergelerinden hareketle **Akademik Tükenmişlik Seviyelerini** sınıflandırmayı amaçlamaktadır.
+**Öğrenci Akademik Tükenmişlik Sınıflandırma** — CRISP-DM tabanlı uçtan uca veri bilimi projesi.
+
+> Üretken yapay zeka (GenAI) kullanım yoğunluğu, geleneksel çalışma alışkanlıkları, sınav kaygısı ve akademik göstergelerden hareketle öğrencilerin **akademik tükenmişlik riskini** ikili olarak (Düşük / Yüksek) sınıflandırır.
+
+```
+─────────────────────────────────────────────────────────────
+  Model        Gradient Boosting · Lean Core (15 feature)
+  Test F1      0.7830           ROC-AUC      0.8690
+  Recall (Y)   0.6485           Precision    0.8411
+  Threshold    0.53 (validation üzerinde seçildi)
+─────────────────────────────────────────────────────────────
+```
 
 ---
 
-## 🚀 Hızlı Başlangıç (Streamlit Arayüzü)
+## Hızlı Başlangıç
 
-Geliştirilen premium arayüzü yerel ortamınızda ayağa kaldırmak için aşağıdaki adımları takip edebilirsiniz:
-
-### 1. Gereksinimlerin Yüklenmesi
-Öncelikle gerekli tüm Python paketlerini yükleyin:
 ```bash
+# 1. Bağımlılıklar
 pip install -r requirements.txt
-```
 
-### 2. Streamlit Uygulamasının Çalıştırılması
-Terminal üzerinden uygulamayı başlatın:
-```bash
+# 2. (opsiyonel) Modeli kendi ortamında yeniden eğit
+python app/retrain.py
+
+# 3. Streamlit arayüzünü başlat
 streamlit run app/streamlit_app.py
 ```
 
-Uygulama başarıyla başlatıldığında tarayıcınızda otomatik olarak açılacaktır (varsayılan adres: `http://localhost:8501`).
+Tarayıcı otomatik açılır: `http://localhost:8501`
 
 ---
 
-## 📁 Klasör Yapısı
+## Klasör Yapısı
 
 ```
-apex-classification/
+apex/
 ├── app/
-│   ├── streamlit_app.py            # Streamlit canlı tahmin ve analitik arayüzü
-│   ├── preprocessing.py            # Üretime hazır, robust veri ön işleme modülü
+│   ├── streamlit_app.py        — Canlı tahmin + analitik arayüz
+│   ├── preprocessing.py        — ProductionPreprocessor (Lean Core, 15 feature)
+│   ├── retrain.py              — Train/val/test split → leak-aware retraining
 │   └── __init__.py
+│
 ├── data/
-│   ├── raw/                        # Dokunulmamış orijinal veri seti
+│   ├── raw/                    — Orijinal veri (dokunulmaz)
 │   │   └── ai_student_impact_dataset.csv
-│   └── processed/                  # Ön işlemeden geçmiş eğitim/test veri setleri
+│   └── processed/              — Pipeline çıktıları
 │       ├── ai_student_impact_cleaned.csv
 │       ├── train.csv
 │       └── test.csv
+│
 ├── notebooks/
-│   └── final_analysis.ipynb        # Ana CRISP-DM notebook'u (6 Faz)
+│   └── final_analysis.ipynb    — Ana CRISP-DM notebook (6 faz)
+│
 ├── models/
-│   ├── best_model.joblib           # Eğitilmiş en iyi Gradient Boosting modeli
-│   ├── best_model_package.joblib   # Model + Karar kuralları + Test metrikleri paketi
-│   ├── best_model_metadata.json    # Model yapılandırma ve başarım dosyası
+│   ├── best_model.joblib              — Eğitilmiş Gradient Boosting modeli
+│   ├── best_model_package.joblib      — Model + threshold + metadata paketi
+│   ├── best_model_metadata.json       — Yapılandırma ve test metrikleri
 │   └── artifacts/
-│       └── full_preprocessor.pkl   # Eğitilmiş ColumnTransformer / Preprocessor nesnesi
-├── figures/                        # Grafik ve arayüz ekran görüntüsü çıktıları
-├── requirements.txt                # Gerekli bağımlılıklar listesi
-├── README.md                       # Bu doküman
-├── CLAUDE.md                       # Geliştirme standartları rehberi
-└── TASKS.md                        # Görev dağılımı ve ilerleme takip tablosu
+│       └── full_preprocessor.pkl      — Train üzerinde fit edilmiş preprocessor
+│
+├── docs/
+│   ├── DEVELOPER_GUIDE.md      — Ekip için fazlı açıklama (basit dilde)
+│   ├── CLAUDE.md               — Geliştirme standartları
+│   └── agents/                 — Ajan yönergeleri ve faz planları
+│
+├── figures/                    — Grafik PNG çıktıları
+├── reports/                    — PDF rapor çıktıları
+├── requirements.txt
+└── README.md
 ```
 
 ---
 
-## 👥 Ekip & Sorumluluklar
+## Ekip ve Sorumluluklar
 
-Proje **CRISP-DM (Cross-Industry Standard Process for Data Mining)** metodolojisi izlenerek 6 aşamada ve 4 kişilik bir ekiple tamamlanmıştır:
+CRISP-DM 6 fazı dört kişilik bir ekiple yürütüldü.
 
-| Ekip Üyesi | Rol | Sorumlu Olduğu CRISP-DM Aşamaları |
-| :--- | :--- | :--- |
-| **Feza** | Veri Analisti | **Faz 1 & 2:** Business Understanding + EDA (Plotly grafik analizleri) |
-| **Cenker** | Veri Mühendisi | **Faz 3:** Data Preparation + ColumnTransformer / Pipeline tasarımı |
-| **Ethem** | ML Mühendisi | **Faz 4 & 5:** Modeling + Evaluation (10+ model kıyası, Hiperparametre) |
-| **Berkay** | Yazılım Mühendisi | **Faz 6:** Deployment + Streamlit Arayüzü & Sunum |
+| Üye        | Rol                | CRISP-DM Fazı                                  |
+|------------|--------------------|------------------------------------------------|
+| **Feza**   | Veri Analisti      | Faz 1 & 2 — Business Understanding + EDA       |
+| **Cenker** | Veri Mühendisi     | Faz 3 — Data Preparation + Pipeline            |
+| **Berkay** | ML Mühendisi       | Faz 4 & 5 — Modeling + Evaluation              |
+| **Ethem**  | Yazılım Mühendisi  | Faz 6 — Deployment + Streamlit                 |
 
----
-
-## 📊 Model & Başarım Sonuçları
-
-En iyi sonucu veren tuned **Gradient Boosting** modeline ait test verisi performans metrikleri:
-
-* **Accuracy (Doğruluk):** `%80.28`
-* **F1 Macro Score:** `0.7925`
-* **Recall (Yüksek Sınıfı):** `0.6701` (Tükenmişliği en az ıskalama ile bulma başarısı)
-* **Precision (Yüksek Sınıfı):** `0.8555`
-* **Karar Eşiği (Tuned Threshold):** `0.53` (Yüksek riskli öğrencileri yakalamak amacıyla optimize edilmiştir)
+Her fazda kim ne yaptı ve neden o yöntemi seçti → **[docs/DEVELOPER_GUIDE.md](docs/DEVELOPER_GUIDE.md)**
 
 ---
 
-## 🧪 Model Retraining (Geliştirici Notu)
+## Veri ve Hedef
 
-Eğer yerel scikit-learn sürümünüz ile model pickling uyuşmazlığı yaşıyorsanız, modeli yerel ortamınızda aynı tohum değerleri ve hiperparametrelerle otomatik olarak yeniden eğitmek için geçici retraining scriptini çalıştırabilirsiniz:
+| | |
+|---|---|
+| **Veri seti**         | `data/raw/ai_student_impact_dataset.csv` |
+| **Gözlem sayısı**     | ~28.000 öğrenci |
+| **Hedef değişken**    | `Tükenmişlik` (Düşük / Yüksek) |
+| **Pozitif sınıf**     | `Yüksek` (yüksek tükenmişlik riski) |
+| **Sınıf dağılımı**    | ~%65 Düşük / ~%35 Yüksek |
+
+---
+
+## Üretim Pipeline · Lean Core
+
+Üretim katmanı **15 sabit feature** üreten deterministik bir kontrat. `fit()` yalnızca train setinde çağrılır; test setine sadece `transform()` uygulanır.
+
+```
+Ham 12 sütun
+   │
+   └─► ProductionPreprocessor.fit(X_train, y_train)
+         │
+         ├─ Median imputer        — sayısal sütunlar
+         ├─ Most-frequent imputer — ordinal ve nominal sütunlar
+         ├─ OrdinalEncoder        — Sınıf Düzeyi, Prompt, Kurum Politikası
+         ├─ WoE Encoder           — Okunan Bölüm, Birincil Kullanım Amacı
+         ├─ Boolean → int         — Ücretli Abonelik
+         ├─ Engineered            — "Toplam Çalışma Yükü"
+         ├─ Missing-indicator     — 2 sütun
+         └─ StandardScaler        — sayısal + ordinal + WoE
+   │
+   └─► 15 feature ─► Gradient Boosting ─► P(Yüksek) ─► threshold uygula
+```
+
+**Veri sızıntısı önlemleri**
+
+- Preprocessor yalnızca train üzerinde fit edilir; test setine sadece `transform()` uygulanır.
+- Karar eşiği (threshold) **iç validation split** üzerinde seçilir; test seti **tek sefer** ölçüm için kullanılır.
+
+---
+
+## Test Sonuçları
+
+En iyi model: **Gradient Boosting** (tuned, 15 feature)
+
+| Metrik              | Değer  |
+|---------------------|--------|
+| Test Accuracy       | 0.7949 |
+| Test F1-Macro       | 0.7830 |
+| Test ROC-AUC        | 0.8690 |
+| Recall (Yüksek)     | 0.6485 |
+| Precision (Yüksek)  | 0.8411 |
+| Karar Eşiği         | 0.53   |
+
+**Confusion Matrix** (test seti)
+
+```
+                  Tahmin: Düşük   Tahmin: Yüksek
+  Gerçek Düşük       2968              306
+  Gerçek Yüksek       878             1620
+```
+
+Eğitim hiperparametreleri ve son güncelleme bilgisi: `models/best_model_metadata.json`
+
+---
+
+## Yeniden Eğitim
+
+Yerel scikit-learn sürümünüzle artifact uyuşmazlığı yaşarsanız veya pipeline'ı kendi makinenizde sıfırdan üretmek isterseniz:
+
 ```bash
-python scratch/retrain.py
+python app/retrain.py
 ```
-Bu komut `models/` altındaki tüm model ve preprocessor nesnelerini yerel kütüphane sürümleriniz ile güncelleyecektir.
+
+Script şunları yapar:
+
+1. Cleaned veriyi yükler.
+2. Stratified train/test split uygular (`test_size=0.20`, `random_state=42`).
+3. Train içinden iç **validation split** ayırır (`test_size=0.15`) — threshold burada seçilir.
+4. `ProductionPreprocessor` train üzerinde fit edilir, test'e yalnızca transform uygulanır.
+5. Gradient Boosting model en iyi parametrelerle fit edilir.
+6. Tüm artifact'lar güncellenir: `best_model.joblib`, `best_model_package.joblib`, `full_preprocessor.pkl`, `train.csv` / `test.csv`, `best_model_metadata.json`.
+
+---
+
+## Notebook Yapısı
+
+Tek dosya, altı CRISP-DM fazı:
+
+```
+notebooks/final_analysis.ipynb
+├── Section 0 — Hero / Proje Tanıtımı
+├── Section 1 — Business Understanding         · Feza
+├── Section 2 — Data Understanding / EDA       · Feza
+├── Section 3 — Data Preparation + Pipeline    · Cenker
+├── Section 4 — Modeling                       · Berkay
+├── Section 5 — Evaluation                     · Berkay
+└── Section 6 — Deployment Simulation          · Ethem
+```
+
+Notebook bir kez **Restart & Run All** ile uçtan uca çalışacak şekilde tasarlanmıştır.
+
+---
+
+## Daha Fazla Bilgi
+
+| Konu                                    | Konum                              |
+|-----------------------------------------|------------------------------------|
+| Fazlı detaylı açıklama (basit dilde)    | [docs/DEVELOPER_GUIDE.md](docs/DEVELOPER_GUIDE.md) |
+| Geliştirme standartları                 | [docs/CLAUDE.md](docs/CLAUDE.md)   |
+| Ajan yönergeleri                        | [docs/agents/](docs/agents/)       |

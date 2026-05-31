@@ -1,14 +1,26 @@
 # -*- coding: utf-8 -*-
-"""Production-safe preprocessor for the AI Student Impact classifier.
+"""Production-safe preprocessor — Lean Core (Binary + WoE + StandardScaler).
 
 Ham formdan gelen DataFrame doğrudan ``ProductionPreprocessor.transform`` ile
 modele hazır hale gelir. Öğrenilen tüm eşikler/imputer/encoder/scaler yalnızca
 ``fit`` sırasında verilen train verisinden öğrenilir.
 
-Kullanım senaryosu dönem sonrası değerlendirmedir. Bu yüzden ``Dönem Sonrası GNO``
-ve bundan türeyen GNO değişkenleri canlı tahmin anında mevcut kabul edilir.
-Eğer dönem başı erken uyarı senaryosuna dönülürse bu sütunlar compact core'dan
-çıkarılmalıdır.
+Phase 3 kararları (binary geçiş + Lean Core refactor sonrası):
+
+- Hedef: Binary (Yüksek=1, Düşük=0). 'Orta' satırları modelleme dışı.
+- GPA bloğu (Pre/Post + türevleri) **drop** — ablation'da Yüksek risk recall'unu
+  düşürdüğü ve canlı tahmin senaryolarında kırılgan olduğu için.
+- Nominal kategoriler (Okunan Bölüm, Birincil Kullanım Amacı) → WoE Encoder
+  (binary log-odds, tek sütun).
+- Ordinal kategoriler (Sınıf Düzeyi, Prompt Yazma Becerisi, Kurum Politikası)
+  → OrdinalEncoder (sıra korunur).
+- Boolean (Ücretli Abonelik) → int 0/1.
+- Tüm sayısal+ordinal+WoE → StandardScaler. Aykırı oranı %0.5 altında olduğu
+  için RobustScaler şart değil.
+- 7 redundant türev feature **drop** — yüksek-MI değişkenlerden ratio/product
+  türetildikleri için kolinearite üretiyorlardı. Tree-based modeller bu
+  etkileşimleri zaten kendileri öğrenir.
+- Sadece ``Toplam Çalışma Yükü`` korundu — sum, kapasite/yük kavramı taşır.
 """
 
 from __future__ import annotations
@@ -16,14 +28,14 @@ from __future__ import annotations
 import numpy as np
 import pandas as pd
 
-from sklearn.feature_selection import mutual_info_classif
+from category_encoders import WOEEncoder
 from sklearn.impute import SimpleImputer
-from sklearn.preprocessing import OneHotEncoder, OrdinalEncoder, RobustScaler
+from sklearn.preprocessing import OrdinalEncoder, StandardScaler
 
+
+# ── Sütun tanımları (Lean Core)
 
 BASE_NUMERIC = [
-    'Dönem Öncesi GNO',
-    'Dönem Sonrası GNO',
     'Haftalık AI Saati',
     'Algılanan AI Bağımlılığı',
     'Sınav Kaygı Düzeyi',
@@ -33,30 +45,7 @@ BASE_NUMERIC = [
 ]
 
 ENGINEERED_NUMERIC = [
-    'GNO Değişimi',
-    'GNO Ortalaması',
-    'GNO Düştü Mü',
-    'GNO Düşüş Şiddeti',
-    'AI / Çalışma Oranı',
-    'AI Çalışma Payı',
-    'Çalışma Dengesizliği',
-    'AI Bağımlılık Yükü',
-    'Sınav Kaygısı × AI Saati',
-    'AI × Kaygı × Bağımlılık',
-    'Kalıcılık / AI Saati',
-    'Kaygı / Kalıcılık',
-    'Bağımlılık / Kalıcılık',
-    'AI × Düşük Kalıcılık',
     'Toplam Çalışma Yükü',
-    'Yüksek AI Kullanımı',
-    'Yüksek Bağımlılık',
-    'Yüksek Kaygı',
-    'Düşük Kalıcılık',
-    'Yüksek AI + Yüksek Kaygı',
-    'Yüksek AI + Düşük Kalıcılık',
-    'Yüksek AI + Yüksek Bağımlılık',
-    'Risk Üçlüsü Bayrağı',
-    'Koruyucu Profil Bayrağı',
 ]
 
 ALL_NUMERIC = BASE_NUMERIC + ENGINEERED_NUMERIC
@@ -68,67 +57,32 @@ ORDINAL_ORDERS = [
     ['Kesin Yasak', 'Kaynak Belirterek İzinli', 'Aktif Olarak Teşvik'],
 ]
 
-OHE_COLS = ['Okunan Bölüm', 'Birincil Kullanım Amacı']
+WOE_COLS = ['Okunan Bölüm', 'Birincil Kullanım Amacı']
 BOOL_COLS = ['Ücretli Abonelik']
 
-MISSING_INDICATOR_COLS = BASE_NUMERIC + ['Prompt Yazma Becerisi']
+MISSING_INDICATOR_COLS = ['Beceri Kalıcılık Skoru', 'Prompt Yazma Becerisi']
 
-COMPACT_CORE_FEATURES = [
-    'Haftalık AI Saati',
-    'Algılanan AI Bağımlılığı',
-    'AI Bağımlılık Yükü',
-    'Sınav Kaygısı × AI Saati',
-    'AI × Kaygı × Bağımlılık',
-    'AI Çalışma Payı',
-    'Kalıcılık / AI Saati',
-    'AI × Düşük Kalıcılık',
-    'Bağımlılık / Kalıcılık',
-    'Toplam Çalışma Yükü',
-    'Beceri Kalıcılık Skoru',
-    'Sınıf Düzeyi',
-    'Kurum Politikası',
-    'Dönem Öncesi GNO',
-    'Dönem Sonrası GNO',
-    'GNO Değişimi',
-    'GNO Düşüş Şiddeti',
-    'Beceri Kalıcılık Skoru Eksik Mi',
-    'Prompt Yazma Becerisi Eksik Mi',
-    'Dönem Öncesi GNO Eksik Mi',
-    'Dönem Sonrası GNO Eksik Mi',
-]
-
-DOMAIN_CLIP_COLS = [
-    'Haftalık AI Saati',
-    'Geleneksel Çalışma Saati',
-    'Dönem Öncesi GNO',
-    'Dönem Sonrası GNO',
-]
-
-WEAK_MI_THRESHOLD = 0.0
+DOMAIN_CLIP_COLS = ['Haftalık AI Saati', 'Geleneksel Çalışma Saati']
 
 
 class ProductionPreprocessor:
-    """Ham girdi -> modele hazır sütunlar.
+    """Ham girdi → modele hazır Lean Core sütunlar.
 
-    Notlar:
-    - KNN/Iterative imputation üretim tarafında pahalı olduğu için numeric
-      sütunlarda median imputation kullanılır.
-    - Eksiklik bilgisi ayrıca indicator feature olarak korunur.
-    - Eşik tabanlı feature'ların eşikleri yalnızca train'de öğrenilir.
+    - WoE nominal encoding (binary log-odds)
+    - OrdinalEncoder hiyerarşik sütunlar
+    - StandardScaler (sayısal + ordinal + WoE)
+    - Toplam Çalışma Yükü engineered feature
+    - Missing indicators (Beceri Kalıcılık + Prompt Yazma Becerisi)
+    - Sadece train'de fit; test sızıntısı yok.
+
+    Lean Core (Phase 3 refactor) — her zaman 15 sabit feature üretir.
     """
 
     feature_names_: list[str] | None = None
 
-    def __init__(
-        self,
-        weak_mi_threshold: float = WEAK_MI_THRESHOLD,
-        use_compact_core: bool = True,
-    ):
-        self.weak_mi_threshold = weak_mi_threshold
-        self.use_compact_core = use_compact_core
-
+    def __init__(self):
         self.numeric_imputer = SimpleImputer(strategy='median')
-        self.scaler = RobustScaler()
+        self.scaler = StandardScaler()
 
         self.ordinal_imputer = SimpleImputer(strategy='most_frequent')
         self.ordinal_encoder = OrdinalEncoder(
@@ -137,118 +91,22 @@ class ProductionPreprocessor:
             unknown_value=-1,
         )
 
-        self.ohe_imputer = SimpleImputer(strategy='most_frequent')
-        self.ohe_encoder = OneHotEncoder(handle_unknown='ignore', sparse_output=False)
+        self.woe_imputer = SimpleImputer(strategy='most_frequent')
+        self.woe_encoder = WOEEncoder(cols=WOE_COLS)
 
         self.bool_imputer = SimpleImputer(strategy='most_frequent')
 
-        self.ai_high_threshold_: float | None = None
-        self.retention_low_threshold_: float | None = None
-        self.full_feature_names_: list[str] | None = None
+        self.feature_names_: list[str] | None = None
         self.selected_features_: list[str] | None = None
-        self.dropped_weak_: list[str] | None = None
-        self.mi_scores_: pd.Series | None = None
 
-    def _fit_thresholds(self, X: pd.DataFrame) -> None:
-        self.ai_high_threshold_ = float(X['Haftalık AI Saati'].median())
-        self.retention_low_threshold_ = float(X['Beceri Kalıcılık Skoru'].quantile(0.35))
-
-    def _threshold(self, attr_name: str, fallback: float) -> float:
-        value = getattr(self, attr_name, None)
-        return fallback if value is None or pd.isna(value) else float(value)
+    # ── Helper transforms
 
     def _add_engineered_features(self, X: pd.DataFrame) -> pd.DataFrame:
         out = X.copy()
-
-        ai_high_thr = self._threshold(
-            'ai_high_threshold_',
-            float(out['Haftalık AI Saati'].median()),
-        )
-        retention_low_thr = self._threshold(
-            'retention_low_threshold_',
-            float(out['Beceri Kalıcılık Skoru'].quantile(0.35)),
-        )
-
-        out['GNO Değişimi'] = out['Dönem Sonrası GNO'] - out['Dönem Öncesi GNO']
-        out['GNO Ortalaması'] = (
-            out['Dönem Sonrası GNO'] + out['Dönem Öncesi GNO']
-        ) / 2
-        out['GNO Düştü Mü'] = (out['GNO Değişimi'] < 0).astype(float)
-        out['GNO Düşüş Şiddeti'] = (-out['GNO Değişimi']).clip(lower=0)
-
-        out['AI / Çalışma Oranı'] = (
-            out['Haftalık AI Saati'] / (out['Geleneksel Çalışma Saati'] + 1)
-        )
-        out['AI Çalışma Payı'] = (
-            out['Haftalık AI Saati']
-            / (out['Haftalık AI Saati'] + out['Geleneksel Çalışma Saati'] + 1)
-        )
-        out['Çalışma Dengesizliği'] = (
-            out['Haftalık AI Saati'] - out['Geleneksel Çalışma Saati']
-        )
-
-        out['AI Bağımlılık Yükü'] = (
-            out['Haftalık AI Saati'] * out['Algılanan AI Bağımlılığı']
-        )
-        out['Sınav Kaygısı × AI Saati'] = (
-            out['Sınav Kaygı Düzeyi'] * out['Haftalık AI Saati']
-        )
-        out['AI × Kaygı × Bağımlılık'] = (
-            out['Haftalık AI Saati']
-            * out['Sınav Kaygı Düzeyi']
-            * out['Algılanan AI Bağımlılığı']
-        )
-
-        out['Kalıcılık / AI Saati'] = (
-            out['Beceri Kalıcılık Skoru'] / (out['Haftalık AI Saati'] + 1)
-        )
-        out['Kaygı / Kalıcılık'] = (
-            out['Sınav Kaygı Düzeyi'] / (out['Beceri Kalıcılık Skoru'] + 1)
-        )
-        out['Bağımlılık / Kalıcılık'] = (
-            out['Algılanan AI Bağımlılığı'] / (out['Beceri Kalıcılık Skoru'] + 1)
-        )
-        out['AI × Düşük Kalıcılık'] = (
-            out['Haftalık AI Saati'] * (100 - out['Beceri Kalıcılık Skoru'])
-        )
-
         out['Toplam Çalışma Yükü'] = (
-            out['Haftalık AI Saati'] + out['Geleneksel Çalışma Saati']
+            out['Haftalık AI Saati'].fillna(out['Haftalık AI Saati'].median())
+            + out['Geleneksel Çalışma Saati'].fillna(out['Geleneksel Çalışma Saati'].median())
         )
-
-        out['Yüksek AI Kullanımı'] = (
-            out['Haftalık AI Saati'] >= ai_high_thr
-        ).astype(float)
-        out['Yüksek Bağımlılık'] = (
-            out['Algılanan AI Bağımlılığı'] >= 7
-        ).astype(float)
-        out['Yüksek Kaygı'] = (
-            out['Sınav Kaygı Düzeyi'] >= 7
-        ).astype(float)
-        out['Düşük Kalıcılık'] = (
-            out['Beceri Kalıcılık Skoru'] <= retention_low_thr
-        ).astype(float)
-
-        out['Yüksek AI + Yüksek Kaygı'] = (
-            out['Yüksek AI Kullanımı'] * out['Yüksek Kaygı']
-        )
-        out['Yüksek AI + Düşük Kalıcılık'] = (
-            out['Yüksek AI Kullanımı'] * out['Düşük Kalıcılık']
-        )
-        out['Yüksek AI + Yüksek Bağımlılık'] = (
-            out['Yüksek AI Kullanımı'] * out['Yüksek Bağımlılık']
-        )
-        out['Risk Üçlüsü Bayrağı'] = (
-            out['Yüksek AI Kullanımı']
-            * out['Yüksek Kaygı']
-            * out['Yüksek Bağımlılık']
-        )
-        out['Koruyucu Profil Bayrağı'] = (
-            (out['Haftalık AI Saati'] < ai_high_thr)
-            & (out['Algılanan AI Bağımlılığı'] <= 3)
-            & (out['Beceri Kalıcılık Skoru'] > retention_low_thr)
-        ).astype(float)
-
         out = out.replace([np.inf, -np.inf], np.nan)
         return out
 
@@ -256,7 +114,8 @@ class ProductionPreprocessor:
     def _missing_indicators(X: pd.DataFrame) -> pd.DataFrame:
         data = {}
         for col in MISSING_INDICATOR_COLS:
-            data[f'{col} Eksik Mi'] = X[col].isna().astype(float)
+            indicator_name = f'{col} Eksik Mi'
+            data[indicator_name] = X[col].isna().astype(float) if col in X.columns else 0.0
         return pd.DataFrame(data, index=X.index)
 
     @staticmethod
@@ -266,95 +125,120 @@ class ProductionPreprocessor:
             s = out[col]
             if s.dtype == 'bool':
                 out[col] = s.astype(float)
-            elif str(s.dtype) == 'boolean' or str(s.dtype) == 'Int64':
+            elif str(s.dtype) in ('boolean', 'Int64'):
                 out[col] = s.astype('Float64').astype(float)
             else:
                 out[col] = pd.to_numeric(s, errors='coerce')
         return out
 
-    def _clip_domain(self, arr) -> np.ndarray:
-        df = pd.DataFrame(arr, columns=ALL_NUMERIC).copy()
+    def _clip_domain(self, num_df: pd.DataFrame) -> pd.DataFrame:
+        out = num_df.copy()
         for col in DOMAIN_CLIP_COLS:
-            df[col] = df[col].clip(lower=0)
-        return df.values
+            if col in out.columns:
+                out[col] = out[col].clip(lower=0)
+        return out
 
-    def fit(self, X: pd.DataFrame, y_multiclass, y_binary_for_woe=None):
-        self._fit_thresholds(X)
+    # ── Fit / Transform
+
+    def fit(self, X: pd.DataFrame, y, y_binary_for_woe=None):
+        """Train'de fit eder.
+
+        Parameters
+        ----------
+        X : pd.DataFrame
+            Ham train özellikleri.
+        y : array-like
+            Binary hedef (0=Düşük, 1=Yüksek) veya çok sınıflı (binary'ye dönüştürülür).
+        y_binary_for_woe : array-like, optional
+            Backward-compat; verilirse y yerine WoE fit için kullanılır.
+        """
+        # y'yi binary'ye normalize et
+        y_binary = y_binary_for_woe if y_binary_for_woe is not None else y
+        y_binary = np.asarray(y_binary)
+        if y_binary.dtype.kind in ('U', 'O'):
+            y_binary = (pd.Series(y_binary) == 'Yüksek').astype(int).values
+        else:
+            # Eğer multi-class (0/1/2) gelirse Yüksek=2 varsayımıyla binary'ye çevir
+            unique_vals = set(np.unique(y_binary))
+            if unique_vals - {0, 1}:
+                # Multi-class — en yüksek değer pozitif kabul edilir
+                y_binary = (y_binary == max(unique_vals)).astype(int)
+            else:
+                y_binary = y_binary.astype(int)
+
         X_fe = self._add_engineered_features(X)
 
+        # Numeric imputer + scaler (sadece numeric block için)
         num_imputed = self.numeric_imputer.fit_transform(X_fe[ALL_NUMERIC])
-        num_clipped = self._clip_domain(num_imputed)
-        self.scaler.fit(num_clipped)
+        num_imp_df = pd.DataFrame(num_imputed, columns=ALL_NUMERIC, index=X.index)
+        num_clipped = self._clip_domain(num_imp_df)
+        # Scaler tüm Lean Core sayısal sinyaller için fit edilir (sayısal + ordinal + WoE)
+        # Önce sayısal kısmını öğret, sonra transform sırasında genişletilmiş matriste fit-transform yapacağız.
+        # Burada sadece sayısal scaler için fit:
+        self.scaler_numeric_only_ = StandardScaler().fit(num_clipped.values)
 
+        # Ordinal imputer + encoder
         ord_imputed = self.ordinal_imputer.fit_transform(X_fe[ORDINAL_COLS])
         self.ordinal_encoder.fit(ord_imputed)
 
-        ohe_imputed = self.ohe_imputer.fit_transform(X_fe[OHE_COLS])
-        self.ohe_encoder.fit(ohe_imputed)
+        # WoE imputer + encoder (y_binary gerektirir)
+        woe_imputed = self.woe_imputer.fit_transform(X_fe[WOE_COLS])
+        woe_imp_df = pd.DataFrame(woe_imputed, columns=WOE_COLS, index=X.index)
+        self.woe_encoder.fit(woe_imp_df, pd.Series(y_binary, index=X.index))
 
+        # Bool imputer
         self.bool_imputer.fit(self._coerce_bool(X_fe[BOOL_COLS]))
 
-        ohe_feature_names = self.ohe_encoder.get_feature_names_out(OHE_COLS).tolist()
+        # Final feature list (sıralı)
         missing_feature_names = [f'{col} Eksik Mi' for col in MISSING_INDICATOR_COLS]
-
-        self.full_feature_names_ = (
+        feature_order = (
             ALL_NUMERIC
             + ORDINAL_COLS
-            + ohe_feature_names
+            + WOE_COLS
             + BOOL_COLS
             + missing_feature_names
         )
 
-        full_df = self._transform_full_to_df(X)
+        # StandardScaler'ı tüm scaled bloka uygula (binary missing + bool hariç)
+        full_df_pre_scale = self._transform_to_df_pre_scale(X)
+        scale_cols = ALL_NUMERIC + ORDINAL_COLS + WOE_COLS
+        self.scaler = StandardScaler()
+        self.scaler.fit(full_df_pre_scale[scale_cols].values)
 
-        self.mi_scores_ = pd.Series(
-            mutual_info_classif(full_df.values, y_multiclass, random_state=42),
-            index=self.full_feature_names_,
-        ).sort_values(ascending=False)
-
-        if self.use_compact_core:
-            missing_compact = [
-                col for col in COMPACT_CORE_FEATURES
-                if col not in self.full_feature_names_
-            ]
-            if missing_compact:
-                raise ValueError(f'Compact core feature eksik: {missing_compact}')
-            self.selected_features_ = COMPACT_CORE_FEATURES.copy()
-        else:
-            self.selected_features_ = self.full_feature_names_.copy()
-
-        self.feature_names_ = self.selected_features_.copy()
-        self.dropped_weak_ = []
+        self.feature_names_ = feature_order
+        self.selected_features_ = feature_order.copy()
         return self
 
-    def _transform_full_to_df(self, X: pd.DataFrame) -> pd.DataFrame:
+    def _transform_to_df_pre_scale(self, X: pd.DataFrame) -> pd.DataFrame:
+        """Scaling öncesi tüm encoding'leri uygular."""
         X_fe = self._add_engineered_features(X)
 
         num_imputed = self.numeric_imputer.transform(X_fe[ALL_NUMERIC])
-        num_clipped = self._clip_domain(num_imputed)
-        num_scaled = self.scaler.transform(num_clipped)
+        num_df = pd.DataFrame(num_imputed, columns=ALL_NUMERIC, index=X.index)
+        num_df = self._clip_domain(num_df)
 
         ord_imputed = self.ordinal_imputer.transform(X_fe[ORDINAL_COLS])
         ord_enc = self.ordinal_encoder.transform(ord_imputed)
+        ord_df = pd.DataFrame(ord_enc, columns=ORDINAL_COLS, index=X.index)
 
-        ohe_imputed = self.ohe_imputer.transform(X_fe[OHE_COLS])
-        ohe_enc = self.ohe_encoder.transform(ohe_imputed)
+        woe_imputed = self.woe_imputer.transform(X_fe[WOE_COLS])
+        woe_imp_df = pd.DataFrame(woe_imputed, columns=WOE_COLS, index=X.index)
+        woe_enc_df = self.woe_encoder.transform(woe_imp_df)
+        woe_enc_df.index = X.index
 
         bool_imputed = self.bool_imputer.transform(self._coerce_bool(X_fe[BOOL_COLS]))
-        bool_arr = pd.DataFrame(bool_imputed, columns=BOOL_COLS).astype(float).values
+        bool_df = pd.DataFrame(bool_imputed, columns=BOOL_COLS, index=X.index).astype(float)
 
-        missing_arr = self._missing_indicators(X).values
+        missing_df = self._missing_indicators(X)
 
-        full = np.hstack([
-            num_scaled,
-            ord_enc,
-            ohe_enc,
-            bool_arr,
-            missing_arr,
-        ])
-
-        return pd.DataFrame(full, columns=self.full_feature_names_, index=X.index)
+        out = pd.concat([num_df, ord_df, woe_enc_df, bool_df, missing_df], axis=1)
+        return out
 
     def transform(self, X: pd.DataFrame) -> pd.DataFrame:
-        full_df = self._transform_full_to_df(X)
-        return full_df[self.selected_features_].copy()
+        pre_scale = self._transform_to_df_pre_scale(X)
+        scale_cols = ALL_NUMERIC + ORDINAL_COLS + WOE_COLS
+        scaled = self.scaler.transform(pre_scale[scale_cols].values)
+        out = pre_scale.copy()
+        out[scale_cols] = scaled
+        # Kolon sırası garantisi
+        return out[self.feature_names_].copy()

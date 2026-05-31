@@ -1,4 +1,4 @@
-# APEX-V2 Proje Geçmişi ve Faz Katkı Günlüğü
+# APEX Proje Geçmişi ve Faz Katkı Günlüğü
 
 > **2026-05-30 Güncel senaryo notu:** Faz 4-5 sırasında proje hedefi dönem başı
 > erken uyarıdan **dönem sonrası tükenmişlik seviyesi değerlendirmesine**

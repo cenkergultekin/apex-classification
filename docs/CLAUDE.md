@@ -1,4 +1,4 @@
-# CLAUDE.md — APEX-V2 Final Proje Rehberi
+# CLAUDE.md — APEX Final Proje Rehberi
 
 ## Proje Özeti
 
@@ -26,7 +26,7 @@ Detaylı görev listeleri için: `plans_and_agents/TASKS.md`
 ## Klasör Yapısı
 
 ```
-apex-v2/
+apex/
 ├── plans_and_agents/             # Planlar, Agent Yönergeleri ve Proje Günlüğü
 ├── data/
 │   ├── raw/                        # Orijinal, dokunulmamış veri

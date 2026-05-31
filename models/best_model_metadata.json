@@ -7,7 +7,7 @@
     "Yüksek"
   ],
   "positive_class": "Yüksek",
-  "feature_count": 21,
+  "feature_count": 15,
   "best_params": {
     "subsample": 0.85,
     "n_estimators": 180,
@@ -18,79 +18,79 @@
   },
   "threshold_decision": {
     "model": "Gradient Boosting",
-    "model_source": "Tuned model (4.4)",
-    "selected_by": "validation_f1_macro_then_high_recall",
+    "model_source": "Lean Core (Phase 3 refactor)",
+    "selected_by": "validation_f1_macro (inner train/val split, test seti tek-sefer kullanıldı)",
+    "validation_best_f1_macro": 0.7999555375060392,
     "target_order": [
       "Düşük",
       "Yüksek"
     ],
     "positive_class": "Yüksek",
+    "roc_auc": 0.8689634664359465,
     "default": {
       "threshold": 0.5,
-      "f1_macro": 0.8057705598826115,
-      "recall_yuksek": 0.7088506207448939,
-      "precision_yuksek": 0.8352996696554978,
-      "yuksek_tahmin_orani": 0.367180731242419
+      "accuracy": 0.7946985446985447,
+      "f1_macro": 0.7843400184747273,
+      "recall_yuksek": 0.6649319455564452,
+      "precision_yuksek": 0.8267794922847188,
+      "yuksek_tahmin_orani": 0.3480595980595981
     },
     "tuned": {
       "threshold": 0.53,
-      "f1_macro": 0.8082508383349987,
-      "recall_yuksek": 0.6948338005606728,
-      "precision_yuksek": 0.8555226824457594,
-      "yuksek_tahmin_orani": 0.3514122335817016
+      "accuracy": 0.7948717948717948,
+      "f1_macro": 0.7830383810471991,
+      "recall_yuksek": 0.6485188150520417,
+      "precision_yuksek": 0.8411214953271028,
+      "yuksek_tahmin_orani": 0.33367983367983367
     }
   },
   "middle_margin_decision": {
     "model": "Gradient Boosting",
-    "model_source": "Tuned model (4.4)",
-    "selected_by": "validation_f1_macro_then_high_recall",
+    "model_source": "Lean Core (Phase 3 refactor)",
+    "selected_by": "validation_f1_macro (inner train/val split, test seti tek-sefer kullanıldı)",
+    "validation_best_f1_macro": 0.7999555375060392,
     "target_order": [
       "Düşük",
       "Yüksek"
     ],
     "positive_class": "Yüksek",
+    "roc_auc": 0.8689634664359465,
     "default": {
       "threshold": 0.5,
-      "f1_macro": 0.8057705598826115,
-      "recall_yuksek": 0.7088506207448939,
-      "precision_yuksek": 0.8352996696554978,
-      "yuksek_tahmin_orani": 0.367180731242419
+      "accuracy": 0.7946985446985447,
+      "f1_macro": 0.7843400184747273,
+      "recall_yuksek": 0.6649319455564452,
+      "precision_yuksek": 0.8267794922847188,
+      "yuksek_tahmin_orani": 0.3480595980595981
     },
     "tuned": {
       "threshold": 0.53,
-      "f1_macro": 0.8082508383349987,
-      "recall_yuksek": 0.6948338005606728,
-      "precision_yuksek": 0.8555226824457594,
-      "yuksek_tahmin_orani": 0.3514122335817016
+      "accuracy": 0.7948717948717948,
+      "f1_macro": 0.7830383810471991,
+      "recall_yuksek": 0.6485188150520417,
+      "precision_yuksek": 0.8411214953271028,
+      "yuksek_tahmin_orani": 0.33367983367983367
     }
   },
   "test_eval_decision": {
     "model": "Gradient Boosting",
-    "model_source": "Tuned model (4.4)",
+    "model_source": "Lean Core (Phase 3 refactor)",
     "prediction_policy": "Tuned binary threshold 0.53",
     "threshold": 0.53,
-    "accuracy": 0.8028413028413028,
-    "f1_macro": 0.7925432064265425,
-    "recall_macro": 0.7871144808332922,
-    "recall_yuksek": 0.6701361088871097,
+    "accuracy": 0.7948717948717948,
+    "f1_macro": 0.7830383810471991,
+    "recall_macro": 0.7775275810141088,
+    "recall_yuksek": 0.6485188150520417,
+    "precision_yuksek": 0.8411214953271028,
+    "roc_auc": 0.8689634664359465,
     "confusion_matrix": [
       [
-        2960,
-        314
+        2968,
+        306
       ],
       [
-        824,
-        1674
-      ]
-    ],
-    "confusion_matrix_normalized": [
-      [
-        0.9040928527794746,
-        0.09590714722052535
-      ],
-      [
-        0.32986389111289033,
-        0.6701361088871097
+        878,
+        1620
       ]
     ]
   }
