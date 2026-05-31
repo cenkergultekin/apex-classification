@@ -1,78 +1,95 @@
 {
-  "model_name": "XGBoost",
+  "model_name": "Gradient Boosting",
   "model_source": "final_model",
   "target": "Tükenmişlik",
   "target_order": [
     "Düşük",
-    "Orta",
     "Yüksek"
   ],
+  "positive_class": "Yüksek",
   "feature_count": 21,
   "best_params": {
-    "subsample": 0.8,
-    "reg_lambda": 2.0,
-    "n_estimators": 200,
-    "min_child_weight": 1,
-    "max_depth": 4,
-    "learning_rate": 0.05,
-    "colsample_bytree": 0.8
+    "subsample": 0.85,
+    "n_estimators": 180,
+    "min_samples_leaf": 20,
+    "max_depth": 3,
+    "learning_rate": 0.05
   },
-  "middle_margin_decision": {
-    "model": "XGBoost",
+  "threshold_decision": {
+    "model": "Gradient Boosting",
     "model_source": "Tuned model (4.4)",
     "selected_by": "validation_f1_macro_then_high_recall",
+    "target_order": [
+      "Düşük",
+      "Yüksek"
+    ],
+    "positive_class": "Yüksek",
     "default": {
-      "f1_macro": 0.5525752316191755,
-      "recall_yuksek": 0.49539447336804165,
-      "orta_tahmin_orani": 0.532
+      "threshold": 0.5,
+      "f1_macro": 0.8057705598826115,
+      "recall_yuksek": 0.7088506207448939,
+      "precision_yuksek": 0.8352996696554978,
+      "yuksek_tahmin_orani": 0.367180731242419
     },
     "tuned": {
-      "margin": 0.04,
-      "min_edge_proba": 0.2,
-      "high_bias": 0.03,
-      "f1_macro": 0.5570621420323855,
-      "recall_yuksek": 0.5470564677613136,
-      "orta_tahmin_orani": 0.4517
+      "threshold": 0.53,
+      "f1_macro": 0.8082508383349987,
+      "recall_yuksek": 0.6948338005606728,
+      "precision_yuksek": 0.8555226824457594,
+      "yuksek_tahmin_orani": 0.3514122335817016
+    }
+  },
+  "middle_margin_decision": {
+    "model": "Gradient Boosting",
+    "model_source": "Tuned model (4.4)",
+    "selected_by": "validation_f1_macro_then_high_recall",
+    "target_order": [
+      "Düşük",
+      "Yüksek"
+    ],
+    "positive_class": "Yüksek",
+    "default": {
+      "threshold": 0.5,
+      "f1_macro": 0.8057705598826115,
+      "recall_yuksek": 0.7088506207448939,
+      "precision_yuksek": 0.8352996696554978,
+      "yuksek_tahmin_orani": 0.367180731242419
+    },
+    "tuned": {
+      "threshold": 0.53,
+      "f1_macro": 0.8082508383349987,
+      "recall_yuksek": 0.6948338005606728,
+      "precision_yuksek": 0.8555226824457594,
+      "yuksek_tahmin_orani": 0.3514122335817016
     }
   },
   "test_eval_decision": {
-    "model": "XGBoost",
-    "accuracy": 0.5404,
-    "f1_macro": 0.5463115024262466,
-    "recall_macro": 0.5384466904515394,
-    "recall_yuksek": 0.5182218662394874,
+    "model": "Gradient Boosting",
+    "model_source": "Tuned model (4.4)",
+    "prediction_policy": "Tuned binary threshold 0.53",
+    "threshold": 0.53,
+    "accuracy": 0.8028413028413028,
+    "f1_macro": 0.7925432064265425,
+    "recall_macro": 0.7871144808332922,
+    "recall_yuksek": 0.6701361088871097,
     "confusion_matrix": [
       [
-        1816,
-        1348,
-        110
+        2960,
+        314
       ],
       [
-        1327,
-        2294,
-        608
-      ],
-      [
-        239,
-        964,
-        1294
+        824,
+        1674
       ]
     ],
     "confusion_matrix_normalized": [
       [
-        0.5546731826511913,
-        0.41172877214416614,
-        0.033598045204642636
+        0.9040928527794746,
+        0.09590714722052535
       ],
       [
-        0.31378576495625443,
-        0.5424450224639394,
-        0.1437692125798061
-      ],
-      [
-        0.09571485782939528,
-        0.38606327593111733,
-        0.5182218662394874
+        0.32986389111289033,
+        0.6701361088871097
       ]
     ]
   }
