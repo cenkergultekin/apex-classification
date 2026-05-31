@@ -13,7 +13,8 @@
     "n_estimators": 180,
     "min_samples_leaf": 20,
     "max_depth": 3,
-    "learning_rate": 0.05
+    "learning_rate": 0.05,
+    "random_state": 42
   },
   "threshold_decision": {
     "model": "Gradient Boosting",
