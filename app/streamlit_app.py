@@ -69,18 +69,18 @@ st.markdown("""
     }
 
     /* ── Hero (çerçevesiz) ── */
-    .hero-wrap { padding: 2px 2px 4px; margin-bottom: 16px; }
+    .hero-wrap { padding: 0 2px 2px; margin-bottom: 12px; }
     .main-title {
         background: linear-gradient(120deg, #e9d5ff 0%, #a78bfa 45%, #22d3ee 100%);
         -webkit-background-clip: text; -webkit-text-fill-color: transparent;
         background-clip: text;
         font-family: 'Space Grotesk', 'Inter', sans-serif;
-        font-size: 1.9rem; font-weight: 700;
-        letter-spacing: -0.5px; line-height: 1.1; margin: 0 0 8px 0;
+        font-size: 1.75rem; font-weight: 700;
+        letter-spacing: -0.5px; line-height: 1.1; margin: 0 0 6px 0;
     }
     .subtitle {
-        color: #cbd5e1; font-size: 0.9rem; font-weight: 400;
-        max-width: 880px; line-height: 1.5; margin: 0;
+        color: #cbd5e1; font-size: 0.86rem; font-weight: 400;
+        max-width: 880px; line-height: 1.45; margin: 0;
     }
 
     /* ── Section headers ── */
@@ -102,13 +102,13 @@ st.markdown("""
         box-shadow: 0 8px 32px rgba(0,0,0,0.37) !important;
         backdrop-filter: blur(10px) !important;
         -webkit-backdrop-filter: blur(10px) !important;
-        padding: 14px 18px !important;
-        margin-bottom: 8px !important;
+        padding: 12px 16px !important;
+        margin-bottom: 6px !important;
     }
 
     .card-title {
-        color: var(--text); font-size: 1.05rem; font-weight: 700;
-        margin-bottom: 8px; padding-bottom: 7px;
+        color: var(--text); font-size: 1.0rem; font-weight: 700;
+        margin-bottom: 18px; padding-bottom: 6px;
         border-bottom: 1px solid rgba(255,255,255,0.08);
     }
 
@@ -305,8 +305,9 @@ st.markdown("""
         margin-bottom: 8px;
     }
     button[data-baseweb="tab"] {
-        font-weight: 600 !important; font-size: 0.95rem !important;
-        border-radius: 10px !important; padding: 9px 22px !important;
+        font-weight: 600 !important; font-size: 0.84rem !important;
+        border-radius: 9px !important; padding: 5px 14px !important;
+        min-height: 0 !important; height: auto !important;
         color: #94a3b8 !important; background: transparent !important;
         transition: all .18s ease !important;
     }
@@ -365,25 +366,21 @@ st.markdown("""
     #MainMenu, footer, .stDeployButton, [data-testid="stToolbar"] {
         display: none !important;
     }
-    .block-container { padding-top: 0.4rem !important; padding-bottom: 0.4rem !important; }
-    /* ── Kompakt: tek ekrana sığdır ── */
-    div[data-testid="stVerticalBlock"] { gap: 0.28rem !important; }
-    div[data-testid="stElementContainer"] { margin: 0 !important; }
-    /* widget etiketleri */
+    .block-container { padding-top: 0.3rem !important; padding-bottom: 0.4rem !important; }
+    /* ── Kompakt (çakışmasız) ── */
+    div[data-testid="stVerticalBlock"] { gap: 0.32rem !important; }
     div[data-testid="stWidgetLabel"] { margin-bottom: 1px !important; }
-    div[data-testid="stWidgetLabel"] p { font-size: 0.8rem !important; }
+    div[data-testid="stWidgetLabel"] p { font-size: 0.78rem !important; }
     /* selectbox yüksekliğini kıs */
-    div[data-baseweb="select"] > div { min-height: 34px !important; }
-    /* slider alt boşluk/tick'leri kıs */
-    div[data-testid="stSlider"] { padding-bottom: 0 !important; }
-    div[data-testid="stSlider"] > div { padding-bottom: 0 !important; }
-    div[data-testid="stTickBar"] { display: none !important; }
+    div[data-baseweb="select"] > div { min-height: 30px !important; }
+    /* slider: değer balonu + min/max satırı çakışmasın diye kendi boşluğu */
+    div[data-testid="stSlider"] { padding-top: 2px !important; margin-bottom: 6px !important; }
     /* segmented control pill'leri kısalt */
-    div[data-testid="stSegmentedControl"] button { padding-top: 3px !important; padding-bottom: 3px !important; min-height: 32px !important; }
+    div[data-testid="stSegmentedControl"] button { padding: 2px 0 !important; min-height: 28px !important; font-size: 0.82rem !important; }
     /* checkbox kompakt */
-    div[data-testid="stCheckbox"] { margin: 2px 0 !important; }
-    /* form grup etiketi kompakt */
-    .form-group-label { margin: 0 0 8px !important; padding-bottom: 6px !important; }
+    div[data-testid="stCheckbox"] { margin: 0 !important; }
+    /* form grup etiketi — çizgi alttaki widget'a yapışmasın */
+    .form-group-label { margin: 2px 0 14px !important; padding-bottom: 7px !important; }
 </style>
 """, unsafe_allow_html=True)
 
@@ -440,27 +437,27 @@ else:
 TEAM = [
     {
         'name': 'Feza', 'role': 'Veri Analisti',
-        'phase': 'CRISP-DM Faz 1 & 2',
-        'desc': 'Business Understanding ve detaylı Plotly EDA süreçlerini yürüttü; '
-                'veri setindeki gizli ilişkileri ve sınıf dengesini ortaya çıkardı.',
+        'phase': 'Faz 1 & 2',
+        'desc': 'Projenin amacını belirledi ve veriyi grafiklerle inceleyerek '
+                'öğrenci verisindeki önemli ilişkileri ortaya çıkardı.',
     },
     {
         'name': 'Cenker', 'role': 'Veri Mühendisi',
-        'phase': 'CRISP-DM Faz 3',
-        'desc': 'Veri temizleme, öznitelik mühendisliği ve Lean Core (15 feature) '
-                'production-ready ProductionPreprocessor / Pipeline mimarisini kurdu.',
+        'phase': 'Faz 3',
+        'desc': 'Veriyi temizledi, eksik değerleri tamamladı ve modelin '
+                'kullanacağı özellikleri hazırladı.',
     },
     {
         'name': 'Berkay', 'role': 'ML Mühendisi',
-        'phase': 'CRISP-DM Faz 4 & 5',
-        'desc': '10+ sınıflandırma algoritmasını stratified CV ile karşılaştırdı, '
-                'Gradient Boosting üzerinde hiperparametre optimizasyonu ve nihai değerlendirmeyi yaptı.',
+        'phase': 'Faz 4 & 5',
+        'desc': 'Birçok farklı modeli deneyip karşılaştırdı, en iyisini seçti '
+                've ayarlarını iyileştirip başarısını ölçtü.',
     },
     {
         'name': 'Ethem', 'role': 'Yazılım Mühendisi',
-        'phase': 'CRISP-DM Faz 6',
-        'desc': 'Modeli üretime aldı: Streamlit canlı tahmin arayüzü, leak-aware retraining '
-                'akışı ve kullanıcı dostu analitik ekranların tasarımını tamamladı.',
+        'phase': 'Faz 6',
+        'desc': 'Modeli bu web uygulamasına dönüştürdü; tahmin ekranını ve '
+                'grafikleri tasarladı.',
     },
 ]
 
@@ -520,7 +517,7 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 # Main Application Tabs
-tab_predict, tab_analytics = st.tabs(["Tükenmişlik Tahmini", "Proje Analitiği & Hikayesi"])
+tab_predict, tab_analytics = st.tabs(["Tükenmişlik Tahmini", "Proje Analitiği"])
 
 # ────────────────────────────────────────────────────────────────────
 # TAB 1 — Tahmin
@@ -573,7 +570,6 @@ with tab_predict:
                         {'range': [35, 70], 'color': 'rgba(245, 158, 11, 0.08)'},
                         {'range': [70, 100], 'color': 'rgba(239, 68, 68, 0.08)'}
                     ],
-                    'threshold': {'line': {'color': "#ffffff", 'width': 3}, 'thickness': 0.75, 'value': thr * 100}
                 }
             ))
             fig_gauge.update_layout(
@@ -583,8 +579,8 @@ with tab_predict:
             )
             st.plotly_chart(fig_gauge, use_container_width=True)
             st.markdown(
-                f"<p style='text-align:center; color:#94a3b8; font-size:0.8em; margin-top:-6px;'>"
-                f"Yüksek risk olasılığı · karar eşiği {thr:.2f}</p>",
+                "<p style='text-align:center; color:#94a3b8; font-size:0.8em; margin-top:-6px;'>"
+                "Yüksek tükenmişlik riski olasılığı</p>",
                 unsafe_allow_html=True
             )
 
@@ -638,6 +634,12 @@ with tab_predict:
                     index=1
                 )
 
+                paid_sub = st.selectbox(
+                    "Ücretli AI Aboneliği",
+                    options=['Var', 'Yok'],
+                    index=1
+                )
+
                 weekly_ai_hours = st.slider(
                     "Haftalık AI Kullanım Süresi (saat)",
                     min_value=0, max_value=40, value=10, step=1,
@@ -648,16 +650,6 @@ with tab_predict:
                     "Haftalık Geleneksel Çalışma Süresi (saat)",
                     min_value=0, max_value=40, value=12, step=1,
                     help="AI dışı, klasik ders çalışmaya ayrılan haftalık saat"
-                )
-
-                # GPA inputları Lean Core refactor ile kaldırıldı (Pre/Post GNO drop edildi —
-                # ablation testinde Yüksek risk recall'unu düşürdüğü için).
-                retention_unk = st.checkbox("Beceri Kalıcılık Skoru bilinmiyor", value=False)
-                retention = st.slider(
-                    "Beceri Kalıcılık Skoru (0-10)",
-                    min_value=0, max_value=10, value=7, step=1,
-                    disabled=retention_unk,
-                    help="0 = hiç kalıcı değil · 10 = tamamen kalıcı"
                 )
 
             with col2:
@@ -672,12 +664,6 @@ with tab_predict:
                 prompt_skill = st.selectbox(
                     "Prompt Yazma Becerisi",
                     options=['Başlangıç', 'Orta', 'İleri', 'Bilinmiyor'],
-                    index=1
-                )
-
-                paid_sub = st.selectbox(
-                    "Ücretli AI Aboneliği",
-                    options=['Var', 'Yok'],
                     index=1
                 )
 
@@ -708,6 +694,18 @@ with tab_predict:
                 if tool_diversity is None:
                     tool_diversity = 3
 
+                # GPA inputları Lean Core refactor ile kaldırıldı (Pre/Post GNO drop edildi).
+                retention_unk = st.checkbox("Beceri Kalıcılık Skoru bilinmiyor", value=False)
+                retention = st.segmented_control(
+                    "Beceri Kalıcılık Skoru",
+                    options=list(range(1, 11)),
+                    default=7,
+                    disabled=retention_unk,
+                    help="1 = hiç kalıcı değil · 10 = tamamen kalıcı"
+                )
+                if retention is None:
+                    retention = 7
+
         # Build the input DataFrame dynamically (Lean Core schema — GPA alanları kaldırıldı)
         input_data = {
             'Okunan Bölüm': [major],
@@ -721,7 +719,7 @@ with tab_predict:
             'Algılanan AI Bağımlılığı': [float(ai_dependency)],
             'Kurum Politikası': [policy],
             'Sınav Kaygı Düzeyi': [float(exam_anxiety)],
-            # Arayüzde 0-10 ölçeğinde alınır; model 0-100 bekler → ×10
+            # Arayüzde 1-10 ölçeğinde alınır; model 0-100 bekler → ×10
             'Beceri Kalıcılık Skoru': [np.nan if retention_unk else float(retention) * 10],
         }
 
@@ -780,14 +778,6 @@ with tab_analytics:
         ]
         for col, (lbl, val, sub) in zip(mcols, cards):
             col.markdown(metric_card(lbl, val, sub), unsafe_allow_html=True)
-
-        st.markdown(
-            f"<p style='color:#94a3b8; font-size:0.82em; margin-top:10px;'>"
-            f"En iyi model: <b style='color:#c4b5fd;'>{METRICS['model_name']}</b> · "
-            f"{METRICS['feature_count']} feature (Lean Core) · karar eşiği {METRICS['threshold']:.2f}. "
-            f"Tüm skorlar yalnızca <b>saklı test seti</b> üzerinde tek sefer ölçülmüştür.</p>",
-            unsafe_allow_html=True
-        )
 
     st.write("")
     st.markdown("<div class='section-head'><span class='bar'></span>Model Karar Analitiği</div>", unsafe_allow_html=True)
