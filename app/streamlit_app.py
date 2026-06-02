@@ -420,8 +420,8 @@ if metadata and 'test_eval_decision' in metadata:
     _te = metadata['test_eval_decision']
     METRICS = {
         'model_name': metadata.get('model_name', 'Gradient Boosting'),
-        'feature_count': metadata.get('feature_count', 15),
-        'threshold': _te.get('threshold', 0.53),
+        'feature_count': metadata.get('feature_count', 12),
+        'threshold': _te.get('threshold', 0.54),
         'accuracy': _te.get('accuracy', float('nan')),
         'f1_macro': _te.get('f1_macro', float('nan')),
         'recall_macro': _te.get('recall_macro', float('nan')),
@@ -634,12 +634,6 @@ with tab_predict:
                     index=1
                 )
 
-                paid_sub = st.selectbox(
-                    "Ücretli AI Aboneliği",
-                    options=['Var', 'Yok'],
-                    index=1
-                )
-
                 weekly_ai_hours = st.slider(
                     "Haftalık AI Kullanım Süresi (saat)",
                     min_value=0, max_value=40, value=10, step=1,
@@ -685,16 +679,9 @@ with tab_predict:
                 if ai_dependency is None:
                     ai_dependency = 4
 
-                tool_diversity = st.segmented_control(
-                    "Kullanılan AI Araç Çeşitliliği (adet)",
-                    options=list(range(1, 11)),
-                    default=3,
-                    help="Düzenli kullanılan farklı AI araç sayısı"
-                )
-                if tool_diversity is None:
-                    tool_diversity = 3
-
-                # GPA inputları Lean Core refactor ile kaldırıldı (Pre/Post GNO drop edildi).
+                # Araç Çeşitliliği ve Ücretli Abonelik alanları kaldırıldı:
+                # leak-safe ablation'da modele katkı vermedikleri için Lean Core'dan çıkarıldılar.
+                # GPA inputları da Lean Core refactor ile kaldırıldı (Pre/Post GNO drop edildi).
                 retention_unk = st.checkbox("Beceri Kalıcılık Skoru bilinmiyor", value=False)
                 retention = st.segmented_control(
                     "Beceri Kalıcılık Skoru",
@@ -713,8 +700,6 @@ with tab_predict:
             'Haftalık AI Saati': [float(weekly_ai_hours)],
             'Birincil Kullanım Amacı': [use_case],
             'Prompt Yazma Becerisi': [np.nan if prompt_skill == 'Bilinmiyor' else prompt_skill],
-            'Araç Çeşitliliği': [float(tool_diversity)],
-            'Ücretli Abonelik': [1.0 if paid_sub == 'Var' else 0.0],
             'Geleneksel Çalışma Saati': [float(traditional_study_hours)],
             'Algılanan AI Bağımlılığı': [float(ai_dependency)],
             'Kurum Politikası': [policy],

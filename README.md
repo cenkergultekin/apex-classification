@@ -6,10 +6,10 @@
 
 ```
 ─────────────────────────────────────────────────────────────
-  Model        Gradient Boosting · Lean Core (15 feature)
-  Test F1      0.7830           ROC-AUC      0.8690
-  Recall (Y)   0.6485           Precision    0.8411
-  Threshold    0.53 (validation üzerinde seçildi)
+  Model        Gradient Boosting · Lean Core (12 feature)
+  Test F1      0.7822           ROC-AUC      0.8689
+  Recall (Y)   0.6433           Precision    0.8449
+  Threshold    0.54 (validation üzerinde seçildi)
 ─────────────────────────────────────────────────────────────
 ```
 
@@ -38,7 +38,7 @@ Tarayıcı otomatik açılır: `http://localhost:8501`
 apex/
 ├── app/
 │   ├── streamlit_app.py        — Canlı tahmin + analitik arayüz
-│   ├── preprocessing.py        — ProductionPreprocessor (Lean Core, 15 feature)
+│   ├── preprocessing.py        — ProductionPreprocessor (Lean Core, 12 feature)
 │   ├── retrain.py              — Train/val/test split → leak-aware retraining
 │   └── __init__.py
 │
@@ -102,7 +102,7 @@ Her fazda kim ne yaptı ve neden o yöntemi seçti → **[docs/DEVELOPER_GUIDE.m
 
 ## Üretim Pipeline · Lean Core
 
-Üretim katmanı **15 sabit feature** üreten deterministik bir kontrat. `fit()` yalnızca train setinde çağrılır; test setine sadece `transform()` uygulanır.
+Üretim katmanı **12 sabit feature** üreten deterministik bir kontrat. `fit()` yalnızca train setinde çağrılır; test setine sadece `transform()` uygulanır.
 
 ```
 Ham 12 sütun
@@ -113,12 +113,10 @@ Ham 12 sütun
          ├─ Most-frequent imputer — ordinal ve nominal sütunlar
          ├─ OrdinalEncoder        — Sınıf Düzeyi, Prompt, Kurum Politikası
          ├─ WoE Encoder           — Okunan Bölüm, Birincil Kullanım Amacı
-         ├─ Boolean → int         — Ücretli Abonelik
-         ├─ Engineered            — "Toplam Çalışma Yükü"
          ├─ Missing-indicator     — 2 sütun
          └─ StandardScaler        — sayısal + ordinal + WoE
    │
-   └─► 15 feature ─► Gradient Boosting ─► P(Yüksek) ─► threshold uygula
+   └─► 12 feature ─► Gradient Boosting ─► P(Yüksek) ─► threshold uygula
 ```
 
 **Veri sızıntısı önlemleri**
@@ -130,23 +128,23 @@ Ham 12 sütun
 
 ## Test Sonuçları
 
-En iyi model: **Gradient Boosting** (tuned, 15 feature)
+En iyi model: **Gradient Boosting** (tuned, 12 feature)
 
 | Metrik              | Değer  |
 |---------------------|--------|
-| Test Accuracy       | 0.7949 |
-| Test F1-Macro       | 0.7830 |
-| Test ROC-AUC        | 0.8690 |
-| Recall (Yüksek)     | 0.6485 |
-| Precision (Yüksek)  | 0.8411 |
-| Karar Eşiği         | 0.53   |
+| Test Accuracy       | 0.7945 |
+| Test F1-Macro       | 0.7822 |
+| Test ROC-AUC        | 0.8689 |
+| Recall (Yüksek)     | 0.6433 |
+| Precision (Yüksek)  | 0.8449 |
+| Karar Eşiği         | 0.54   |
 
 **Confusion Matrix** (test seti)
 
 ```
                   Tahmin: Düşük   Tahmin: Yüksek
-  Gerçek Düşük       2968              306
-  Gerçek Yüksek       878             1620
+  Gerçek Düşük       2979              295
+  Gerçek Yüksek       891             1607
 ```
 
 Eğitim hiperparametreleri ve son güncelleme bilgisi: `models/best_model_metadata.json`

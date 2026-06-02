@@ -14,13 +14,23 @@ Phase 3 kararları (binary geçiş + Lean Core refactor sonrası):
   (binary log-odds, tek sütun).
 - Ordinal kategoriler (Sınıf Düzeyi, Prompt Yazma Becerisi, Kurum Politikası)
   → OrdinalEncoder (sıra korunur).
-- Boolean (Ücretli Abonelik) → int 0/1.
 - Tüm sayısal+ordinal+WoE → StandardScaler. Aykırı oranı %0.5 altında olduğu
   için RobustScaler şart değil.
 - 7 redundant türev feature **drop** — yüksek-MI değişkenlerden ratio/product
   türetildikleri için kolinearite üretiyorlardı. Tree-based modeller bu
   etkileşimleri zaten kendileri öğrenir.
 - Sadece ``Toplam Çalışma Yükü`` korundu — sum, kapasite/yük kavramı taşır.
+
+Leak-safe kombinatoryel ablation (Phase 3 selection turu) sonucu **2 feature
+daha drop** edildi — korumacı sadeleştirme, 0 skor kaybı (5-fold CV ROC-AUC
+0.8668 → 0.8671):
+
+- ``Araç Çeşitliliği`` — marjinal CV katkısı sıfır **ve** ``Prompt Yazma
+  Becerisi`` ile r=0.57 (gerçek redundans/duplicate).
+- ``Ücretli Abonelik`` — marjinal CV katkısı sıfır, düşük anlatı değeri.
+
+Not: Bu kararlar leave-one-out + forward-selection ile, fold-içi encoding
+(sızıntısız) ölçülerek verildi; tekil MI eşiğiyle değil.
 """
 
 from __future__ import annotations
@@ -41,12 +51,13 @@ BASE_NUMERIC = [
     'Sınav Kaygı Düzeyi',
     'Geleneksel Çalışma Saati',
     'Beceri Kalıcılık Skoru',
-    'Araç Çeşitliliği',
+    # 'Araç Çeşitliliği' — leak-safe ablation'da drop (sıfır katkı + Prompt ile r=0.57)
 ]
 
-ENGINEERED_NUMERIC = [
-    'Toplam Çalışma Yükü',
-]
+# 'Toplam Çalışma Yükü' (= AI + Geleneksel) — leak-safe ablation'da drop:
+# sıfır CV katkısı + sum-vs-parts kolinearitesi (bileşenleriyle yüksek korele,
+# korelasyon matrisinde gereksiz redundans üretiyordu). Engineered feature kalmadı.
+ENGINEERED_NUMERIC: list[str] = []
 
 ALL_NUMERIC = BASE_NUMERIC + ENGINEERED_NUMERIC
 
@@ -58,7 +69,8 @@ ORDINAL_ORDERS = [
 ]
 
 WOE_COLS = ['Okunan Bölüm', 'Birincil Kullanım Amacı']
-BOOL_COLS = ['Ücretli Abonelik']
+# 'Ücretli Abonelik' — leak-safe ablation'da drop (sıfır CV katkısı, düşük anlatı değeri)
+BOOL_COLS: list[str] = []
 
 MISSING_INDICATOR_COLS = ['Beceri Kalıcılık Skoru', 'Prompt Yazma Becerisi']
 
@@ -186,8 +198,9 @@ class ProductionPreprocessor:
         woe_imp_df = pd.DataFrame(woe_imputed, columns=WOE_COLS, index=X.index)
         self.woe_encoder.fit(woe_imp_df, pd.Series(y_binary, index=X.index))
 
-        # Bool imputer
-        self.bool_imputer.fit(self._coerce_bool(X_fe[BOOL_COLS]))
+        # Bool imputer (BOOL_COLS boşsa atlanır)
+        if BOOL_COLS:
+            self.bool_imputer.fit(self._coerce_bool(X_fe[BOOL_COLS]))
 
         # Final feature list (sıralı)
         missing_feature_names = [f'{col} Eksik Mi' for col in MISSING_INDICATOR_COLS]
@@ -226,8 +239,11 @@ class ProductionPreprocessor:
         woe_enc_df = self.woe_encoder.transform(woe_imp_df)
         woe_enc_df.index = X.index
 
-        bool_imputed = self.bool_imputer.transform(self._coerce_bool(X_fe[BOOL_COLS]))
-        bool_df = pd.DataFrame(bool_imputed, columns=BOOL_COLS, index=X.index).astype(float)
+        if BOOL_COLS:
+            bool_imputed = self.bool_imputer.transform(self._coerce_bool(X_fe[BOOL_COLS]))
+            bool_df = pd.DataFrame(bool_imputed, columns=BOOL_COLS, index=X.index).astype(float)
+        else:
+            bool_df = pd.DataFrame(index=X.index)
 
         missing_df = self._missing_indicators(X)
 
