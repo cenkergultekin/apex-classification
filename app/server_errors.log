@@ -1,0 +1,70 @@
+=== Exception during /api/predict ===
+Traceback (most recent call last):
+  File "C:\Users\ercan\Desktop\apex\apex-classification\app\server.py", line 128, in do_POST
+    'advisors': advisors
+    ^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ercan\AppData\Local\Python\pythoncore-3.14-64\Lib\http\server.py", line 561, in send_response
+    self.log_request(code)
+    ~~~~~~~~~~~~~~~~^^^^^^
+  File "C:\Users\ercan\AppData\Local\Python\pythoncore-3.14-64\Lib\http\server.py", line 613, in log_request
+    self.log_message('"%s" %s %s',
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^
+                     self.requestline, str(code), str(size))
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ercan\AppData\Local\Python\pythoncore-3.14-64\Lib\http\server.py", line 656, in log_message
+    sys.stderr.write("%s - - [%s] %s\n" %
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+                     (self.address_string(),
+                     ^^^^^^^^^^^^^^^^^^^^^^^
+                      self.log_date_time_string(),
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                      message.translate(self._control_char_table)))
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+OSError: [Errno 22] Invalid argument
+
+=== Incoming POST request to /api/predict ===
+
+=== Incoming POST request to /api/predict ===
+
+=== Incoming POST request to /api/predict ===
+
+=== Incoming POST request to /api/predict ===
+
+=== Incoming POST request to /api/predict ===
+
+=== Incoming POST request to /api/predict ===
+
+=== Incoming POST request to /api/predict ===
+
+=== Incoming POST request to /api/predict ===
+
+=== Incoming POST request to /api/predict ===
+
+=== Incoming POST request to /api/predict ===
+
+=== Incoming POST request to /api/predict ===
+
+=== Incoming POST request to /api/predict ===
+=== Exception during POST ===
+Traceback (most recent call last):
+  File "C:\Users\ercan\Desktop\apex\apex-classification\app\server.py", line 132, in do_POST
+    self.send_response(200)
+    ~~~~~~~~~~~~~~~~~~^^^^^
+  File "C:\Users\ercan\AppData\Local\Python\pythoncore-3.14-64\Lib\http\server.py", line 561, in send_response
+    self.log_request(code)
+    ~~~~~~~~~~~~~~~~^^^^^^
+  File "C:\Users\ercan\AppData\Local\Python\pythoncore-3.14-64\Lib\http\server.py", line 613, in log_request
+    self.log_message('"%s" %s %s',
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^
+                     self.requestline, str(code), str(size))
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ercan\AppData\Local\Python\pythoncore-3.14-64\Lib\http\server.py", line 656, in log_message
+    sys.stderr.write("%s - - [%s] %s\n" %
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+                     (self.address_string(),
+                     ^^^^^^^^^^^^^^^^^^^^^^^
+                      self.log_date_time_string(),
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                      message.translate(self._control_char_table)))
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+OSError: [Errno 22] Invalid argument

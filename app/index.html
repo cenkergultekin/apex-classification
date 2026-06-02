@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>APEX - AI Student Impact | Akademik Tükenmişlik ve Başarı Sınıflandırma</title>
+  <meta name="description" content="CRISP-DM metodolojisi ile yapay zeka kullanımı, geleneksel çalışma alışkanlıkları ve sınav kaygısının akademik tükenmişlik (burnout) üzerindeki etkilerinin sınıflandırma analizi. APEX Ekibi.">
+  <!-- Favicon -->
+  <link rel="icon" type="image/x-icon" href="static/assets/imgs/logo.png">
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <!-- Custom Styles -->
+  <link rel="stylesheet" href="static/css/style.css">
+</head>
+<body>
+
+  <!-- Header -->
+  <header class="header" id="header">
+    <div class="header-container">
+      <a href="#" class="brand">
+        <span class="brand-title">APEX</span>
+      </a>
+
+      <nav class="nav" id="nav-menu">
+        <ul class="nav-list">
+          <li class="nav-item"><a href="#showcase" class="nav-link">Proje Hakkında</a></li>
+          <li class="nav-item"><a href="#features" class="nav-link">Özellikler</a></li>
+          <li class="nav-item"><a href="#team" class="nav-link">Ekibimiz</a></li>
+          <li class="nav-item"><a href="#faq" class="nav-link">SSS</a></li>
+        </ul>
+      </nav>
+
+      <div class="header-actions">
+        <a href="https://github.com" target="_blank" class="btn btn-sm btn-primary">GitHub Repo</a>
+        <button class="menu-toggle" id="menu-toggle" aria-label="Toggle Menu">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="menu-icon"><line x1="4" x2="20" y1="12" y2="12"></line><line x1="4" x2="20" y1="6" y2="6"></line><line x1="4" x2="20" y1="18" y2="18"></line></svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Mobile Dropdown Menu -->
+    <div class="mobile-menu" id="mobile-menu">
+      <ul class="mobile-nav-list">
+        <li><a href="#showcase" class="mobile-nav-link">Proje Hakkında</a></li>
+        <li><a href="#features" class="mobile-nav-link">Özellikler</a></li>
+        <li><a href="#team" class="mobile-nav-link">Ekibimiz</a></li>
+        <li><a href="#faq" class="mobile-nav-link">SSS</a></li>
+        <li><a href="https://github.com" target="_blank" class="btn btn-primary w-full text-center">GitHub Repo</a></li>
+      </ul>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="hero-section">
+    <div class="hero-bg-overlay"></div>
+    <div class="container hero-container">
+      <div class="hero-content">
+        <h1 class="hero-title"><span class="text-gradient">Akademik Tükenmişlik Analizi</span></h1>
+        <p class="hero-description">Öğrencilerin tükenmişlik risklerini henüz ortaya çıkmadan tespit eden, yapay zeka destekli proaktif bir karar destek sistemi. Kurumunuzun eğitim kalitesini ve öğrenci memnuniyetini yenilikçi analizlerle bir adım öteye taşıyın.</p>
+        <div class="hero-actions">
+          <a href="#showcase" class="btn btn-lg btn-primary animate-pulse">Projeyi Keşfet</a>
+          <a href="#faq" class="btn btn-lg btn-outline">Nasıl Çalışır?</a>
+        </div>
+        <div class="hero-happy-users">
+          <div class="avatar-group">
+            <img src="static/assets/imgs/user/1.png" alt="Feza" class="avatar-sm">
+            <img src="static/assets/imgs/user/2.png" alt="Cenker" class="avatar-sm">
+            <img src="static/assets/imgs/user/3.png" alt="Ethem" class="avatar-sm">
+            <img src="static/assets/imgs/user/4.png" alt="Berkay" class="avatar-sm">
+          </div>
+          <span class="happy-users-text">APEX Ekibi — <strong>4 kişilik</strong> proje takımı.</span>
+        </div>
+      </div>
+      <div class="hero-image-wrapper">
+        <div class="glass-card hero-image-card">
+          <img src="static/assets/imgs/hero.png" alt="APEX Proje Dashboard" class="hero-image">
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section Showcases (What, Why, How) -->
+  <section id="showcase" class="showcase-section">
+    <div class="container">
+      
+      <!-- Showcase 1: Proje Nedir (Image Left) -->
+      <div class="showcase-row">
+        <div class="showcase-image-col reveal">
+          <div class="image-wrapper" style="max-width: 440px; margin-left: 0;">
+            <img src="static/assets/imgs/section1.png" alt="APEX EDA Dashboard" class="showcase-img">
+          </div>
+        </div>
+        <div class="showcase-content-col reveal reveal-delay-1">
+          <h2 class="section-title text-left" style="font-size: 1.85rem; font-weight: 700; letter-spacing: -0.02em; margin-bottom: 0.5rem;">Proje Nedir?</h2>
+          <p class="section-desc" style="font-size: 0.95rem; line-height: 1.5; color: hsl(var(--muted-foreground)); margin-top: 0.5rem; margin-bottom: 1.5rem;">APEX, öğrencilerin yapay zeka araçları kullanım alışkanlıklarının, çalışma rutinlerinin ve sınav kaygısının <strong>Akademik Tükenmişlik (Burnout)</strong> üzerindeki etkilerini analiz eden karar destek altyapısıdır.</p>
+          
+          <div class="showcase-items" style="gap: 1.25rem;">
+            <div class="showcase-item">
+              <span class="checkmark-dot" style="margin-top: 0.45rem;"></span>
+              <div>
+                <h4 class="showcase-item-title" style="font-size: 0.95rem; font-weight: 650; margin-bottom: 0.15rem;">CRISP-DM Metodolojisi</h4>
+                <p class="showcase-item-desc" style="font-size: 0.85rem;">İş probleminden canlı yayına uzanan 6 fazlı endüstriyel süreç.</p>
+              </div>
+            </div>
+            <div class="showcase-item">
+              <span class="checkmark-dot" style="margin-top: 0.45rem;"></span>
+              <div>
+                <h4 class="showcase-item-title" style="font-size: 0.95rem; font-weight: 650; margin-bottom: 0.15rem;">Keşifsel Veri Analizi (EDA)</h4>
+                <p class="showcase-item-desc" style="font-size: 0.85rem;">Plotly tabanlı korelasyon haritaları ve interaktif dağılımlar.</p>
+              </div>
+            </div>
+            <div class="showcase-item">
+              <span class="checkmark-dot" style="margin-top: 0.45rem;"></span>
+              <div>
+                <h4 class="showcase-item-title" style="font-size: 0.95rem; font-weight: 650; margin-bottom: 0.15rem;">Şampiyon Modelleme</h4>
+                <p class="showcase-item-desc" style="font-size: 0.85rem;">Hiperparametreleri optimize edilmiş XGBoost algoritması.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Showcase 2: Neden Bu Proje (Image Right - Text Left) -->
+      <div class="showcase-row">
+        <div class="showcase-content-col reveal">
+          <h2 class="section-title text-left" style="font-size: 1.85rem; font-weight: 700; letter-spacing: -0.02em; margin-bottom: 0.5rem;">Neden Bu Proje?</h2>
+          <p class="section-desc" style="font-size: 0.95rem; line-height: 1.5; color: hsl(var(--muted-foreground)); margin-top: 0.5rem; margin-bottom: 1.5rem;">Tükenmişlik süreci zamanında tespit edilmezse öğrenci kaybına ve motivasyon düşüklüğüne yol açar. APEX, potansiyel riskleri henüz dönem bitmeden belirleyerek eğitim kurumlarına stratejik rehberlik imkanı sunar.</p>
+          
+          <div class="showcase-items" style="gap: 1.25rem;">
+            <div class="showcase-item">
+              <span class="checkmark-dot bg-accent" style="margin-top: 0.45rem;"></span>
+              <div>
+                <h4 class="showcase-item-title" style="font-size: 0.95rem; font-weight: 650; margin-bottom: 0.15rem;">Proaktif Eğitim Vizyonu</h4>
+                <p class="showcase-item-desc" style="font-size: 0.85rem;">Öğrencileri akademik başarısızlık veya yoğun stres safhasına geçmeden önce tespit eder.</p>
+              </div>
+            </div>
+            <div class="showcase-item">
+              <span class="checkmark-dot bg-accent" style="margin-top: 0.45rem;"></span>
+              <div>
+                <h4 class="showcase-item-title" style="font-size: 0.95rem; font-weight: 650; margin-bottom: 0.15rem;">Etkin Kaynak Yönetimi</h4>
+                <p class="showcase-item-desc" style="font-size: 0.85rem;">Rehberlik ve danışmanlık hizmetlerinizi doğrudan yardıma ihtiyacı olan öğrencilere odaklamanızı sağlar.</p>
+              </div>
+            </div>
+            <div class="showcase-item">
+              <span class="checkmark-dot bg-accent" style="margin-top: 0.45rem;"></span>
+              <div>
+                <h4 class="showcase-item-title" style="font-size: 0.95rem; font-weight: 650; margin-bottom: 0.15rem;">Kurumsal Memnuniyet</h4>
+                <p class="showcase-item-desc" style="font-size: 0.85rem;">Öğrenci bağlılığını ve başarısını artırarak kurumsal prestije ve veli memnuniyetine doğrudan katkı sunar.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="showcase-image-col reveal reveal-delay-1">
+          <div class="image-wrapper" style="max-width: 440px; margin-right: 0; margin-left: auto;">
+            <img src="static/assets/imgs/section2.png" alt="APEX Model Karşılaştırma" class="showcase-img">
+          </div>
+        </div>
+      </div>
+
+      <!-- Showcase 3: Nasıl Çalışır (Image Left) -->
+      <div class="showcase-row">
+        <div class="showcase-image-col reveal">
+          <div class="image-wrapper" style="max-width: 440px; margin-left: 0;">
+            <img src="static/assets/imgs/section3.png" alt="APEX Pipeline Akışı" class="showcase-img">
+          </div>
+        </div>
+        <div class="showcase-content-col reveal reveal-delay-1">
+          <h2 class="section-title text-left" style="font-size: 1.85rem; font-weight: 700; letter-spacing: -0.02em; margin-bottom: 0.5rem;">Nasıl Çalışır?</h2>
+          <p class="section-desc" style="font-size: 0.95rem; line-height: 1.5; color: hsl(var(--muted-foreground)); margin-top: 0.5rem; margin-bottom: 1.5rem;">Öğrenci parametreleri, veri sızıntısını engelleyen ön işleme hattından geçerek tahmin modeline aktarılır:</p>
+          
+          <div class="showcase-items" style="gap: 1.25rem;">
+            <div class="showcase-item">
+              <span class="step-num" style="margin-top: 0.15rem; width: 1.5rem; height: 1.5rem; font-size: 0.8rem;">1</span>
+              <div>
+                <h4 class="showcase-item-title" style="font-size: 0.95rem; font-weight: 650; margin-bottom: 0.15rem;">Öznitelik Analizi & Seçimi</h4>
+                <p class="showcase-item-desc" style="font-size: 0.85rem;">Haftalık AI saati, sınav kaygısı ve çalışma dengesi incelenir.</p>
+              </div>
+            </div>
+            <div class="showcase-item">
+              <span class="step-num" style="margin-top: 0.15rem; width: 1.5rem; height: 1.5rem; font-size: 0.8rem;">2</span>
+              <div>
+                <h4 class="showcase-item-title" style="font-size: 0.95rem; font-weight: 650; margin-bottom: 0.15rem;">Sızıntısız Preprocessing Pipeline</h4>
+                <p class="showcase-item-desc" style="font-size: 0.85rem;">ColumnTransformer ile encoding ve scaling işlemleri güvenle tamamlanır.</p>
+              </div>
+            </div>
+            <div class="showcase-item">
+              <span class="step-num" style="margin-top: 0.15rem; width: 1.5rem; height: 1.5rem; font-size: 0.8rem;">3</span>
+              <div>
+                <h4 class="showcase-item-title" style="font-size: 0.95rem; font-weight: 650; margin-bottom: 0.15rem;">Eşik Ayarlı Risk Hesabı</h4>
+                <p class="showcase-item-desc" style="font-size: 0.85rem;">0.53 karar eşiğine göre öğrencinin anlık risk düzeyi ve tavsiyeler üretilir.</p>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Features Section -->
+  <section id="features" class="features-section bg-gradient-subtle">
+    <div class="container">
+      <div class="section-header text-center">
+        <span class="badge">Özellikler</span>
+        <h2 class="section-title">Projenin Temel Bileşenleri</h2>
+        <p class="section-subtitle">APEX projesinin teknik altyapısını oluşturan ana bileşenler ve yetenekler.</p>
+      </div>
+
+      <div class="features-grid">
+        <!-- Feature 1 -->
+        <div class="feature-card glass-card">
+          <div class="feature-icon-wrapper">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="feature-icon" style="width: 2rem; height: 2rem; color: #000;">
+              <path d="M3 3v18h18" />
+              <path d="M18.7 8l-5.1 5.2-2.8-2.7L7 14.3" />
+              <circle cx="18.7" cy="8" r="1.5" fill="currentColor" />
+              <circle cx="10.8" cy="10.5" r="1.5" fill="currentColor" />
+            </svg>
+          </div>
+          <h3 class="feature-title">İnteraktif Veri Hikayesi</h3>
+          <p class="feature-desc">Tüm Keşifsel Veri Analizi (EDA) grafikleri Plotly ile oluşturulmuştur. İnteraktif yapısıyla veri kümesindeki gizli anksiyete ve tükenmişlik korelasyonlarını görselleştirir.</p>
+        </div>
+
+        <!-- Feature 2 -->
+        <div class="feature-card glass-card">
+          <div class="feature-icon-wrapper">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="feature-icon" style="width: 2rem; height: 2rem; color: #000;">
+              <rect x="3" y="3" width="6" height="6" rx="1.5" />
+              <rect x="15" y="15" width="6" height="6" rx="1.5" />
+              <path d="M9 6h4.5a3 3 0 0 1 3 3v6" />
+              <circle cx="9" cy="6" r="1" fill="currentColor" />
+              <circle cx="15" cy="18" r="1" fill="currentColor" />
+              <circle cx="16.5" cy="10.5" r="1.5" fill="currentColor" />
+            </svg>
+          </div>
+          <h3 class="feature-title">Kişiselleştirilmiş Öğrenci Analizi</h3>
+          <p class="feature-desc">Her öğrencinin yapay zeka kullanım alışkanlığı, haftalık çalışma süreleri ve kaygı düzeyini dikkate alarak kişiye özel tükenmişlik risk sonuçları üretir.</p>
+        </div>
+
+        <!-- Feature 3 -->
+        <div class="feature-card glass-card">
+          <div class="feature-icon-wrapper">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="feature-icon" style="width: 2rem; height: 2rem; color: #000;">
+              <path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6" />
+              <path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18" />
+              <path d="M4 22h16" />
+              <path d="M10 14.66V17c0 .55-.45 1-1 1H4v2h16v-2h-5c-.55 0-1-.45-1-1v-2.34" />
+              <path d="M12 2a6 6 0 0 1 6 6v3a6 6 0 0 1-6 6 6 6 0 0 1-6-6V8a6 6 0 0 1 6-6z" />
+            </svg>
+          </div>
+          <h3 class="feature-title">Proaktif Risk Tespiti</h3>
+          <p class="feature-desc">Akademik tükenmişlik belirtilerini öğrenciler ciddi motivasyon kaybı yaşamadan çok önce yakalayarak kurumlara hızlı müdahale şansı tanır.</p>
+        </div>
+
+        <!-- Feature 4 -->
+        <div class="feature-card glass-card">
+          <div class="feature-icon-wrapper">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="feature-icon" style="width: 2rem; height: 2rem; color: #000;">
+              <path d="M9.5 2A2.5 2.5 0 0 1 12 4.5v15a2.5 2.5 0 0 1-4.96-.44 2.5 2.5 0 0 1 0-3.12 3 3 0 0 1 0-3.88 2.5 2.5 0 0 1 0-3.12A2.5 2.5 0 0 1 9.5 2z" />
+              <path d="M14.5 2A2.5 2.5 0 0 0 12 4.5v15a2.5 2.5 0 0 0 4.96-.44 2.5 2.5 0 0 0 0-3.12 3 3 0 0 0 0-3.88 2.5 2.5 0 0 0 0-3.12A2.5 2.5 0 0 0 14.5 2z" />
+              <path d="M12 7h3M9 12h6M12 17H9" />
+            </svg>
+          </div>
+          <h3 class="feature-title">Stratejik Rehberlik Aksiyonları</h3>
+          <p class="feature-desc">Eğitim danışmanları ve rehber öğretmenler için model sonuçlarına dayalı, doğrudan uygulanabilir ve etkili aksiyon önerileri sunar.</p>
+        </div>
+
+        <!-- Feature 5 -->
+        <div class="feature-card glass-card">
+          <div class="feature-icon-wrapper">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="feature-icon" style="width: 2rem; height: 2rem; color: #000;">
+              <path d="M19 21l-7.5-7.5" />
+              <path d="M16.5 12.5l-5-5L19 5.5l2.5 2z" fill="currentColor" fill-opacity="0.1" />
+              <path d="M19 2l.75 1.5L21.25 4 19.75 4.75 19 6.25 18.25 4.75 16.75 4 18.25 3.25z" fill="currentColor" stroke="none" />
+              <path d="M6 7l.5 1L7.5 8.5 6.5 9 6 10l-.5-1-1-.5 1-.5z" fill="currentColor" stroke="none" />
+              <path d="M5 18l.5 1 1 .5-1 .5-.5 1-.5-1-1-.5 1-.5z" fill="currentColor" stroke="none" />
+            </svg>
+          </div>
+          <h3 class="feature-title">Etkileşimli Tahmin Arayüzü</h3>
+          <p class="feature-desc">Canlıya alınan model, Streamlit arayüzü ile sunulur. Kullanıcılar bölüm, AI saati ve stres seviyelerini girerek anlık tükenmişlik risk oranını görebilir.</p>
+        </div>
+
+        <!-- Feature 6 -->
+        <div class="feature-card glass-card">
+          <div class="feature-icon-wrapper">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="feature-icon" style="width: 2rem; height: 2rem; color: #000;">
+              <path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l.73-1.19" />
+              <circle cx="12" cy="12" r="3" />
+            </svg>
+          </div>
+          <h3 class="feature-title">CRISP-DM Metodolojisi</h3>
+          <p class="feature-desc">Projemiz, endüstri standardı CRISP-DM metodolojisinin 6 fazına (İş Anlayışından Dağıtıma kadar) tam uyumlu şekilde tasarlanıp belgelenmiştir.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Team Section -->
+  <section id="team" class="showcase-section">
+    <div class="container">
+      <div class="section-header text-center">
+        <span class="badge">Ekip</span>
+        <h2 class="section-title">APEX Proje Ekibi</h2>
+        <p class="section-subtitle">Her ekip üyesi CRISP-DM'in farklı fazlarından sorumludur.</p>
+      </div>
+
+      <div class="features-grid" style="grid-template-columns: repeat(2, 1fr); max-width: 68rem; margin: 0 auto;">
+        <!-- Feza -->
+        <div class="feature-card glass-card text-center">
+          <h3 class="feature-title">Feza</h3>
+          <p class="feature-desc">Veriyi anlama ve keşifsel analiz adımlarını yönetti.</p>
+        </div>
+
+        <!-- Cenker -->
+        <div class="feature-card glass-card text-center">
+          <h3 class="feature-title">Cenker</h3>
+          <p class="feature-desc">Veri ön işleme ve sistem altyapısını tasarladı.</p>
+        </div>
+
+        <!-- Berkay -->
+        <div class="feature-card glass-card text-center">
+          <h3 class="feature-title">Berkay</h3>
+          <p class="feature-desc">Makine öğrenmesi modellerini eğitti ve değerlendirdi.</p>
+        </div>
+
+        <!-- Ethem -->
+        <div class="feature-card glass-card text-center">
+          <h3 class="feature-title">Ethem</h3>
+          <p class="feature-desc">Uygulamanın yayına alınması ve arayüz geliştirmelerini üstlendi.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ Section -->
+  <section id="faq" class="faq-section bg-gradient-subtle">
+    <div class="container max-w-4xl">
+      <div class="section-header text-center">
+        <span class="badge">SSS</span>
+        <h2 class="section-title">Sıkça Sorulan Sorular</h2>
+        <p class="section-subtitle">APEX projesi hakkında merak edilen sorular ve yanıtları.</p>
+      </div>
+
+      <div class="accordion-list mt-8">
+        <!-- FAQ 1 -->
+        <div class="accordion-item shadow-premium">
+          <button class="accordion-header">
+            <span>Bu projede hangi veri seti kullanıldı?</span>
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="accordion-chevron"><polyline points="6 9 12 15 18 9"></polyline></svg>
+          </button>
+          <div class="accordion-content">
+            <p>ai_student_impact_dataset.csv veri seti kullanılmıştır. Öğrencilerin akademik bölümü, sınıfı, haftalık AI kullanım saatleri, AI kullanım amacı, geleneksel çalışma süreleri, sınav dönemi kaygı düzeyleri ve algılanan AI bağımlılıkları gibi zengin akademik parametreleri barındırmaktadır.</p>
+          </div>
+        </div>
+
+        <!-- FAQ 2 -->
+        <div class="accordion-item shadow-premium">
+          <button class="accordion-header">
+            <span>Kaç farklı model denenmiştir?</span>
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="accordion-chevron"><polyline points="6 9 12 15 18 9"></polyline></svg>
+          </button>
+          <div class="accordion-content">
+            <p>Logistic Regression, Decision Tree, Random Forest, XGBoost, LightGBM, AdaBoost, KNN, SVM, Naive Bayes ve Gradient Boosting dahil 10'dan fazla sınıflandırma modeli 5-katlı Tabakalı Çapraz Doğrulama (Stratified Cross-Validation) ile eğitilerek yarıştırılmıştır.</p>
+          </div>
+        </div>
+
+        <!-- FAQ 3 -->
+        <div class="accordion-item shadow-premium">
+          <button class="accordion-header">
+            <span>Veri sızıntısı (data leakage) nasıl engellendi?</span>
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="accordion-chevron"><polyline points="6 9 12 15 18 9"></polyline></svg>
+          </button>
+          <div class="accordion-content">
+            <p>Tüm preprocessing (veri ön işleme) adımları scikit-learn ColumnTransformer ve Pipeline mimarisiyle kurulmuştur. Akıllı veri mühendisliği ve target encoding fit işlemleri sadece eğitim setinde (train fold) gerçekleştirilmiş, test setine sızıntı sıfırlanmıştır.</p>
+          </div>
+        </div>
+
+        <!-- FAQ 4 -->
+        <div class="accordion-item shadow-premium">
+          <button class="accordion-header">
+            <span>Modelin gerçek başarı metrikleri nelerdir?</span>
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="accordion-chevron"><polyline points="6 9 12 15 18 9"></polyline></svg>
+          </button>
+          <div class="accordion-content">
+            <p>En iyi modelimiz olan XGBoost, bağımsız test veri setinde yüksek doğruluk ve ROC-AUC değerlerine ulaşmıştır. Yanlış alarm oranını (false positive) en aza indirmek ve kurumsal kaynakları doğru yönetmek amacıyla optimize edilen modelimiz, risk grubunu saptamada yüksek kesinlik sunmaktadır.</p>
+          </div>
+        </div>
+
+        <!-- FAQ 5 -->
+        <div class="accordion-item shadow-premium">
+          <button class="accordion-header">
+            <span>CRISP-DM metodolojisi nedir?</span>
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="accordion-chevron"><polyline points="6 9 12 15 18 9"></polyline></svg>
+          </button>
+          <div class="accordion-content">
+            <p>CRISP-DM (Cross-Industry Standard Process for Data Mining), veri projelerinde hata oranını minimize eden 6 aşamalı döngüsel bir standarttır: İş Anlayışı, Veri Anlayışı, Veri Hazırlama, Modelleme, Değerlendirme ve Dağıtım.</p>
+          </div>
+        </div>
+
+        <!-- FAQ 6 -->
+        <div class="accordion-item shadow-premium">
+          <button class="accordion-header">
+            <span>Canlı tahmin ve demo sistemi nasıl çalışır?</span>
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="accordion-chevron"><polyline points="6 9 12 15 18 9"></polyline></svg>
+          </button>
+          <div class="accordion-content">
+            <p>Streamlit uygulamamızın 'Tükenmişlik Tahmini' sekmesinde, bir öğrencinin haftalık AI saati, sınav kaygısı ve çalışma süresi gibi 12 temel parametresi girilerek %0 ile %100 arasında bir risk olasılığı üretilir ve buna bağlı akademik rehberlik önerileri otomatik olarak sunulur.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Prediction Engine Section -->
+  <section id="prediction-engine" class="showcase-section bg-gradient-subtle" style="padding: 3.5rem 0; border-top: 1px solid hsl(var(--border) / 0.5);">
+    <div class="container max-w-4xl text-center">
+      <div class="section-header text-center" style="margin-bottom: 1.5rem;">
+        <span class="badge">Canlı Demo</span>
+        <h2 class="section-title" style="font-size: 2rem; font-weight: 750;">Tahmin Arayüzüne Geç</h2>
+        <p class="section-subtitle" style="font-size: 1rem; max-width: 36rem; margin: 0.75rem auto 0;">
+          Formu landing page'den kaldırdık. Canlı Streamlit demosuna tek tıkla geçebilirsin.
+        </p>
+      </div>
+      <a href="http://localhost:8501" class="btn btn-lg btn-primary" style="padding-inline: 2.5rem;">Canlı Demo'yu Aç</a>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container footer-container">
+      <div class="footer-row">
+        <!-- Brand Info -->
+        <div class="footer-brand-col">
+          <a href="#" class="brand mb-6">
+            <span class="brand-title">APEX</span>
+          </a>
+          <p class="footer-brand-desc">APEX — AI Student Impact projesi, yapay zeka entegrasyonunun akademik tükenmişlik üzerindeki etkilerini analiz eden veri odaklı bir karar destek sistemidir.</p>
+        </div>
+
+        <!-- Footer Links Grid -->
+        <div class="footer-links-col">
+          <div class="footer-links-grid">
+            <!-- Col 1 -->
+            <div>
+              <h4 class="footer-col-title">Proje</h4>
+              <ul class="footer-links-list">
+                <li><a href="#showcase" class="footer-link">Proje Hakkında</a></li>
+                <li><a href="#features" class="footer-link">Özellikler</a></li>
+                <li><a href="#faq" class="footer-link">SSS</a></li>
+              </ul>
+            </div>
+            <!-- Col 2 -->
+            <div>
+              <h4 class="footer-col-title">Ekip</h4>
+              <ul class="footer-links-list">
+                <li><a href="#team" class="footer-link">Feza — EDA</a></li>
+                <li><a href="#team" class="footer-link">Cenker — Pipeline</a></li>
+                <li><a href="#team" class="footer-link">Ethem — Modelleme</a></li>
+                <li><a href="#team" class="footer-link">Berkay — Deployment</a></li>
+              </ul>
+            </div>
+            <!-- Col 3 -->
+            <div>
+              <h4 class="footer-col-title">Teknolojiler</h4>
+              <ul class="footer-links-list">
+                <li><a href="#" class="footer-link">Python & Scikit-learn</a></li>
+                <li><a href="#" class="footer-link">Plotly & SHAP</a></li>
+                <li><a href="#" class="footer-link">Streamlit</a></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <hr class="footer-divider">
+
+      <!-- Footer Bottom -->
+      <div class="footer-bottom">
+        <p class="copyright">© 2026 • APEX Ekibi — Tüm Hakları Saklıdır.</p>
+        <div class="footer-badge">
+          CRISP-DM Phase 6 Delivery • <a href="#" class="badge-link">AI Student Impact</a>
+        </div>
+        
+        <!-- Social Icons -->
+        <div class="social-links">
+          <a href="https://github.com" target="_blank" class="social-link-icon" aria-label="GitHub">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4"></path><path d="M9 18c-4.51 2-5-2-7-2"></path></svg>
+          </a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Main JavaScript -->
+  <script src="static/js/script.js"></script>
+</body>
+</html>
