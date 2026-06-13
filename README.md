@@ -196,3 +196,7 @@ Notebook bir kez **Restart & Run All** ile uçtan uca çalışacak şekilde tasa
 | Fazlı detaylı açıklama (basit dilde)    | [docs/DEVELOPER_GUIDE.md](docs/DEVELOPER_GUIDE.md) |
 | Geliştirme standartları                 | [docs/CLAUDE.md](docs/CLAUDE.md)   |
 | Ajan yönergeleri                        | [docs/agents/](docs/agents/)       |
+
+## Github Repo Linki
+
+https://github.com/cenkergultekin/apex-classification
